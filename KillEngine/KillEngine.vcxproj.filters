@@ -19,6 +19,11 @@
     <ClInclude Include="src\Kei\Log.h">
       <Filter>Kei</Filter>
     </ClInclude>
+    <ClInclude Include="src\Kei\Events\Event.h" />
+    <ClInclude Include="src\Kei\Events\ApplicationEvent.h" />
+    <ClInclude Include="src\Kei\Events\MouseEvent.h" />
+    <ClInclude Include="src\Kei\Events\KeyEvent.h" />
+    <ClInclude Include="src\Kei\Keycodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Kei\Application.cpp">

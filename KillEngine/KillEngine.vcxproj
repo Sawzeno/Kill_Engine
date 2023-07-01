@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>KEI_PLATFORM_WINDOWS;KEI_BUILD_DLL;KEI_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\spdlog\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>vendor\spdlog\include;src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -150,6 +150,11 @@
     <ClInclude Include="src\Kei\Application.h" />
     <ClInclude Include="src\Kei\Core.h" />
     <ClInclude Include="src\Kei\EntryPoint.h" />
+    <ClInclude Include="src\Kei\Events\ApplicationEvent.h" />
+    <ClInclude Include="src\Kei\Events\Event.h" />
+    <ClInclude Include="src\Kei\Events\KeyEvent.h" />
+    <ClInclude Include="src\Kei\Events\MouseEvent.h" />
+    <ClInclude Include="src\Kei\Keycodes.h" />
     <ClInclude Include="src\Kei\Log.h" />
   </ItemGroup>
   <ItemGroup>

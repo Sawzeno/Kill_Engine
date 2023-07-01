@@ -5,6 +5,7 @@
 
 #include "Kei/Application.h"
 #include "Kei/Log.h"
+#include "kei/Core.h"
 
 
 // ---------ENTRY POINT-------
