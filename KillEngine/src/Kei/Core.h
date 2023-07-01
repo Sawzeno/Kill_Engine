@@ -8,6 +8,4 @@
 #endif // KEI_BUILD_KEI
 #else
 #error KILL ENGINE ONLY RUNS ON WINDOWS !
-
-#endif 
-
+#endif
