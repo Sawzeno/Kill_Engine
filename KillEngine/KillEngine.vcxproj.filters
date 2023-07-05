@@ -24,6 +24,7 @@
     <ClInclude Include="src\Kei\Events\MouseEvent.h" />
     <ClInclude Include="src\Kei\Events\KeyEvent.h" />
     <ClInclude Include="src\Kei\Keycodes.h" />
+    <ClInclude Include="src\Kei\Misc\Clock.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Kei\Application.cpp">
@@ -32,5 +33,6 @@
     <ClCompile Include="src\Kei\Log.cpp">
       <Filter>Kei</Filter>
     </ClCompile>
+    <ClCompile Include="src\Kei\Misc\Test.h" />
   </ItemGroup>
 </Project>

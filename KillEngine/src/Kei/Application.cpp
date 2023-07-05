@@ -1,5 +1,7 @@
 #include "Application.h"
-
+#include"Kei/Events/KeyEvent.h"
+#include"Log.h"
+#include"Keycodes.h"
 
 namespace Kei {
 
@@ -7,14 +9,17 @@ namespace Kei {
 
 	}
 
-	void Application::Run() {
-		while (true);
-	}
-
 	Application::~Application() {
 
 	}
-
-	
+	void Application::Run() {
+		
+		Log log;
+		log.Init();
+		KeyPressedEvent e(Key::A, true);
+		//KEI_TRACE("{}", e.ToString());
+		KEI_TRACE(e);
+		while (true);
+	}
 
 }

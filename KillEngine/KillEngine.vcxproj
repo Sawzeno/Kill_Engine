@@ -156,10 +156,12 @@
     <ClInclude Include="src\Kei\Events\MouseEvent.h" />
     <ClInclude Include="src\Kei\Keycodes.h" />
     <ClInclude Include="src\Kei\Log.h" />
+    <ClInclude Include="src\Kei\Misc\Clock.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Kei\Application.cpp" />
     <ClCompile Include="src\Kei\Log.cpp" />
+    <ClCompile Include="src\Kei\Misc\Test.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,0 +1,40 @@
+classes
+
+defined by by class specifier -> decl-specifier-seq of the declaration syntax
+
+
+	RTTI	
+-> dynamic cast 
+if a pointer to a base calss can  be converted to a pointer of the derived class
+
+-> type identification
+{
+	Base* basePtr = new Derived();
+	if (typeid(*basePtr) == typeid(Derived))
+	{
+		// The object pointed to by basePtr is of type Derived
+	}
+}
+dynamic binding
+
+union
+constexpr
+consteval
+
+virtual base class
+
+	In this example, the member level1 is declared as protected in the Base class. This makes it accessible to Derived1, which inherits from Base. Derived1 can directly access and modify the level1 member.
+	
+	However, in FinalDerived, which inherits from Derived1, the level1 member is not directly accessible. Since it is not declared as public or protected in Derived1, it cannot be accessed directly in FinalDerived.
+
+	Therefore, by using the protected access specifier, you can make a member available to a derived class (Derived1) while preventing direct access to that member in subsequent derived classes (FinalDerived).
+
+what allows compiletime polymorphism
+
+how does initliation work ?
+how is class acessed by declaring the constructor?
+
+Game Idea -> digging blocks of something from underwater and then constructing a tower 
+
+make sure to initialze the lists or whatever storing data strcutre 
+you use to store in private , and de;ete it in the destructor
