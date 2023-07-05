@@ -9,3 +9,5 @@
 #else
 #error KILL ENGINE ONLY RUNS ON WINDOWS !
 #endif
+
+#define BIT(x) (1 << x)
