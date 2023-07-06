@@ -154,9 +154,10 @@
     <ClInclude Include="src\Kei\Events\Event.h" />
     <ClInclude Include="src\Kei\Events\KeyEvent.h" />
     <ClInclude Include="src\Kei\Events\MouseEvent.h" />
-    <ClInclude Include="src\Kei\Keycodes.h" />
+    <ClInclude Include="src\Kei\KeyCodes.h" />
     <ClInclude Include="src\Kei\Log.h" />
     <ClInclude Include="src\Kei\Misc\Clock.h" />
+    <ClInclude Include="src\Kei\MouseCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Kei\Application.cpp" />
