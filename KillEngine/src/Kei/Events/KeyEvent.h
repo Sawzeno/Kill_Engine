@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Kei/Events/Event.h"
-#include "Kei/Keycodes.h"
+#include "Event.h"
+#include "Kei/KeyCodes.h"
 
 
 namespace Kei {
