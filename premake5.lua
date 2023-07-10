@@ -19,6 +19,9 @@ targetdir("bin/" .. outputdir .. "/%{prj.name}")
 
 objdir("bin-int/" .. outputdir .. "/%{prj.name}")
 
+pchheader "Keipch.h"
+pchsource "KillEngine/src/Keipch.cpp"
+
 files {"%{prj.name}/src/**.h", "%{prj.name}/src/**.cpp"}
 
 includedirs {"%{prj.name}/vendor/spdlog/include", "%{prj.name}/src"}
