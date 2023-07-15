@@ -50,6 +50,7 @@
       <Filter>Kei</Filter>
     </ClInclude>
     <ClInclude Include="src\Keipch.h" />
+    <ClInclude Include="src\Kei\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Kei\Application.cpp">
