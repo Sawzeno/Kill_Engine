@@ -7,8 +7,15 @@ filter {"action:vs*"}
 
 configurations {"Debug", "Release", "Dist"}
 
+----------------------------------------------------------------------Defines
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+IncludeDir = {}
+IncludeDir["GLFW"] = "KillEngine/vendor/GLFW/include"
 
+----------------------------------------------------------------------Includes
+include "KillEngine/vendor/GLFW"
+
+----------------------------------------------------------------------KillEngine project
 project "KillEngine"
 location "KillEngine"
 
@@ -16,16 +23,18 @@ kind "SharedLib"
 language "C++"
 
 targetdir("bin/" .. outputdir .. "/%{prj.name}")
-
 objdir("bin-int/" .. outputdir .. "/%{prj.name}")
 
 pchheader "Keipch.h"
 pchsource "KillEngine/src/Keipch.cpp"
 
+----------------------------------------------------------------------
 files {"%{prj.name}/src/**.h", "%{prj.name}/src/**.cpp"}
 
-includedirs {"%{prj.name}/vendor/spdlog/include", "%{prj.name}/src"}
+includedirs {"%{prj.name}/vendor/spdlog/include", "%{prj.name}/src", "%{IncludeDir.GLFW}"}
 
+links {"GLFW", "opengl32.lib"}
+----------------------------------------------------------------------
 filter "system:windows"
 cppdialect "C++17"
 staticruntime "On"
@@ -47,6 +56,7 @@ filter "configurations:Dist"
 defines "KEI_DIST"
 optimize "On"
 
+-----------------------------------------------------------------------Sandbox project
 project "Sandbox"
 location "Sandbox"
 kind "ConsoleApp"
