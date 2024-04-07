@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/testbed.dir/src/main.c.o -o testbed  -Wl,-rpath,/home/gon/Developer/Kill_Engine/build/engine ../engine/libengine.so

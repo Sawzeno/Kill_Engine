@@ -1,0 +1,14 @@
+[
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/engine",
+  "command": "/usr/bin/cc -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -fPIC -o CMakeFiles/engine.dir/src/test.c.o -c /home/gon/Developer/Kill_Engine/engine/src/test.c",
+  "file": "/home/gon/Developer/Kill_Engine/engine/src/test.c",
+  "output": "engine/CMakeFiles/engine.dir/src/test.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/testbed",
+  "command": "/usr/bin/cc  -I/home/gon/Developer/Kill_Engine/testbed/includes -I/home/gon/Developer/Kill_Engine/testbed/../engine/includes -I/home/gon/Developer/Kill_Engine/engine/includes  -o CMakeFiles/testbed.dir/src/main.c.o -c /home/gon/Developer/Kill_Engine/testbed/src/main.c",
+  "file": "/home/gon/Developer/Kill_Engine/testbed/src/main.c",
+  "output": "testbed/CMakeFiles/testbed.dir/src/main.c.o"
+}
+]
