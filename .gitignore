@@ -1,9 +1,2 @@
 #directories 
-.vs/
-.vscode/
-bin/
-bin-int/
-
-
-#files
-*.user
+build
