@@ -114,12 +114,12 @@ testbed/clean: testbed/CMakeFiles/testbed.dir/clean
 engine/CMakeFiles/engine.dir/all:
 	$(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/depend
 	$(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=1,2 "Built target engine"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Built target engine"
 .PHONY : engine/CMakeFiles/engine.dir/all
 
 # Build rule for subdir invocation for target.
 engine/CMakeFiles/engine.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/gon/Developer/Kill_Engine/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gon/Developer/Kill_Engine/build/CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 engine/CMakeFiles/engine.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/gon/Developer/Kill_Engine/build/CMakeFiles 0
 .PHONY : engine/CMakeFiles/engine.dir/rule
@@ -140,12 +140,12 @@ engine/CMakeFiles/engine.dir/clean:
 testbed/CMakeFiles/testbed.dir/all: engine/CMakeFiles/engine.dir/all
 	$(MAKE) $(MAKESILENT) -f testbed/CMakeFiles/testbed.dir/build.make testbed/CMakeFiles/testbed.dir/depend
 	$(MAKE) $(MAKESILENT) -f testbed/CMakeFiles/testbed.dir/build.make testbed/CMakeFiles/testbed.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=3,4 "Built target testbed"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=12,13,14 "Built target testbed"
 .PHONY : testbed/CMakeFiles/testbed.dir/all
 
 # Build rule for subdir invocation for target.
 testbed/CMakeFiles/testbed.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/gon/Developer/Kill_Engine/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gon/Developer/Kill_Engine/build/CMakeFiles 14
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 testbed/CMakeFiles/testbed.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/gon/Developer/Kill_Engine/build/CMakeFiles 0
 .PHONY : testbed/CMakeFiles/testbed.dir/rule

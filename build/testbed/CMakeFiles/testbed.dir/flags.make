@@ -4,7 +4,7 @@
 # compile C with /usr/bin/cc
 C_DEFINES = 
 
-C_INCLUDES = -I/home/gon/Developer/Kill_Engine/testbed/includes -I/home/gon/Developer/Kill_Engine/testbed/../engine/includes -I/home/gon/Developer/Kill_Engine/engine/includes
+C_INCLUDES = -I/home/gon/Developer/Kill_Engine/testbed/../engine/src -I/home/gon/Developer/Kill_Engine/engine/src
 
 C_FLAGS = 
 

@@ -1,11 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(testbed)
 
-# Include the testbed headers
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/includes)
-
 # Include engine headers
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../engine/includes)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../engine/src)
 
 # Set the source files for testbed
 file(GLOB_RECURSE SOURCES "src/*.c")
@@ -14,5 +11,5 @@ file(GLOB_RECURSE SOURCES "src/*.c")
 add_executable(testbed ${SOURCES})
 
 # Link with engine library
-target_link_libraries(testbed engine)
+target_link_libraries(testbed PRIVATE engine ${X11_LIBRARIES} ${XCB_LIBRARIES})
 

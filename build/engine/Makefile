@@ -130,29 +130,245 @@ engine/fast:
 	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/build
 .PHONY : engine/fast
 
-src/test.o: src/test.c.o
-.PHONY : src/test.o
+src/containers/darray.o: src/containers/darray.c.o
+.PHONY : src/containers/darray.o
 
 # target to build an object file
-src/test.c.o:
-	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/test.c.o
-.PHONY : src/test.c.o
+src/containers/darray.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/containers/darray.c.o
+.PHONY : src/containers/darray.c.o
 
-src/test.i: src/test.c.i
-.PHONY : src/test.i
+src/containers/darray.i: src/containers/darray.c.i
+.PHONY : src/containers/darray.i
 
 # target to preprocess a source file
-src/test.c.i:
-	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/test.c.i
-.PHONY : src/test.c.i
+src/containers/darray.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/containers/darray.c.i
+.PHONY : src/containers/darray.c.i
 
-src/test.s: src/test.c.s
-.PHONY : src/test.s
+src/containers/darray.s: src/containers/darray.c.s
+.PHONY : src/containers/darray.s
 
 # target to generate assembly for a file
-src/test.c.s:
-	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/test.c.s
-.PHONY : src/test.c.s
+src/containers/darray.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/containers/darray.c.s
+.PHONY : src/containers/darray.c.s
+
+src/core/application.o: src/core/application.c.o
+.PHONY : src/core/application.o
+
+# target to build an object file
+src/core/application.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/application.c.o
+.PHONY : src/core/application.c.o
+
+src/core/application.i: src/core/application.c.i
+.PHONY : src/core/application.i
+
+# target to preprocess a source file
+src/core/application.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/application.c.i
+.PHONY : src/core/application.c.i
+
+src/core/application.s: src/core/application.c.s
+.PHONY : src/core/application.s
+
+# target to generate assembly for a file
+src/core/application.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/application.c.s
+.PHONY : src/core/application.c.s
+
+src/core/clock.o: src/core/clock.c.o
+.PHONY : src/core/clock.o
+
+# target to build an object file
+src/core/clock.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/clock.c.o
+.PHONY : src/core/clock.c.o
+
+src/core/clock.i: src/core/clock.c.i
+.PHONY : src/core/clock.i
+
+# target to preprocess a source file
+src/core/clock.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/clock.c.i
+.PHONY : src/core/clock.c.i
+
+src/core/clock.s: src/core/clock.c.s
+.PHONY : src/core/clock.s
+
+# target to generate assembly for a file
+src/core/clock.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/clock.c.s
+.PHONY : src/core/clock.c.s
+
+src/core/defines.o: src/core/defines.c.o
+.PHONY : src/core/defines.o
+
+# target to build an object file
+src/core/defines.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/defines.c.o
+.PHONY : src/core/defines.c.o
+
+src/core/defines.i: src/core/defines.c.i
+.PHONY : src/core/defines.i
+
+# target to preprocess a source file
+src/core/defines.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/defines.c.i
+.PHONY : src/core/defines.c.i
+
+src/core/defines.s: src/core/defines.c.s
+.PHONY : src/core/defines.s
+
+# target to generate assembly for a file
+src/core/defines.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/defines.c.s
+.PHONY : src/core/defines.c.s
+
+src/core/events.o: src/core/events.c.o
+.PHONY : src/core/events.o
+
+# target to build an object file
+src/core/events.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/events.c.o
+.PHONY : src/core/events.c.o
+
+src/core/events.i: src/core/events.c.i
+.PHONY : src/core/events.i
+
+# target to preprocess a source file
+src/core/events.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/events.c.i
+.PHONY : src/core/events.c.i
+
+src/core/events.s: src/core/events.c.s
+.PHONY : src/core/events.s
+
+# target to generate assembly for a file
+src/core/events.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/events.c.s
+.PHONY : src/core/events.c.s
+
+src/core/input.o: src/core/input.c.o
+.PHONY : src/core/input.o
+
+# target to build an object file
+src/core/input.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/input.c.o
+.PHONY : src/core/input.c.o
+
+src/core/input.i: src/core/input.c.i
+.PHONY : src/core/input.i
+
+# target to preprocess a source file
+src/core/input.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/input.c.i
+.PHONY : src/core/input.c.i
+
+src/core/input.s: src/core/input.c.s
+.PHONY : src/core/input.s
+
+# target to generate assembly for a file
+src/core/input.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/input.c.s
+.PHONY : src/core/input.c.s
+
+src/core/kmemory.o: src/core/kmemory.c.o
+.PHONY : src/core/kmemory.o
+
+# target to build an object file
+src/core/kmemory.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/kmemory.c.o
+.PHONY : src/core/kmemory.c.o
+
+src/core/kmemory.i: src/core/kmemory.c.i
+.PHONY : src/core/kmemory.i
+
+# target to preprocess a source file
+src/core/kmemory.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/kmemory.c.i
+.PHONY : src/core/kmemory.c.i
+
+src/core/kmemory.s: src/core/kmemory.c.s
+.PHONY : src/core/kmemory.s
+
+# target to generate assembly for a file
+src/core/kmemory.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/kmemory.c.s
+.PHONY : src/core/kmemory.c.s
+
+src/platform/platform.o: src/platform/platform.c.o
+.PHONY : src/platform/platform.o
+
+# target to build an object file
+src/platform/platform.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/platform/platform.c.o
+.PHONY : src/platform/platform.c.o
+
+src/platform/platform.i: src/platform/platform.c.i
+.PHONY : src/platform/platform.i
+
+# target to preprocess a source file
+src/platform/platform.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/platform/platform.c.i
+.PHONY : src/platform/platform.c.i
+
+src/platform/platform.s: src/platform/platform.c.s
+.PHONY : src/platform/platform.s
+
+# target to generate assembly for a file
+src/platform/platform.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/platform/platform.c.s
+.PHONY : src/platform/platform.c.s
+
+src/renderer/rendererbackend.o: src/renderer/rendererbackend.c.o
+.PHONY : src/renderer/rendererbackend.o
+
+# target to build an object file
+src/renderer/rendererbackend.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o
+.PHONY : src/renderer/rendererbackend.c.o
+
+src/renderer/rendererbackend.i: src/renderer/rendererbackend.c.i
+.PHONY : src/renderer/rendererbackend.i
+
+# target to preprocess a source file
+src/renderer/rendererbackend.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.i
+.PHONY : src/renderer/rendererbackend.c.i
+
+src/renderer/rendererbackend.s: src/renderer/rendererbackend.c.s
+.PHONY : src/renderer/rendererbackend.s
+
+# target to generate assembly for a file
+src/renderer/rendererbackend.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.s
+.PHONY : src/renderer/rendererbackend.c.s
+
+src/renderer/rendererfrontend.o: src/renderer/rendererfrontend.c.o
+.PHONY : src/renderer/rendererfrontend.o
+
+# target to build an object file
+src/renderer/rendererfrontend.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o
+.PHONY : src/renderer/rendererfrontend.c.o
+
+src/renderer/rendererfrontend.i: src/renderer/rendererfrontend.c.i
+.PHONY : src/renderer/rendererfrontend.i
+
+# target to preprocess a source file
+src/renderer/rendererfrontend.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.i
+.PHONY : src/renderer/rendererfrontend.c.i
+
+src/renderer/rendererfrontend.s: src/renderer/rendererfrontend.c.s
+.PHONY : src/renderer/rendererfrontend.s
+
+# target to generate assembly for a file
+src/renderer/rendererfrontend.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.s
+.PHONY : src/renderer/rendererfrontend.c.s
 
 # Help Target
 help:
@@ -163,9 +379,36 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... engine"
-	@echo "... src/test.o"
-	@echo "... src/test.i"
-	@echo "... src/test.s"
+	@echo "... src/containers/darray.o"
+	@echo "... src/containers/darray.i"
+	@echo "... src/containers/darray.s"
+	@echo "... src/core/application.o"
+	@echo "... src/core/application.i"
+	@echo "... src/core/application.s"
+	@echo "... src/core/clock.o"
+	@echo "... src/core/clock.i"
+	@echo "... src/core/clock.s"
+	@echo "... src/core/defines.o"
+	@echo "... src/core/defines.i"
+	@echo "... src/core/defines.s"
+	@echo "... src/core/events.o"
+	@echo "... src/core/events.i"
+	@echo "... src/core/events.s"
+	@echo "... src/core/input.o"
+	@echo "... src/core/input.i"
+	@echo "... src/core/input.s"
+	@echo "... src/core/kmemory.o"
+	@echo "... src/core/kmemory.i"
+	@echo "... src/core/kmemory.s"
+	@echo "... src/platform/platform.o"
+	@echo "... src/platform/platform.i"
+	@echo "... src/platform/platform.s"
+	@echo "... src/renderer/rendererbackend.o"
+	@echo "... src/renderer/rendererbackend.i"
+	@echo "... src/renderer/rendererbackend.s"
+	@echo "... src/renderer/rendererfrontend.o"
+	@echo "... src/renderer/rendererfrontend.i"
+	@echo "... src/renderer/rendererfrontend.s"
 .PHONY : help
 
 

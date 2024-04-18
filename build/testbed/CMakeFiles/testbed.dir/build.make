@@ -69,32 +69,48 @@ include testbed/CMakeFiles/testbed.dir/progress.make
 # Include the compile flags for this target's objects.
 include testbed/CMakeFiles/testbed.dir/flags.make
 
-testbed/CMakeFiles/testbed.dir/src/main.c.o: testbed/CMakeFiles/testbed.dir/flags.make
-testbed/CMakeFiles/testbed.dir/src/main.c.o: /home/gon/Developer/Kill_Engine/testbed/src/main.c
-testbed/CMakeFiles/testbed.dir/src/main.c.o: testbed/CMakeFiles/testbed.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object testbed/CMakeFiles/testbed.dir/src/main.c.o"
-	cd /home/gon/Developer/Kill_Engine/build/testbed && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT testbed/CMakeFiles/testbed.dir/src/main.c.o -MF CMakeFiles/testbed.dir/src/main.c.o.d -o CMakeFiles/testbed.dir/src/main.c.o -c /home/gon/Developer/Kill_Engine/testbed/src/main.c
+testbed/CMakeFiles/testbed.dir/src/entry.c.o: testbed/CMakeFiles/testbed.dir/flags.make
+testbed/CMakeFiles/testbed.dir/src/entry.c.o: /home/gon/Developer/Kill_Engine/testbed/src/entry.c
+testbed/CMakeFiles/testbed.dir/src/entry.c.o: testbed/CMakeFiles/testbed.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object testbed/CMakeFiles/testbed.dir/src/entry.c.o"
+	cd /home/gon/Developer/Kill_Engine/build/testbed && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT testbed/CMakeFiles/testbed.dir/src/entry.c.o -MF CMakeFiles/testbed.dir/src/entry.c.o.d -o CMakeFiles/testbed.dir/src/entry.c.o -c /home/gon/Developer/Kill_Engine/testbed/src/entry.c
 
-testbed/CMakeFiles/testbed.dir/src/main.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/testbed.dir/src/main.c.i"
-	cd /home/gon/Developer/Kill_Engine/build/testbed && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gon/Developer/Kill_Engine/testbed/src/main.c > CMakeFiles/testbed.dir/src/main.c.i
+testbed/CMakeFiles/testbed.dir/src/entry.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/testbed.dir/src/entry.c.i"
+	cd /home/gon/Developer/Kill_Engine/build/testbed && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gon/Developer/Kill_Engine/testbed/src/entry.c > CMakeFiles/testbed.dir/src/entry.c.i
 
-testbed/CMakeFiles/testbed.dir/src/main.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/testbed.dir/src/main.c.s"
-	cd /home/gon/Developer/Kill_Engine/build/testbed && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gon/Developer/Kill_Engine/testbed/src/main.c -o CMakeFiles/testbed.dir/src/main.c.s
+testbed/CMakeFiles/testbed.dir/src/entry.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/testbed.dir/src/entry.c.s"
+	cd /home/gon/Developer/Kill_Engine/build/testbed && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gon/Developer/Kill_Engine/testbed/src/entry.c -o CMakeFiles/testbed.dir/src/entry.c.s
+
+testbed/CMakeFiles/testbed.dir/src/game.c.o: testbed/CMakeFiles/testbed.dir/flags.make
+testbed/CMakeFiles/testbed.dir/src/game.c.o: /home/gon/Developer/Kill_Engine/testbed/src/game.c
+testbed/CMakeFiles/testbed.dir/src/game.c.o: testbed/CMakeFiles/testbed.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object testbed/CMakeFiles/testbed.dir/src/game.c.o"
+	cd /home/gon/Developer/Kill_Engine/build/testbed && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT testbed/CMakeFiles/testbed.dir/src/game.c.o -MF CMakeFiles/testbed.dir/src/game.c.o.d -o CMakeFiles/testbed.dir/src/game.c.o -c /home/gon/Developer/Kill_Engine/testbed/src/game.c
+
+testbed/CMakeFiles/testbed.dir/src/game.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/testbed.dir/src/game.c.i"
+	cd /home/gon/Developer/Kill_Engine/build/testbed && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gon/Developer/Kill_Engine/testbed/src/game.c > CMakeFiles/testbed.dir/src/game.c.i
+
+testbed/CMakeFiles/testbed.dir/src/game.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/testbed.dir/src/game.c.s"
+	cd /home/gon/Developer/Kill_Engine/build/testbed && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gon/Developer/Kill_Engine/testbed/src/game.c -o CMakeFiles/testbed.dir/src/game.c.s
 
 # Object files for target testbed
 testbed_OBJECTS = \
-"CMakeFiles/testbed.dir/src/main.c.o"
+"CMakeFiles/testbed.dir/src/entry.c.o" \
+"CMakeFiles/testbed.dir/src/game.c.o"
 
 # External object files for target testbed
 testbed_EXTERNAL_OBJECTS =
 
-testbed/testbed: testbed/CMakeFiles/testbed.dir/src/main.c.o
+testbed/testbed: testbed/CMakeFiles/testbed.dir/src/entry.c.o
+testbed/testbed: testbed/CMakeFiles/testbed.dir/src/game.c.o
 testbed/testbed: testbed/CMakeFiles/testbed.dir/build.make
 testbed/testbed: engine/libengine.so
 testbed/testbed: testbed/CMakeFiles/testbed.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable testbed"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable testbed"
 	cd /home/gon/Developer/Kill_Engine/build/testbed && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/testbed.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

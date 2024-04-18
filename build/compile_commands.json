@@ -1,14 +1,74 @@
 [
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "/usr/bin/cc -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -fPIC -o CMakeFiles/engine.dir/src/test.c.o -c /home/gon/Developer/Kill_Engine/engine/src/test.c",
-  "file": "/home/gon/Developer/Kill_Engine/engine/src/test.c",
-  "output": "engine/CMakeFiles/engine.dir/src/test.c.o"
+  "command": "clang -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src -fPIC -o CMakeFiles/engine.dir/src/containers/darray.c.o -c /home/gon/Developer/Kill_Engine/engine/src/containers/darray.c",
+  "file": "/home/gon/Developer/Kill_Engine/engine/src/containers/darray.c",
+  "output": "engine/CMakeFiles/engine.dir/src/containers/darray.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/engine",
+  "command": "clang -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src -fPIC -o CMakeFiles/engine.dir/src/core/application.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/application.c",
+  "file": "/home/gon/Developer/Kill_Engine/engine/src/core/application.c",
+  "output": "engine/CMakeFiles/engine.dir/src/core/application.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/engine",
+  "command": "clang -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src -fPIC -o CMakeFiles/engine.dir/src/core/clock.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/clock.c",
+  "file": "/home/gon/Developer/Kill_Engine/engine/src/core/clock.c",
+  "output": "engine/CMakeFiles/engine.dir/src/core/clock.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/engine",
+  "command": "clang -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src -fPIC -o CMakeFiles/engine.dir/src/core/defines.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/defines.c",
+  "file": "/home/gon/Developer/Kill_Engine/engine/src/core/defines.c",
+  "output": "engine/CMakeFiles/engine.dir/src/core/defines.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/engine",
+  "command": "clang -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src -fPIC -o CMakeFiles/engine.dir/src/core/events.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/events.c",
+  "file": "/home/gon/Developer/Kill_Engine/engine/src/core/events.c",
+  "output": "engine/CMakeFiles/engine.dir/src/core/events.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/engine",
+  "command": "clang -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src -fPIC -o CMakeFiles/engine.dir/src/core/input.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/input.c",
+  "file": "/home/gon/Developer/Kill_Engine/engine/src/core/input.c",
+  "output": "engine/CMakeFiles/engine.dir/src/core/input.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/engine",
+  "command": "clang -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src -fPIC -o CMakeFiles/engine.dir/src/core/kmemory.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/kmemory.c",
+  "file": "/home/gon/Developer/Kill_Engine/engine/src/core/kmemory.c",
+  "output": "engine/CMakeFiles/engine.dir/src/core/kmemory.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/engine",
+  "command": "clang -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src -fPIC -o CMakeFiles/engine.dir/src/platform/platform.c.o -c /home/gon/Developer/Kill_Engine/engine/src/platform/platform.c",
+  "file": "/home/gon/Developer/Kill_Engine/engine/src/platform/platform.c",
+  "output": "engine/CMakeFiles/engine.dir/src/platform/platform.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/engine",
+  "command": "clang -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src -fPIC -o CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererbackend.c",
+  "file": "/home/gon/Developer/Kill_Engine/engine/src/renderer/rendererbackend.c",
+  "output": "engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/engine",
+  "command": "clang -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src -fPIC -o CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererfrontend.c",
+  "file": "/home/gon/Developer/Kill_Engine/engine/src/renderer/rendererfrontend.c",
+  "output": "engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/testbed",
-  "command": "/usr/bin/cc  -I/home/gon/Developer/Kill_Engine/testbed/includes -I/home/gon/Developer/Kill_Engine/testbed/../engine/includes -I/home/gon/Developer/Kill_Engine/engine/includes  -o CMakeFiles/testbed.dir/src/main.c.o -c /home/gon/Developer/Kill_Engine/testbed/src/main.c",
-  "file": "/home/gon/Developer/Kill_Engine/testbed/src/main.c",
-  "output": "testbed/CMakeFiles/testbed.dir/src/main.c.o"
+  "command": "/usr/bin/cc  -I/home/gon/Developer/Kill_Engine/testbed/../engine/src -I/home/gon/Developer/Kill_Engine/engine/src  -o CMakeFiles/testbed.dir/src/entry.c.o -c /home/gon/Developer/Kill_Engine/testbed/src/entry.c",
+  "file": "/home/gon/Developer/Kill_Engine/testbed/src/entry.c",
+  "output": "testbed/CMakeFiles/testbed.dir/src/entry.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/testbed",
+  "command": "/usr/bin/cc  -I/home/gon/Developer/Kill_Engine/testbed/../engine/src -I/home/gon/Developer/Kill_Engine/engine/src  -o CMakeFiles/testbed.dir/src/game.c.o -c /home/gon/Developer/Kill_Engine/testbed/src/game.c",
+  "file": "/home/gon/Developer/Kill_Engine/testbed/src/game.c",
+  "output": "testbed/CMakeFiles/testbed.dir/src/game.c.o"
 }
 ]

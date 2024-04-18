@@ -69,33 +69,180 @@ include engine/CMakeFiles/engine.dir/progress.make
 # Include the compile flags for this target's objects.
 include engine/CMakeFiles/engine.dir/flags.make
 
-engine/CMakeFiles/engine.dir/src/test.c.o: engine/CMakeFiles/engine.dir/flags.make
-engine/CMakeFiles/engine.dir/src/test.c.o: /home/gon/Developer/Kill_Engine/engine/src/test.c
-engine/CMakeFiles/engine.dir/src/test.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object engine/CMakeFiles/engine.dir/src/test.c.o"
-	cd /home/gon/Developer/Kill_Engine/build/engine && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/test.c.o -MF CMakeFiles/engine.dir/src/test.c.o.d -o CMakeFiles/engine.dir/src/test.c.o -c /home/gon/Developer/Kill_Engine/engine/src/test.c
+engine/CMakeFiles/engine.dir/src/containers/darray.c.o: engine/CMakeFiles/engine.dir/flags.make
+engine/CMakeFiles/engine.dir/src/containers/darray.c.o: /home/gon/Developer/Kill_Engine/engine/src/containers/darray.c
+engine/CMakeFiles/engine.dir/src/containers/darray.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object engine/CMakeFiles/engine.dir/src/containers/darray.c.o"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/containers/darray.c.o -MF CMakeFiles/engine.dir/src/containers/darray.c.o.d -o CMakeFiles/engine.dir/src/containers/darray.c.o -c /home/gon/Developer/Kill_Engine/engine/src/containers/darray.c
 
-engine/CMakeFiles/engine.dir/src/test.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/engine.dir/src/test.c.i"
-	cd /home/gon/Developer/Kill_Engine/build/engine && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gon/Developer/Kill_Engine/engine/src/test.c > CMakeFiles/engine.dir/src/test.c.i
+engine/CMakeFiles/engine.dir/src/containers/darray.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/engine.dir/src/containers/darray.c.i"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gon/Developer/Kill_Engine/engine/src/containers/darray.c > CMakeFiles/engine.dir/src/containers/darray.c.i
 
-engine/CMakeFiles/engine.dir/src/test.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/engine.dir/src/test.c.s"
-	cd /home/gon/Developer/Kill_Engine/build/engine && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gon/Developer/Kill_Engine/engine/src/test.c -o CMakeFiles/engine.dir/src/test.c.s
+engine/CMakeFiles/engine.dir/src/containers/darray.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/engine.dir/src/containers/darray.c.s"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gon/Developer/Kill_Engine/engine/src/containers/darray.c -o CMakeFiles/engine.dir/src/containers/darray.c.s
+
+engine/CMakeFiles/engine.dir/src/core/application.c.o: engine/CMakeFiles/engine.dir/flags.make
+engine/CMakeFiles/engine.dir/src/core/application.c.o: /home/gon/Developer/Kill_Engine/engine/src/core/application.c
+engine/CMakeFiles/engine.dir/src/core/application.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object engine/CMakeFiles/engine.dir/src/core/application.c.o"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/core/application.c.o -MF CMakeFiles/engine.dir/src/core/application.c.o.d -o CMakeFiles/engine.dir/src/core/application.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/application.c
+
+engine/CMakeFiles/engine.dir/src/core/application.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/engine.dir/src/core/application.c.i"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gon/Developer/Kill_Engine/engine/src/core/application.c > CMakeFiles/engine.dir/src/core/application.c.i
+
+engine/CMakeFiles/engine.dir/src/core/application.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/engine.dir/src/core/application.c.s"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gon/Developer/Kill_Engine/engine/src/core/application.c -o CMakeFiles/engine.dir/src/core/application.c.s
+
+engine/CMakeFiles/engine.dir/src/core/clock.c.o: engine/CMakeFiles/engine.dir/flags.make
+engine/CMakeFiles/engine.dir/src/core/clock.c.o: /home/gon/Developer/Kill_Engine/engine/src/core/clock.c
+engine/CMakeFiles/engine.dir/src/core/clock.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object engine/CMakeFiles/engine.dir/src/core/clock.c.o"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/core/clock.c.o -MF CMakeFiles/engine.dir/src/core/clock.c.o.d -o CMakeFiles/engine.dir/src/core/clock.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/clock.c
+
+engine/CMakeFiles/engine.dir/src/core/clock.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/engine.dir/src/core/clock.c.i"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gon/Developer/Kill_Engine/engine/src/core/clock.c > CMakeFiles/engine.dir/src/core/clock.c.i
+
+engine/CMakeFiles/engine.dir/src/core/clock.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/engine.dir/src/core/clock.c.s"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gon/Developer/Kill_Engine/engine/src/core/clock.c -o CMakeFiles/engine.dir/src/core/clock.c.s
+
+engine/CMakeFiles/engine.dir/src/core/defines.c.o: engine/CMakeFiles/engine.dir/flags.make
+engine/CMakeFiles/engine.dir/src/core/defines.c.o: /home/gon/Developer/Kill_Engine/engine/src/core/defines.c
+engine/CMakeFiles/engine.dir/src/core/defines.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object engine/CMakeFiles/engine.dir/src/core/defines.c.o"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/core/defines.c.o -MF CMakeFiles/engine.dir/src/core/defines.c.o.d -o CMakeFiles/engine.dir/src/core/defines.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/defines.c
+
+engine/CMakeFiles/engine.dir/src/core/defines.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/engine.dir/src/core/defines.c.i"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gon/Developer/Kill_Engine/engine/src/core/defines.c > CMakeFiles/engine.dir/src/core/defines.c.i
+
+engine/CMakeFiles/engine.dir/src/core/defines.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/engine.dir/src/core/defines.c.s"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gon/Developer/Kill_Engine/engine/src/core/defines.c -o CMakeFiles/engine.dir/src/core/defines.c.s
+
+engine/CMakeFiles/engine.dir/src/core/events.c.o: engine/CMakeFiles/engine.dir/flags.make
+engine/CMakeFiles/engine.dir/src/core/events.c.o: /home/gon/Developer/Kill_Engine/engine/src/core/events.c
+engine/CMakeFiles/engine.dir/src/core/events.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object engine/CMakeFiles/engine.dir/src/core/events.c.o"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/core/events.c.o -MF CMakeFiles/engine.dir/src/core/events.c.o.d -o CMakeFiles/engine.dir/src/core/events.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/events.c
+
+engine/CMakeFiles/engine.dir/src/core/events.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/engine.dir/src/core/events.c.i"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gon/Developer/Kill_Engine/engine/src/core/events.c > CMakeFiles/engine.dir/src/core/events.c.i
+
+engine/CMakeFiles/engine.dir/src/core/events.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/engine.dir/src/core/events.c.s"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gon/Developer/Kill_Engine/engine/src/core/events.c -o CMakeFiles/engine.dir/src/core/events.c.s
+
+engine/CMakeFiles/engine.dir/src/core/input.c.o: engine/CMakeFiles/engine.dir/flags.make
+engine/CMakeFiles/engine.dir/src/core/input.c.o: /home/gon/Developer/Kill_Engine/engine/src/core/input.c
+engine/CMakeFiles/engine.dir/src/core/input.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object engine/CMakeFiles/engine.dir/src/core/input.c.o"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/core/input.c.o -MF CMakeFiles/engine.dir/src/core/input.c.o.d -o CMakeFiles/engine.dir/src/core/input.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/input.c
+
+engine/CMakeFiles/engine.dir/src/core/input.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/engine.dir/src/core/input.c.i"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gon/Developer/Kill_Engine/engine/src/core/input.c > CMakeFiles/engine.dir/src/core/input.c.i
+
+engine/CMakeFiles/engine.dir/src/core/input.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/engine.dir/src/core/input.c.s"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gon/Developer/Kill_Engine/engine/src/core/input.c -o CMakeFiles/engine.dir/src/core/input.c.s
+
+engine/CMakeFiles/engine.dir/src/core/kmemory.c.o: engine/CMakeFiles/engine.dir/flags.make
+engine/CMakeFiles/engine.dir/src/core/kmemory.c.o: /home/gon/Developer/Kill_Engine/engine/src/core/kmemory.c
+engine/CMakeFiles/engine.dir/src/core/kmemory.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object engine/CMakeFiles/engine.dir/src/core/kmemory.c.o"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/core/kmemory.c.o -MF CMakeFiles/engine.dir/src/core/kmemory.c.o.d -o CMakeFiles/engine.dir/src/core/kmemory.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/kmemory.c
+
+engine/CMakeFiles/engine.dir/src/core/kmemory.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/engine.dir/src/core/kmemory.c.i"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gon/Developer/Kill_Engine/engine/src/core/kmemory.c > CMakeFiles/engine.dir/src/core/kmemory.c.i
+
+engine/CMakeFiles/engine.dir/src/core/kmemory.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/engine.dir/src/core/kmemory.c.s"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gon/Developer/Kill_Engine/engine/src/core/kmemory.c -o CMakeFiles/engine.dir/src/core/kmemory.c.s
+
+engine/CMakeFiles/engine.dir/src/platform/platform.c.o: engine/CMakeFiles/engine.dir/flags.make
+engine/CMakeFiles/engine.dir/src/platform/platform.c.o: /home/gon/Developer/Kill_Engine/engine/src/platform/platform.c
+engine/CMakeFiles/engine.dir/src/platform/platform.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object engine/CMakeFiles/engine.dir/src/platform/platform.c.o"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/platform/platform.c.o -MF CMakeFiles/engine.dir/src/platform/platform.c.o.d -o CMakeFiles/engine.dir/src/platform/platform.c.o -c /home/gon/Developer/Kill_Engine/engine/src/platform/platform.c
+
+engine/CMakeFiles/engine.dir/src/platform/platform.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/engine.dir/src/platform/platform.c.i"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gon/Developer/Kill_Engine/engine/src/platform/platform.c > CMakeFiles/engine.dir/src/platform/platform.c.i
+
+engine/CMakeFiles/engine.dir/src/platform/platform.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/engine.dir/src/platform/platform.c.s"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gon/Developer/Kill_Engine/engine/src/platform/platform.c -o CMakeFiles/engine.dir/src/platform/platform.c.s
+
+engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o: engine/CMakeFiles/engine.dir/flags.make
+engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o: /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererbackend.c
+engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o -MF CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o.d -o CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererbackend.c
+
+engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/engine.dir/src/renderer/rendererbackend.c.i"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererbackend.c > CMakeFiles/engine.dir/src/renderer/rendererbackend.c.i
+
+engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/engine.dir/src/renderer/rendererbackend.c.s"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererbackend.c -o CMakeFiles/engine.dir/src/renderer/rendererbackend.c.s
+
+engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o: engine/CMakeFiles/engine.dir/flags.make
+engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o: /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererfrontend.c
+engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o -MF CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o.d -o CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererfrontend.c
+
+engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.i"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererfrontend.c > CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.i
+
+engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.s"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererfrontend.c -o CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.s
 
 # Object files for target engine
 engine_OBJECTS = \
-"CMakeFiles/engine.dir/src/test.c.o"
+"CMakeFiles/engine.dir/src/containers/darray.c.o" \
+"CMakeFiles/engine.dir/src/core/application.c.o" \
+"CMakeFiles/engine.dir/src/core/clock.c.o" \
+"CMakeFiles/engine.dir/src/core/defines.c.o" \
+"CMakeFiles/engine.dir/src/core/events.c.o" \
+"CMakeFiles/engine.dir/src/core/input.c.o" \
+"CMakeFiles/engine.dir/src/core/kmemory.c.o" \
+"CMakeFiles/engine.dir/src/platform/platform.c.o" \
+"CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o" \
+"CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o"
 
 # External object files for target engine
 engine_EXTERNAL_OBJECTS =
 
-engine/libengine.so: engine/CMakeFiles/engine.dir/src/test.c.o
+engine/libengine.so: engine/CMakeFiles/engine.dir/src/containers/darray.c.o
+engine/libengine.so: engine/CMakeFiles/engine.dir/src/core/application.c.o
+engine/libengine.so: engine/CMakeFiles/engine.dir/src/core/clock.c.o
+engine/libengine.so: engine/CMakeFiles/engine.dir/src/core/defines.c.o
+engine/libengine.so: engine/CMakeFiles/engine.dir/src/core/events.c.o
+engine/libengine.so: engine/CMakeFiles/engine.dir/src/core/input.c.o
+engine/libengine.so: engine/CMakeFiles/engine.dir/src/core/kmemory.c.o
+engine/libengine.so: engine/CMakeFiles/engine.dir/src/platform/platform.c.o
+engine/libengine.so: engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o
+engine/libengine.so: engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o
 engine/libengine.so: engine/CMakeFiles/engine.dir/build.make
 engine/libengine.so: /lib/libvulkan.so
-engine/libengine.so: /usr/lib/libglfw.so.3.4
+engine/libengine.so: /usr/lib/libSM.so
+engine/libengine.so: /usr/lib/libICE.so
+engine/libengine.so: /usr/lib/libX11.so
+engine/libengine.so: /usr/lib/libXext.so
 engine/libengine.so: engine/CMakeFiles/engine.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C shared library libengine.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking C shared library libengine.so"
 	cd /home/gon/Developer/Kill_Engine/build/engine && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/engine.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

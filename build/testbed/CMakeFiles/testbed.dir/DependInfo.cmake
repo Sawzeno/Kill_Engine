@@ -8,7 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/gon/Developer/Kill_Engine/testbed/src/main.c" "testbed/CMakeFiles/testbed.dir/src/main.c.o" "gcc" "testbed/CMakeFiles/testbed.dir/src/main.c.o.d"
+  "/home/gon/Developer/Kill_Engine/testbed/src/entry.c" "testbed/CMakeFiles/testbed.dir/src/entry.c.o" "gcc" "testbed/CMakeFiles/testbed.dir/src/entry.c.o.d"
+  "/home/gon/Developer/Kill_Engine/testbed/src/game.c" "testbed/CMakeFiles/testbed.dir/src/game.c.o" "gcc" "testbed/CMakeFiles/testbed.dir/src/game.c.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

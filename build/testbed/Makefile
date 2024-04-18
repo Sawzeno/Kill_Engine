@@ -130,29 +130,53 @@ testbed/fast:
 	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f testbed/CMakeFiles/testbed.dir/build.make testbed/CMakeFiles/testbed.dir/build
 .PHONY : testbed/fast
 
-src/main.o: src/main.c.o
-.PHONY : src/main.o
+src/entry.o: src/entry.c.o
+.PHONY : src/entry.o
 
 # target to build an object file
-src/main.c.o:
-	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f testbed/CMakeFiles/testbed.dir/build.make testbed/CMakeFiles/testbed.dir/src/main.c.o
-.PHONY : src/main.c.o
+src/entry.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f testbed/CMakeFiles/testbed.dir/build.make testbed/CMakeFiles/testbed.dir/src/entry.c.o
+.PHONY : src/entry.c.o
 
-src/main.i: src/main.c.i
-.PHONY : src/main.i
+src/entry.i: src/entry.c.i
+.PHONY : src/entry.i
 
 # target to preprocess a source file
-src/main.c.i:
-	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f testbed/CMakeFiles/testbed.dir/build.make testbed/CMakeFiles/testbed.dir/src/main.c.i
-.PHONY : src/main.c.i
+src/entry.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f testbed/CMakeFiles/testbed.dir/build.make testbed/CMakeFiles/testbed.dir/src/entry.c.i
+.PHONY : src/entry.c.i
 
-src/main.s: src/main.c.s
-.PHONY : src/main.s
+src/entry.s: src/entry.c.s
+.PHONY : src/entry.s
 
 # target to generate assembly for a file
-src/main.c.s:
-	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f testbed/CMakeFiles/testbed.dir/build.make testbed/CMakeFiles/testbed.dir/src/main.c.s
-.PHONY : src/main.c.s
+src/entry.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f testbed/CMakeFiles/testbed.dir/build.make testbed/CMakeFiles/testbed.dir/src/entry.c.s
+.PHONY : src/entry.c.s
+
+src/game.o: src/game.c.o
+.PHONY : src/game.o
+
+# target to build an object file
+src/game.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f testbed/CMakeFiles/testbed.dir/build.make testbed/CMakeFiles/testbed.dir/src/game.c.o
+.PHONY : src/game.c.o
+
+src/game.i: src/game.c.i
+.PHONY : src/game.i
+
+# target to preprocess a source file
+src/game.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f testbed/CMakeFiles/testbed.dir/build.make testbed/CMakeFiles/testbed.dir/src/game.c.i
+.PHONY : src/game.c.i
+
+src/game.s: src/game.c.s
+.PHONY : src/game.s
+
+# target to generate assembly for a file
+src/game.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f testbed/CMakeFiles/testbed.dir/build.make testbed/CMakeFiles/testbed.dir/src/game.c.s
+.PHONY : src/game.c.s
 
 # Help Target
 help:
@@ -163,9 +187,12 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... testbed"
-	@echo "... src/main.o"
-	@echo "... src/main.i"
-	@echo "... src/main.s"
+	@echo "... src/entry.o"
+	@echo "... src/entry.i"
+	@echo "... src/entry.s"
+	@echo "... src/game.o"
+	@echo "... src/game.i"
+	@echo "... src/game.s"
 .PHONY : help
 
 

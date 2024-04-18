@@ -1,1 +1,1 @@
-/usr/bin/cc CMakeFiles/testbed.dir/src/main.c.o -o testbed  -Wl,-rpath,/home/gon/Developer/Kill_Engine/build/engine ../engine/libengine.so
+/usr/bin/cc CMakeFiles/testbed.dir/src/entry.c.o CMakeFiles/testbed.dir/src/game.c.o -o testbed  -Wl,-rpath,/home/gon/Developer/Kill_Engine/build/engine ../engine/libengine.so -lxcb
