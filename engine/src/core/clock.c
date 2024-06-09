@@ -2,11 +2,11 @@
 
 #include  "defines.h"
 #include  "platform/platform.h"
-#include <complex.h>
+#include  <complex.h>
 
 u8  clockStart(Clock *clock){
 #if LOG_DEBUG_ENABLED == 1
-  ISNULL(clock)
+  ISNULL(clock ,false);
 #endif
 
   clock->start  = platformGetAbsoluteTime();
@@ -16,7 +16,7 @@ u8  clockStart(Clock *clock){
 
 u8  clockUpdate(Clock *clock){
 #if LOG_DEBUG_ENABLED == 1
-  ISNULL(clock)
+  ISNULL(clock , false);
 #endif
 
   if(clock->start != 0){
@@ -27,7 +27,7 @@ u8  clockUpdate(Clock *clock){
 
 u8 clockStop(Clock* clock){
 #if LOG_DEBUG_ENABLED == 1
-  ISNULL(clock)
+  ISNULL(clock , false);
 #endif
   clock->start = 0;
   return true;

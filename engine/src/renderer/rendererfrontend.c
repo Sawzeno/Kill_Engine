@@ -9,10 +9,7 @@ static rendererBackend* backend = 0;
 u8  initializeRenderer(const char *applicationName, platformState *platState){
 
   backend = kallocate(sizeof(rendererBackend), MEMORY_TAG_RENDERER);
-  if(backend  ==  NULL){
-    UFATAL("could not allocate memory for backend")
-    return false;
-  }
+
 
   backend->platState    = platState;
   backend->initilaize   = rendererBackendInitialize;
@@ -22,14 +19,15 @@ u8  initializeRenderer(const char *applicationName, platformState *platState){
   backend->resized      = rendererBackendResized;
 
   if(!(backend->initilaize(applicationName , platState))){
-    UFATAL("FAILED TO INITIALIZE RENDERER BACKEND!!")
+    UFATAL("FAILED TO INITIALIZE RENDERER BACKEND!!");
     return false;
   }
-
   return true;
 }
 
 u8  shutdownRenderer(){
+
+  backend->shutdown();
   backend->platState  = 0;
   backend->resized    = 0;
   backend->endFrame   = 0;
@@ -38,7 +36,6 @@ u8  shutdownRenderer(){
   backend->beginFrame = 0;
 
   kfree(backend , sizeof(rendererBackend) , MEMORY_TAG_RENDERER);
-
   UINFO("RENDERER SUBSYTEM SHUTDOWN");
   return true;
 }
@@ -48,19 +45,33 @@ u8 rendererBeginFrame(f32 deltaTime){
 
 u8 rendererEndFrame(f32 deltaTime){
   u8 result = backend->endFrame( deltaTime);
-  backend->frameNumber++;
   return result;
 }
 
 u8  rendererDrawFrame(renderPacket* packet){
-  UTRACE("RENDERER DRAW FRAME CALLED")
   if(rendererBeginFrame(packet->deltaTime)){
-    u8 result = rendererEndFrame(packet->deltaTime);
-    if(result ==  false){
-      UERROR("rendererEndFrame Failed !")
+    UTRACE("RENDERER BEGIN FRAME SUCCESFULL");
+    if(rendererEndFrame(packet->deltaTime)){
+      UTRACE("RENDERER END FRAME SUCCESFULL");
+      backend->frameNumber++;
+      return true;
+    }else{
+      UERROR("rendererEndFrame Failed !");
       return false;
     }
+  }else{
+    UERROR("rendererBeginFrame Failed !");
+    return false;
   }
+}
 
+
+u8  rendererOnResized(u16 width , u16 height){
+  UTRACE("RENDRER RESIZE CALLED");
+  if(backend){
+    backend->resized(width, height);
+  }else{
+    UFATAL("RESIZE CALLED WHEN NO BAKEND EXISTS!!, %i, %i",width,height);
+  }
   return true;
 }

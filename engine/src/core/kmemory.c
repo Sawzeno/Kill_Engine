@@ -33,15 +33,17 @@ static const char* memory_tag_strings[MEMORY_TAG_MAX_TAGS] = {
   "ENTITY_SCENE",
 };
 
+
+#define MEM_STATS_LEN 10240
 static memoryStats stats;
 
 void initializeMemory(){
   memset(&stats , 0 , sizeof(stats));
-  UINFO("MEMORY SUSBSYSTEM INITIALIZED")
+  UINFO("MEMORY SUSBSYSTEM INITIALIZED");
 }
 
 void shutdownMemory(){
-  UREPORT(LOG_WARN, "TODO")
+  UREPORT("TODO");
 }
 
 char* getMemoryUsage(){
@@ -49,7 +51,7 @@ char* getMemoryUsage(){
   const u64 mib   = 1024 * 1024;
   const u64 kib   = 1024;
 
-  char buffer[4096]   = "System Memory Use(TAGGED):\n";
+  char buffer[MEM_STATS_LEN]   = "System Memory Use(TAGGED):\n";
   u64 offset  = strlen(buffer);
 
   for(u32 i = 0 ; i < MEMORY_TAG_MAX_TAGS  ; ++i){
@@ -70,7 +72,7 @@ char* getMemoryUsage(){
       unit[1] = 0;
       amount  = stats.taggedAllocations[i];
     } 
-    i32 length = snprintf(buffer + offset, 4096 - offset, "%-20s: %.2f%s\n", memory_tag_strings[i], amount, unit);
+    i32 length = snprintf(buffer + offset, MEM_STATS_LEN - offset, "%-20s: %.2f%s\n", memory_tag_strings[i], amount, unit);
     offset+= length;
   }
 
@@ -80,18 +82,20 @@ char* getMemoryUsage(){
 
 void* kallocate(u64 size , memory_tag tag){
   if(tag ==  MEMORY_TAG_UNKNOWN){
-    UWARN("kallocate called on MEMORY_TAG_UNKNOWN , reclass this allocation !")
+    UWARN("kallocate called on MEMORY_TAG_UNKNOWN , reclass this allocation !");
+  }
+  void* block = calloc(1, size);
+  if(block == NULL ){
+    exit(1);
   }
   stats.totalAllocated  +=  size;
   stats.taggedAllocations[tag]  += size;
-  void* block = malloc(size);
-  memset(block , 0 , size);
   return block;
 }
 
 void  kfree(void* block , u64 size , memory_tag tag){
   if(tag  == MEMORY_TAG_UNKNOWN){
-    UWARN("kfree called on MEMORY_TAG_UNKOWN")
+    UWARN("kfree called on MEMORY_TAG_UNKOWN");
   }
   stats.totalAllocated  -=  size;
   stats.taggedAllocations[tag]  -=  size;
@@ -102,8 +106,11 @@ void* kzeroMemory(void* block , u64 size){
   return memset(block , 0 , size);
 }
 
-void* kcopyMemory(void* dest , const void* source , u64 size){
-  return memcpy(dest , source , size);
+void* kcopyMemory(void* dest , const void* source , u64 size, const char* func){
+  //UDEBUG("copying %p to %p in function %s",source,dest,func);
+  void* copied = memcpy(dest , source , size);
+
+  return copied ;
 }
 
 void* ksetMemory(void* dest , i32 value , u64 size){

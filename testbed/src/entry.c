@@ -9,7 +9,7 @@ i8 creategame(Game* outGame){
   outGame->appConfig.posX   = 100;
   outGame->appConfig.posY   = 100;
   outGame->appConfig.width  = 1280;
-  outGame->appConfig.height = 720;
+  outGame->appConfig.height = 1440;
   outGame->appConfig.name   = "KILL ENGINE";
   
   //Funcrtion Pointers

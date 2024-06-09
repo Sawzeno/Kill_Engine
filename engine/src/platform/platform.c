@@ -1,8 +1,10 @@
 #include  "platform.h"
+#include "core/events.h"
 #include  "core/input.h"
 #include  "defines.h"
 
 #include  <X11/X.h>
+#include <vulkan/vulkan_core.h>
 #include  <xcb/xcb.h>
 #include  <xcb/xproto.h>
 #include  <X11/keysym.h>
@@ -15,8 +17,11 @@
 #include  <stdlib.h>
 #include  <unistd.h>
 #include  <string.h>
-#include  <bits/time.h>
-#include  <time.h>
+
+#define   VK_USE_PLATFORM_XCB_KHR
+#include  <vulkan/vulkan.h>
+#include  "renderer/vulkantypes.h"
+#include  "renderer/utils.h"
 
 typedef struct internalState internalState;
 
@@ -27,6 +32,7 @@ struct internalState{
   xcb_screen_t*     screen;
   xcb_atom_t        wmProtocols;
   xcb_atom_t        wmDeleteWin;
+  VkSurfaceKHR      surface;
 };
 
 u8  translateKeycode(u32 xKeycode);
@@ -39,14 +45,15 @@ u8  startPlatform(platformState* platState,
                   i32 height){
   //create internal state
   platState->internalState  = malloc(sizeof(internalState));
-  MEMERR(platState->internalState)
+  MEMERR(platState->internalState);
   internalState*  state = (internalState*)(platState->internalState);
 
   //connect to Xserver
   state->display  = XOpenDisplay(NULL);
 
   //Turn off keyrepeats
-  XAutoRepeatOff(state->display);
+  XAutoRepeatOn(state->display);
+  //XAutoRepeatOff(state->display);
 
   //Retrieve the connection from display
   state->connection = XGetXCBConnection(state->display);
@@ -79,9 +86,10 @@ u8  startPlatform(platformState* platState,
     XCB_EVENT_MASK_EXPOSURE       | XCB_EVENT_MASK_BUTTON_PRESS   |
     XCB_EVENT_MASK_BUTTON_RELEASE | XCB_EVENT_MASK_POINTER_MOTION |
     XCB_EVENT_MASK_ENTER_WINDOW   | XCB_EVENT_MASK_LEAVE_WINDOW   |
-    XCB_EVENT_MASK_KEY_PRESS      | XCB_EVENT_MASK_KEY_RELEASE;
+    XCB_EVENT_MASK_KEY_PRESS      | XCB_EVENT_MASK_KEY_RELEASE    |
+    XCB_EVENT_MASK_STRUCTURE_NOTIFY;
   //values to be sent over to XCB
-  u32 valueList[] = {state->screen->black_pixel , eventValues};
+  u32 valueList[] = {state->screen->black_pixel , eventValues} ;
 
   //create the window
   xcb_create_window (state->connection,                             /* Connection          */
@@ -139,7 +147,7 @@ u8  startPlatform(platformState* platState,
     return false;
   }
 
-  UINFO("WINDOWING SUBSYSTEM INITIALIZED")
+  UINFO("WINDOWING SUBSYSTEM INITIALIZED");
   return true;
 }
 
@@ -168,7 +176,7 @@ u8    platformPumpMessages(platformState* platState){
   //poll for events untill NULL returned
   while(event != 0){
     event = xcb_poll_for_event(state->connection);
-    UTRACE("EVENT POLLED")
+    UTRACE("EVENT POLLED");
     if(event  ==  0){
       break;
     }
@@ -176,7 +184,7 @@ u8    platformPumpMessages(platformState* platState){
     switch (event->response_type & ~0x80) {
       case XCB_KEY_PRESS:
       case XCB_KEY_RELEASE: {
-        UTRACE("PLATFORM KEY PRESSED OR RELEASED")
+        //UTRACE("PLATFORM KEY PRESSED OR RELEASED");
         xcb_key_release_event_t* keyboardEvent = (xcb_key_release_event_t*)event;
         u8  pressed         = event->response_type  == XCB_KEY_PRESS;
         xcb_keycode_t code  = keyboardEvent->detail;
@@ -187,7 +195,7 @@ u8    platformPumpMessages(platformState* platState){
 
       case  XCB_BUTTON_PRESS:
       case  XCB_BUTTON_RELEASE:{
-        UTRACE("PLATFROM MOUSE PRESSED OR RELEASED")
+        //UTRACE("PLATFROM MOUSE PRESSED OR RELEASED");
         xcb_button_press_event_t* mouseEvent =   (xcb_button_press_event_t*)event;
         u8  pressed = event->response_type  ==  XCB_BUTTON_PRESS;
         buttons mouseButton = BUTTON_MAX_BUTTONS;
@@ -201,22 +209,28 @@ u8    platformPumpMessages(platformState* platState){
         }
 
         if(mouseButton != BUTTON_MAX_BUTTONS){
-          UTRACE("PLATFORM MAX BUTTONS PRESSED")
+          UTRACE("PLATFORM MAX BUTTONS PRESSED");
           inputProcessButton(mouseButton, pressed);
         }
       }break;
       case  XCB_MOTION_NOTIFY:{
-        UTRACE("PLATFORM MOTION NOTIFY")
+        //UTRACE("PLATFORM MOTION NOTIFY");
         xcb_motion_notify_event_t* moveEvent = (xcb_motion_notify_event_t*)event;
         inputProcessMouseMove(moveEvent->event_x, moveEvent->event_y);
         break;
       }
-      case  XCB_CONFIGURE_NOTIFY:
+      case  XCB_CONFIGURE_NOTIFY:{
+        UWARN("----------------------------------------------------------RESIZING--------------");
+        xcb_configure_notify_event_t* configureEvent  = (xcb_configure_notify_event_t*)event;
         //resizing
-        break;
+        eventContext context;
+        context.data.u16[0] = configureEvent->width;
+        context.data.u16[1] = configureEvent->height;
+        eventFire(EVENT_CODE_RESIZED, 0, context);
+      }break;
 
       case  XCB_CLIENT_MESSAGE:{
-        UTRACE("PLATFORM CLIENT NOTIFY")
+        //UTRACE("PLATFORM CLIENT NOTIFY");
         cm  = (xcb_client_message_event_t*)event;
         if(cm->data.data32[0] ==  state->wmDeleteWin){
           quitFlagged = true;
@@ -238,6 +252,20 @@ void  platformSleep(u64 ms){
     sleep(ms/1000);
   } 
   usleep((ms%1000) * 1000);
+}
+
+VkResult  createvulkanSurface(platformState* platState, vulkanContext* context){
+  internalState* state  = (internalState*)(platState->internalState);
+
+  VkXcbSurfaceCreateInfoKHR createInfo  = {VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR};
+  createInfo.connection = state->connection;
+  createInfo.window = state->window;
+
+  VkResult  result  = vkCreateXcbSurfaceKHR(context->instance, &createInfo, context->allocator, &state->surface);
+  VK_CHECK2(result, "COULD NOT SETUP VULKAN SURFACE "); 
+  context->surface  = state->surface;
+  UINFO("VULKAN SURFACE INITIALIZED");
+  return result;
 }
 
 f64   platformGetAbsoluteTime(){

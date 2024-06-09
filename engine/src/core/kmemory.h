@@ -33,7 +33,7 @@ void  kfree(void* block , u64 size , memory_tag tag);
 
 void* kzeroMemory(void* block , u64 size);
 
-void* kcopyMemory(void* dest , const void* source , u64 size);
+void* kcopyMemory(void* dest , const void* source , u64 size, const char* func);
 
 void* ksetMemory(void* dest , i32 value , u64 size);
 

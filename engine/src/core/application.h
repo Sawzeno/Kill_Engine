@@ -13,5 +13,6 @@ struct applicationConfig{
   char* name;
 };
 
+i8  applicationGetFrameBufferSize(u32* width, u32* height);
 i8  applicationCreate(Game* game);
 i8  applicationRun();

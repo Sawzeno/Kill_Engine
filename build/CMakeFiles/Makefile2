@@ -65,16 +65,19 @@ CMAKE_BINARY_DIR = /home/gon/Developer/Kill_Engine/build
 # The main recursive "all" target.
 all: engine/all
 all: testbed/all
+all: tests/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
 preinstall: engine/preinstall
 preinstall: testbed/preinstall
+preinstall: tests/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
 clean: engine/clean
 clean: testbed/clean
+clean: tests/clean
 .PHONY : clean
 
 #=============================================================================
@@ -108,18 +111,35 @@ testbed/clean: testbed/CMakeFiles/testbed.dir/clean
 .PHONY : testbed/clean
 
 #=============================================================================
+# Directory level rules for directory tests
+
+# Recursive "all" directory target.
+tests/all: tests/CMakeFiles/darray.test.dir/all
+tests/all: tests/CMakeFiles/kmemory.test.dir/all
+.PHONY : tests/all
+
+# Recursive "preinstall" directory target.
+tests/preinstall:
+.PHONY : tests/preinstall
+
+# Recursive "clean" directory target.
+tests/clean: tests/CMakeFiles/darray.test.dir/clean
+tests/clean: tests/CMakeFiles/kmemory.test.dir/clean
+.PHONY : tests/clean
+
+#=============================================================================
 # Target rules for target engine/CMakeFiles/engine.dir
 
 # All Build rule for target.
 engine/CMakeFiles/engine.dir/all:
 	$(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/depend
 	$(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Built target engine"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21 "Built target engine"
 .PHONY : engine/CMakeFiles/engine.dir/all
 
 # Build rule for subdir invocation for target.
 engine/CMakeFiles/engine.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/gon/Developer/Kill_Engine/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gon/Developer/Kill_Engine/build/CMakeFiles 19
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 engine/CMakeFiles/engine.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/gon/Developer/Kill_Engine/build/CMakeFiles 0
 .PHONY : engine/CMakeFiles/engine.dir/rule
@@ -140,12 +160,12 @@ engine/CMakeFiles/engine.dir/clean:
 testbed/CMakeFiles/testbed.dir/all: engine/CMakeFiles/engine.dir/all
 	$(MAKE) $(MAKESILENT) -f testbed/CMakeFiles/testbed.dir/build.make testbed/CMakeFiles/testbed.dir/depend
 	$(MAKE) $(MAKESILENT) -f testbed/CMakeFiles/testbed.dir/build.make testbed/CMakeFiles/testbed.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=12,13,14 "Built target testbed"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=24,25,26 "Built target testbed"
 .PHONY : testbed/CMakeFiles/testbed.dir/all
 
 # Build rule for subdir invocation for target.
 testbed/CMakeFiles/testbed.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/gon/Developer/Kill_Engine/build/CMakeFiles 14
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gon/Developer/Kill_Engine/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 testbed/CMakeFiles/testbed.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/gon/Developer/Kill_Engine/build/CMakeFiles 0
 .PHONY : testbed/CMakeFiles/testbed.dir/rule
@@ -158,6 +178,58 @@ testbed: testbed/CMakeFiles/testbed.dir/rule
 testbed/CMakeFiles/testbed.dir/clean:
 	$(MAKE) $(MAKESILENT) -f testbed/CMakeFiles/testbed.dir/build.make testbed/CMakeFiles/testbed.dir/clean
 .PHONY : testbed/CMakeFiles/testbed.dir/clean
+
+#=============================================================================
+# Target rules for target tests/CMakeFiles/darray.test.dir
+
+# All Build rule for target.
+tests/CMakeFiles/darray.test.dir/all: engine/CMakeFiles/engine.dir/all
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/darray.test.dir/build.make tests/CMakeFiles/darray.test.dir/depend
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/darray.test.dir/build.make tests/CMakeFiles/darray.test.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=1,2 "Built target darray.test"
+.PHONY : tests/CMakeFiles/darray.test.dir/all
+
+# Build rule for subdir invocation for target.
+tests/CMakeFiles/darray.test.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gon/Developer/Kill_Engine/build/CMakeFiles 21
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/darray.test.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gon/Developer/Kill_Engine/build/CMakeFiles 0
+.PHONY : tests/CMakeFiles/darray.test.dir/rule
+
+# Convenience name for target.
+darray.test: tests/CMakeFiles/darray.test.dir/rule
+.PHONY : darray.test
+
+# clean rule for target.
+tests/CMakeFiles/darray.test.dir/clean:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/darray.test.dir/build.make tests/CMakeFiles/darray.test.dir/clean
+.PHONY : tests/CMakeFiles/darray.test.dir/clean
+
+#=============================================================================
+# Target rules for target tests/CMakeFiles/kmemory.test.dir
+
+# All Build rule for target.
+tests/CMakeFiles/kmemory.test.dir/all: engine/CMakeFiles/engine.dir/all
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/kmemory.test.dir/build.make tests/CMakeFiles/kmemory.test.dir/depend
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/kmemory.test.dir/build.make tests/CMakeFiles/kmemory.test.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=22,23 "Built target kmemory.test"
+.PHONY : tests/CMakeFiles/kmemory.test.dir/all
+
+# Build rule for subdir invocation for target.
+tests/CMakeFiles/kmemory.test.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gon/Developer/Kill_Engine/build/CMakeFiles 21
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/kmemory.test.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gon/Developer/Kill_Engine/build/CMakeFiles 0
+.PHONY : tests/CMakeFiles/kmemory.test.dir/rule
+
+# Convenience name for target.
+kmemory.test: tests/CMakeFiles/kmemory.test.dir/rule
+.PHONY : kmemory.test
+
+# clean rule for target.
+tests/CMakeFiles/kmemory.test.dir/clean:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/kmemory.test.dir/build.make tests/CMakeFiles/kmemory.test.dir/clean
+.PHONY : tests/CMakeFiles/kmemory.test.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

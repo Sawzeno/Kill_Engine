@@ -35,12 +35,12 @@ u8  initializeEvents(){
   kzeroMemory(&state , sizeof(state));
   areEventsInitialized = true;
   
-  UINFO("EVENT SUBSYSTEM INITIALIZED !")
+  UINFO("EVENT SUBSYSTEM INITIALIZED !");
   return true;
 }
 
 void  shutdownEvents(){
-  UINFO("EVENT SUBSYSTEM SHUTDOWN !")
+  UINFO("EVENT SUBSYSTEM SHUTDOWN !");
   for(u16 i = 0 ; i < MAX_MESSAGE_CODES ; ++i){
     if(state.registered[i].events != 0){
       _darrayDestroy(state.registered[i].events);
@@ -61,7 +61,7 @@ u8 eventRegister(u16 code, void* listener, pfnOnEvent onEvent) {
     u64 registeredCount = darrayLength(state.registered[code].events);
     for(u64 i = 0; i < registeredCount; ++i) {
         if(state.registered[code].events[i].listener == listener) {
-            UREPORT(LOG_WARN, "TODO")
+            UREPORT("TODO");
             return false;
         }
     }

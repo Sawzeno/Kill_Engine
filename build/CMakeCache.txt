@@ -242,6 +242,30 @@ KILL_ENGINE_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 KILL_ENGINE_SOURCE_DIR:STATIC=/home/gon/Developer/Kill_Engine
 
+//Enable debug logs
+LOG_DEBUG:BOOL=ON
+
+//Enable debug logs
+LOG_DEBUG_ENABLED:BOOL=ON
+
+//Enable info logs
+LOG_INFO:BOOL=ON
+
+//Enable info logs
+LOG_INFO_ENABLED:BOOL=ON
+
+//Enable trace logs
+LOG_TRACE:BOOL=ON
+
+//Enable trace logs
+LOG_TRACE_ENABLED:BOOL=ON
+
+//Enable warning logs
+LOG_WARN:BOOL=ON
+
+//Enable warning logs
+LOG_WARN_ENABLED:BOOL=ON
+
 //Arguments to supply to pkg-config
 PKG_CONFIG_ARGN:STRING=
 
@@ -698,6 +722,15 @@ testbed_IS_TOP_LEVEL:STATIC=OFF
 //Value Computed by CMake
 testbed_SOURCE_DIR:STATIC=/home/gon/Developer/Kill_Engine/testbed
 
+//Value Computed by CMake
+tests_BINARY_DIR:STATIC=/home/gon/Developer/Kill_Engine/build/tests
+
+//Value Computed by CMake
+tests_IS_TOP_LEVEL:STATIC=OFF
+
+//Value Computed by CMake
+tests_SOURCE_DIR:STATIC=/home/gon/Developer/Kill_Engine/tests
+
 
 ########################
 # INTERNAL cache entries
@@ -714,7 +747,7 @@ CMAKE_CACHE_MAJOR_VERSION:INTERNAL=3
 //Minor version of cmake used to create the current loaded cache
 CMAKE_CACHE_MINOR_VERSION:INTERNAL=29
 //Patch version of cmake used to create the current loaded cache
-CMAKE_CACHE_PATCH_VERSION:INTERNAL=2
+CMAKE_CACHE_PATCH_VERSION:INTERNAL=5
 //ADVANCED property for variable: CMAKE_COLOR_MAKEFILE
 CMAKE_COLOR_MAKEFILE-ADVANCED:INTERNAL=1
 //Path to CMake executable.
@@ -815,7 +848,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=3
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=4
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -865,7 +898,7 @@ FIND_PACKAGE_MESSAGE_DETAILS_PkgConfig:INTERNAL=[/usr/bin/pkg-config][v2.1.1()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //Details about finding Vulkan
-FIND_PACKAGE_MESSAGE_DETAILS_Vulkan:INTERNAL=[/lib/libvulkan.so][/usr/include][cfound components: glslc glslangValidator ][v1.3.279()]
+FIND_PACKAGE_MESSAGE_DETAILS_Vulkan:INTERNAL=[/lib/libvulkan.so][/usr/include][cfound components: glslc glslangValidator ][v1.3.285()]
 //Details about finding X11
 FIND_PACKAGE_MESSAGE_DETAILS_X11:INTERNAL=[/usr/include][/usr/lib/libX11.so][c ][v()]
 //ADVANCED property for variable: FREETYPE_INCLUDE_DIR_freetype2

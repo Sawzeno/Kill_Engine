@@ -142,6 +142,32 @@ testbed/fast:
 	$(MAKE) $(MAKESILENT) -f testbed/CMakeFiles/testbed.dir/build.make testbed/CMakeFiles/testbed.dir/build
 .PHONY : testbed/fast
 
+#=============================================================================
+# Target rules for targets named darray.test
+
+# Build rule for target.
+darray.test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 darray.test
+.PHONY : darray.test
+
+# fast build rule for target.
+darray.test/fast:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/darray.test.dir/build.make tests/CMakeFiles/darray.test.dir/build
+.PHONY : darray.test/fast
+
+#=============================================================================
+# Target rules for targets named kmemory.test
+
+# Build rule for target.
+kmemory.test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 kmemory.test
+.PHONY : kmemory.test
+
+# fast build rule for target.
+kmemory.test/fast:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/kmemory.test.dir/build.make tests/CMakeFiles/kmemory.test.dir/build
+.PHONY : kmemory.test/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -150,7 +176,9 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... darray.test"
 	@echo "... engine"
+	@echo "... kmemory.test"
 	@echo "... testbed"
 .PHONY : help
 

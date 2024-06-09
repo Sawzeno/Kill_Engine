@@ -322,6 +322,126 @@ src/platform/platform.c.s:
 	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/platform/platform.c.s
 .PHONY : src/platform/platform.c.s
 
+src/renderer/commandbuffer.o: src/renderer/commandbuffer.c.o
+.PHONY : src/renderer/commandbuffer.o
+
+# target to build an object file
+src/renderer/commandbuffer.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o
+.PHONY : src/renderer/commandbuffer.c.o
+
+src/renderer/commandbuffer.i: src/renderer/commandbuffer.c.i
+.PHONY : src/renderer/commandbuffer.i
+
+# target to preprocess a source file
+src/renderer/commandbuffer.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.i
+.PHONY : src/renderer/commandbuffer.c.i
+
+src/renderer/commandbuffer.s: src/renderer/commandbuffer.c.s
+.PHONY : src/renderer/commandbuffer.s
+
+# target to generate assembly for a file
+src/renderer/commandbuffer.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.s
+.PHONY : src/renderer/commandbuffer.c.s
+
+src/renderer/device.o: src/renderer/device.c.o
+.PHONY : src/renderer/device.o
+
+# target to build an object file
+src/renderer/device.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/device.c.o
+.PHONY : src/renderer/device.c.o
+
+src/renderer/device.i: src/renderer/device.c.i
+.PHONY : src/renderer/device.i
+
+# target to preprocess a source file
+src/renderer/device.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/device.c.i
+.PHONY : src/renderer/device.c.i
+
+src/renderer/device.s: src/renderer/device.c.s
+.PHONY : src/renderer/device.s
+
+# target to generate assembly for a file
+src/renderer/device.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/device.c.s
+.PHONY : src/renderer/device.c.s
+
+src/renderer/fence.o: src/renderer/fence.c.o
+.PHONY : src/renderer/fence.o
+
+# target to build an object file
+src/renderer/fence.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/fence.c.o
+.PHONY : src/renderer/fence.c.o
+
+src/renderer/fence.i: src/renderer/fence.c.i
+.PHONY : src/renderer/fence.i
+
+# target to preprocess a source file
+src/renderer/fence.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/fence.c.i
+.PHONY : src/renderer/fence.c.i
+
+src/renderer/fence.s: src/renderer/fence.c.s
+.PHONY : src/renderer/fence.s
+
+# target to generate assembly for a file
+src/renderer/fence.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/fence.c.s
+.PHONY : src/renderer/fence.c.s
+
+src/renderer/framebuffer.o: src/renderer/framebuffer.c.o
+.PHONY : src/renderer/framebuffer.o
+
+# target to build an object file
+src/renderer/framebuffer.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/framebuffer.c.o
+.PHONY : src/renderer/framebuffer.c.o
+
+src/renderer/framebuffer.i: src/renderer/framebuffer.c.i
+.PHONY : src/renderer/framebuffer.i
+
+# target to preprocess a source file
+src/renderer/framebuffer.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/framebuffer.c.i
+.PHONY : src/renderer/framebuffer.c.i
+
+src/renderer/framebuffer.s: src/renderer/framebuffer.c.s
+.PHONY : src/renderer/framebuffer.s
+
+# target to generate assembly for a file
+src/renderer/framebuffer.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/framebuffer.c.s
+.PHONY : src/renderer/framebuffer.c.s
+
+src/renderer/image.o: src/renderer/image.c.o
+.PHONY : src/renderer/image.o
+
+# target to build an object file
+src/renderer/image.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/image.c.o
+.PHONY : src/renderer/image.c.o
+
+src/renderer/image.i: src/renderer/image.c.i
+.PHONY : src/renderer/image.i
+
+# target to preprocess a source file
+src/renderer/image.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/image.c.i
+.PHONY : src/renderer/image.c.i
+
+src/renderer/image.s: src/renderer/image.c.s
+.PHONY : src/renderer/image.s
+
+# target to generate assembly for a file
+src/renderer/image.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/image.c.s
+.PHONY : src/renderer/image.c.s
+
 src/renderer/rendererbackend.o: src/renderer/rendererbackend.c.o
 .PHONY : src/renderer/rendererbackend.o
 
@@ -370,6 +490,78 @@ src/renderer/rendererfrontend.c.s:
 	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.s
 .PHONY : src/renderer/rendererfrontend.c.s
 
+src/renderer/renderpass.o: src/renderer/renderpass.c.o
+.PHONY : src/renderer/renderpass.o
+
+# target to build an object file
+src/renderer/renderpass.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/renderpass.c.o
+.PHONY : src/renderer/renderpass.c.o
+
+src/renderer/renderpass.i: src/renderer/renderpass.c.i
+.PHONY : src/renderer/renderpass.i
+
+# target to preprocess a source file
+src/renderer/renderpass.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/renderpass.c.i
+.PHONY : src/renderer/renderpass.c.i
+
+src/renderer/renderpass.s: src/renderer/renderpass.c.s
+.PHONY : src/renderer/renderpass.s
+
+# target to generate assembly for a file
+src/renderer/renderpass.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/renderpass.c.s
+.PHONY : src/renderer/renderpass.c.s
+
+src/renderer/swapchain.o: src/renderer/swapchain.c.o
+.PHONY : src/renderer/swapchain.o
+
+# target to build an object file
+src/renderer/swapchain.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/swapchain.c.o
+.PHONY : src/renderer/swapchain.c.o
+
+src/renderer/swapchain.i: src/renderer/swapchain.c.i
+.PHONY : src/renderer/swapchain.i
+
+# target to preprocess a source file
+src/renderer/swapchain.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/swapchain.c.i
+.PHONY : src/renderer/swapchain.c.i
+
+src/renderer/swapchain.s: src/renderer/swapchain.c.s
+.PHONY : src/renderer/swapchain.s
+
+# target to generate assembly for a file
+src/renderer/swapchain.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/swapchain.c.s
+.PHONY : src/renderer/swapchain.c.s
+
+src/renderer/utils.o: src/renderer/utils.c.o
+.PHONY : src/renderer/utils.o
+
+# target to build an object file
+src/renderer/utils.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/utils.c.o
+.PHONY : src/renderer/utils.c.o
+
+src/renderer/utils.i: src/renderer/utils.c.i
+.PHONY : src/renderer/utils.i
+
+# target to preprocess a source file
+src/renderer/utils.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/utils.c.i
+.PHONY : src/renderer/utils.c.i
+
+src/renderer/utils.s: src/renderer/utils.c.s
+.PHONY : src/renderer/utils.s
+
+# target to generate assembly for a file
+src/renderer/utils.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/utils.c.s
+.PHONY : src/renderer/utils.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -403,12 +595,36 @@ help:
 	@echo "... src/platform/platform.o"
 	@echo "... src/platform/platform.i"
 	@echo "... src/platform/platform.s"
+	@echo "... src/renderer/commandbuffer.o"
+	@echo "... src/renderer/commandbuffer.i"
+	@echo "... src/renderer/commandbuffer.s"
+	@echo "... src/renderer/device.o"
+	@echo "... src/renderer/device.i"
+	@echo "... src/renderer/device.s"
+	@echo "... src/renderer/fence.o"
+	@echo "... src/renderer/fence.i"
+	@echo "... src/renderer/fence.s"
+	@echo "... src/renderer/framebuffer.o"
+	@echo "... src/renderer/framebuffer.i"
+	@echo "... src/renderer/framebuffer.s"
+	@echo "... src/renderer/image.o"
+	@echo "... src/renderer/image.i"
+	@echo "... src/renderer/image.s"
 	@echo "... src/renderer/rendererbackend.o"
 	@echo "... src/renderer/rendererbackend.i"
 	@echo "... src/renderer/rendererbackend.s"
 	@echo "... src/renderer/rendererfrontend.o"
 	@echo "... src/renderer/rendererfrontend.i"
 	@echo "... src/renderer/rendererfrontend.s"
+	@echo "... src/renderer/renderpass.o"
+	@echo "... src/renderer/renderpass.i"
+	@echo "... src/renderer/renderpass.s"
+	@echo "... src/renderer/swapchain.o"
+	@echo "... src/renderer/swapchain.i"
+	@echo "... src/renderer/swapchain.s"
+	@echo "... src/renderer/utils.o"
+	@echo "... src/renderer/utils.i"
+	@echo "... src/renderer/utils.s"
 .PHONY : help
 
 

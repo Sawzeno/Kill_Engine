@@ -8,13 +8,13 @@ extern i8 creategame(Game* game);
 
 int main(void){
 
-  UINFO("INITIALZING ENGINE LOGGER")
+  UINFO("INITIALZING ENGINE LOGGER");
   initializeLogging();
-  UINFO("INITIALZING ENGINE MEMORY")
+  UINFO("INITIALZING ENGINE MEMORY");
   initializeMemory();
 
   //Request the game instance of the application
-  UINFO("INITIALIZING GAME APPLICATION ...")
+  UINFO("INITIALIZING GAME APPLICATION ...");
   Game game;
   if(creategame(&game) == false){
     UFATAL("Could not initialize the appliaction itself!");
@@ -28,13 +28,13 @@ int main(void){
   }
 
   //Initializes the config , assigns all the func pointers 
-  UINFO("LAAUNCHING GAME...")
+  UINFO("LAAUNCHING GAME...");
   if(applicationCreate(&game) == false){
     UINFO("Application failed to create !");
     return 1;
   }
 
-  //contains the game loop
+  UDEBUG("----------------------RUNNING APPLICATION--------------");
   if(applicationRun() ==  false){
     UINFO("Application did not quit gracefully");
     return 2;

@@ -40,8 +40,8 @@ void inputUpdate(f64 deltaTime){
     return;
   }
 
-  kcopyMemory(&state.keyboardPrevious, &state.keyboardCurrent,  sizeof(KeyboardState));
-  kcopyMemory(&state.mousePrevious,    &state.mouseCurrent,     sizeof(MouseState));
+  kcopyMemory(&state.keyboardPrevious, &state.keyboardCurrent,  sizeof(KeyboardState), __FUNCTION__);
+  kcopyMemory(&state.mousePrevious,    &state.mouseCurrent,     sizeof(MouseState), __FUNCTION__);
 }
 
 void inputProcessKey(keys key, u8 pressed){

@@ -46,6 +46,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/gon/Developer/Kill_Engine/build/engine/cmake_install.cmake")
   include("/home/gon/Developer/Kill_Engine/build/testbed/cmake_install.cmake")
+  include("/home/gon/Developer/Kill_Engine/build/tests/cmake_install.cmake")
 
 endif()
 
