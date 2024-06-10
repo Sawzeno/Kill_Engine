@@ -2,7 +2,7 @@
 
 #include  "defines.h"
 
-typedef struct platformState platformState;
-typedef struct vulkanContext vulkanContext;
+typedef struct PlatformState platformState;
+typedef struct VulkanContext VulkanContext;
 
-u8  createvulkanSurface(platformState* platState, vulkanContext* context);
+u8  createVulkanSurface(platformState* platState, VulkanContext* context);

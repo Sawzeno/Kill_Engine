@@ -2,9 +2,9 @@
 
 #include  "defines.h"
 
-typedef struct eventContext eventContext;
+typedef struct EventContext EventContext;
 
-struct eventContext{
+struct EventContext{
 
   //128 bytes
   union{
@@ -24,7 +24,7 @@ struct eventContext{
   }data;
 };
 
-typedef enum systemEventCode{
+typedef enum SystemEventCode{
   //Shuts down the application on the next frame
   EVENT_CODE_APPLICATION_QUIT = 0x01,
   //Keyboard Key Pressed
@@ -45,12 +45,12 @@ typedef enum systemEventCode{
   MAX_EVENT_CODE              = 0xFF
 }systemEventCode;
 
-typedef u8(*pfnOnEvent)(u16 code , void* sender  , void* listener , eventContext data);
+typedef u8(*pfnOnEvent)(u16 code , void* sender  , void* listener , EventContext data);
 
 u8    initializeEvents();
 void  shutdownEvents  ();
 
 u8    eventRegister   (u16 code, void* listener , pfnOnEvent onEvent);
 u8    eventUnregister (u16 code , void* listener , pfnOnEvent onEvent);
-u8    eventFire       (u16 code , void* sender , eventContext context);
+u8    eventFire       (u16 code , void* sender , EventContext context);
 

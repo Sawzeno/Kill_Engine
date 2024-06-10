@@ -2,13 +2,15 @@
 
 #include  "vulkantypes.h"
 
-VkResult  vulkanFenceCreate(vulkanContext* context,
+VkResult  vulkanFenceCreate(VulkanContext* context,
                             u8 createSignaled,
-                            vulkanFence* outFence);
+                            VulkanFence* outFence);
 
-VkResult  vulkanFenceDestroy(vulkanContext* context, 
-                             vulkanFence* fence);
+VkResult  vulkanFenceDestroy(VulkanContext* context, 
+                             VulkanFence* fence);
 
-u8  vulkanFenceWait(vulkanContext* context, vulkanFence* fence, u64 timeoutNS);
+u8        vulkanFenceWait   (VulkanContext* context,
+                             VulkanFence* fence, u64 timeoutNS);
 
-VkResult  vulkanFenceReset(vulkanContext* context, vulkanFence* fence);
+VkResult  vulkanFenceReset  (VulkanContext* context,
+                             VulkanFence* fence);

@@ -5,11 +5,12 @@
 // renderpass will need to know bout the framebuffer , 
 // framebuffers are used to relay data back to swapchain
 
-VkResult  vulkanFrameBufferCreate(vulkanContext* context,
-                                 vulkanRenderPass* renderPass, 
-                                 u32 width, u32 height, 
-                                 u32 attachmentCount,
-                                 VkImageView* attachments, 
-                                 vulkanFrameBuffer* outFrameBuffer);
+VkResult  vulkanFrameBufferCreate(VulkanContext*    context,
+                                 VulkanRenderPass*  renderPass, 
+                                 u32 width, u32     height, 
+                                 u32                attachmentCount,
+                                 VkImageView*       attachments, 
+                                 VulkanFrameBuffer* outFrameBuffer);
 
-VkResult  vulkanFrameBufferDestroy(vulkanContext* context, vulkanFrameBuffer* frameBuffer);
+VkResult  vulkanFrameBufferDestroy(VulkanContext*     context,
+                                   VulkanFrameBuffer* frameBuffer);

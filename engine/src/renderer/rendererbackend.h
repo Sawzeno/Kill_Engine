@@ -5,24 +5,24 @@
 #include  <vulkan/vulkan.h>
 #include  <vulkan/vulkan_core.h>
 
-typedef struct  rendererBackend rendererBackend;
-typedef struct  renderPacket    renderPacket;
+typedef struct  RendererBackend RendererBackend;
+typedef struct  RenderPacket    RenderPacket;
 
-struct rendererBackend{
-  platformState* platState;
+struct RendererBackend{
+  PlatformState* platState;
   u64 frameNumber;
-  u8  (*initilaize) (const char* applicationName , platformState* platState);
+  u8  (*initilaize) (const char* applicationName , PlatformState* platState);
   u8  (*beginFrame) (f32 deltaTime);
   u8  (*endFrame)   (f32 deltaTime);
   u8  (*resized)    (u16 width, u16 height);
   u8  (*shutdown)   ();
 };
 
-struct renderPacket{
+struct RenderPacket{
   f32 deltaTime;
 };
 
-u8  rendererBackendInitialize (const char* applicationName , platformState* platState);
+u8  rendererBackendInitialize (const char* applicationName , PlatformState* platState);
 
 u8  rendererBackendBeginFrame (f32 deltaTime);
 

@@ -41,18 +41,18 @@ if(result != VK_SUCCESS){         \
     }
 
 
-void      printAvailableLayers      ();
-void      printAvailableExtenesions ();
-VkResult  checkAvailableLayers      (const char** requiredLayers);
-VkResult  checkAvailableExtensions  (const char** requiredExtensions); 
-const char* vkResultToString        (VkResult result);
-u8  vulkanResultIsSuccess(VkResult result);
-void logVulkanContext(const vulkanContext* context) ;
-void logVulkanDevice(const vulkanDevice* device) ;
-void logVulkanSwapchainSupportInfo(const vulkanSwapchainSupportInfo* supportInfo) ;
-void logVulkanSwapchain(const vulkanSwapchain* swapchain) ;
-void logVulkanImage(const vulkanImage* image) ;
-void logVulkanRenderPass(const vulkanRenderPass* renderPass) ;
-void logVulkanCommandBuffer(const vulkanCommandBuffer* commandBuffer) ;
-void logVulkanFramebuffer(const struct vulkanFrameBuffer* framebuffer) ;
-void logVulkanFence(const vulkanFence* fence) ;
+void            printAvailableLayers          ();
+void            printAvailableExtenesions     ();
+VkResult        checkAvailableLayers          (const char** requiredLayers);
+VkResult        checkAvailableExtensions      (const char** requiredExtensions); 
+const char*     vkResultToString              (VkResult result);
+u8              vulkanResultIsSuccess         (VkResult result);
+void            logVulkanContext              (const VulkanContext* context) ;
+void            logVulkanDevice               (const VulkanDevice* device) ;
+void            logVulkanSwapchainSupportInfo (const VulkanSwapchainSupportInfo* supportInfo) ;
+void            logVulkanSwapchain            (const VulkanSwapchain* swapchain) ;
+void            logVulkanImage                (const VulkanImage* image) ;
+void            logVulkanRenderPass           (const VulkanRenderPass* renderPass) ;
+void            logVulkanCommandBuffer        (const VulkanCommandBuffer* commandBuffer) ;
+void            logVulkanFramebuffer          (const struct VulkanFrameBuffer* framebuffer) ;
+void            logVulkanFence                (const VulkanFence* fence) ;

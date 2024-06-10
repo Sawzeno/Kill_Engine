@@ -3,12 +3,12 @@
 #include  "vulkantypes.h"
 #include <vulkan/vulkan_core.h>
 
-VkResult  vulkanDeviceCreate  (vulkanContext* context);
-VkResult  vulkanDeviceDestroy (vulkanContext* context);
+VkResult  vulkanDeviceCreate  (VulkanContext* context);
+VkResult  vulkanDeviceDestroy (VulkanContext* context);
 
 VkResult vulkanDeviceQuerySwapchainSupport(
   VkPhysicalDevice  physicalDevice,
   VkSurfaceKHR      surface,
-  vulkanSwapchainSupportInfo* outSupportInfo);
+  VulkanSwapchainSupportInfo* outSupportInfo);
 
-VkResult  vulkanDeviceDetectDepthFormat(vulkanDevice* device);
+VkResult  vulkanDeviceDetectDepthFormat(VulkanDevice* device);

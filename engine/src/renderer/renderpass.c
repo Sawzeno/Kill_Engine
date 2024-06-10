@@ -1,15 +1,14 @@
-#include "renderpass.h"
+#include  "renderpass.h"
 #include  "utils.h"
-#include "core/kmemory.h"
-#include "vulkantypes.h"
-#include <vulkan/vulkan_core.h>
+#include  "core/kmemory.h"
+#include  "vulkantypes.h"
+#include  <vulkan/vulkan_core.h>
 
-
-VkResult  vulkanRenderPassCreate(vulkanContext* context,
-                                 vulkanRenderPass* outRenderPass,
+VkResult  vulkanRenderPassCreate(VulkanContext*     context,
+                                 VulkanRenderPass*  outRenderPass,
                                  f32 x, f32 y, f32 w, f32 h,
                                  f32 r, f32 g, f32 b, f32 a,
-                                 f32 depth, u32 stencil){
+                                 f32 depth, u32     stencil){
   VkResult  result  = 0;
 
   outRenderPass->x =x ;
@@ -120,7 +119,7 @@ VkResult  vulkanRenderPassCreate(vulkanContext* context,
   return VK_SUCCESS;
 }
 
-VkResult  vulkanRenderPassDestroy (vulkanContext* context,  vulkanRenderPass* renderPass){
+VkResult  vulkanRenderPassDestroy (VulkanContext* context,  VulkanRenderPass* renderPass){
   if(renderPass && renderPass->handle){
     vkDestroyRenderPass(context->device.logicalDevice, renderPass->handle, context->allocator);
     renderPass->handle = NULL;
@@ -131,8 +130,8 @@ VkResult  vulkanRenderPassDestroy (vulkanContext* context,  vulkanRenderPass* re
   }
 }
 
-VkResult  vulkanRenderPassBegin   (vulkanCommandBuffer* commandBuffer,
-                                   vulkanRenderPass* renderPass, VkFramebuffer frameBuffer){
+VkResult  vulkanRenderPassBegin   (VulkanCommandBuffer* commandBuffer,
+                                   VulkanRenderPass* renderPass, VkFramebuffer frameBuffer){
 
   UDEBUG("-----------------------RENDER PASS BEGIN________");
   VkRenderPassBeginInfo beginInfo = {VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO};
@@ -161,7 +160,7 @@ VkResult  vulkanRenderPassBegin   (vulkanCommandBuffer* commandBuffer,
   return VK_SUCCESS;
 } 
 
-VkResult  vulkanRenderPassEnd     (vulkanCommandBuffer* commandBuffer, vulkanRenderPass* renderPass){
+VkResult  vulkanRenderPassEnd     (VulkanCommandBuffer* commandBuffer, VulkanRenderPass* renderPass){
   vkCmdEndRenderPass(commandBuffer->handle);
   commandBuffer->state  = COMMAND_BUFFER_STATE_RECORDING;
   return VK_SUCCESS;

@@ -23,9 +23,9 @@
 #include  "renderer/vulkantypes.h"
 #include  "renderer/utils.h"
 
-typedef struct internalState internalState;
+typedef struct InternalState InternalState;
 
-struct internalState{
+struct InternalState{
   Display*          display;
   xcb_connection_t* connection;
   xcb_window_t      window;
@@ -37,16 +37,16 @@ struct internalState{
 
 u8  translateKeycode(u32 xKeycode);
 
-u8  startPlatform(platformState* platState,
+u8  startPlatform(PlatformState* platState,
                   const char* appliactionName,
                   i32 x,
                   i32 y,
                   i32 width,
                   i32 height){
   //create internal state
-  platState->internalState  = malloc(sizeof(internalState));
+  platState->internalState  = malloc(sizeof(InternalState));
   MEMERR(platState->internalState);
-  internalState*  state = (internalState*)(platState->internalState);
+  InternalState*  state = (InternalState*)(platState->internalState);
 
   //connect to Xserver
   state->display  = XOpenDisplay(NULL);
@@ -151,10 +151,10 @@ u8  startPlatform(platformState* platState,
   return true;
 }
 
-void  shutdownPlatform    (platformState* platState){
+void  shutdownPlatform    (PlatformState* platState){
   UINFO("WINDOWING SUBSYTEM SHUTDOWN");
 
-  internalState*  state = (internalState*)(platState->internalState);
+  InternalState*  state = (InternalState*)(platState->internalState);
 
   UTRACE("RESTORING STATES");
   //turn repeat keys back ON
@@ -165,9 +165,9 @@ void  shutdownPlatform    (platformState* platState){
   xcb_destroy_window(state->connection, state->window);
 }
 
-u8    platformPumpMessages(platformState* platState){
+u8    platformPumpMessages(PlatformState* platState){
 
-  internalState*  state = (internalState*)(platState->internalState);
+  InternalState*  state = (InternalState*)(platState->internalState);
   xcb_generic_event_t* event;
   xcb_client_message_event_t* cm;
 
@@ -223,7 +223,7 @@ u8    platformPumpMessages(platformState* platState){
         UWARN("----------------------------------------------------------RESIZING--------------");
         xcb_configure_notify_event_t* configureEvent  = (xcb_configure_notify_event_t*)event;
         //resizing
-        eventContext context;
+        EventContext context;
         context.data.u16[0] = configureEvent->width;
         context.data.u16[1] = configureEvent->height;
         eventFire(EVENT_CODE_RESIZED, 0, context);
@@ -254,8 +254,8 @@ void  platformSleep(u64 ms){
   usleep((ms%1000) * 1000);
 }
 
-VkResult  createvulkanSurface(platformState* platState, vulkanContext* context){
-  internalState* state  = (internalState*)(platState->internalState);
+VkResult  createVulkanSurface(PlatformState* platState, VulkanContext* context){
+  InternalState* state  = (InternalState*)(platState->internalState);
 
   VkXcbSurfaceCreateInfoKHR createInfo  = {VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR};
   createInfo.connection = state->connection;

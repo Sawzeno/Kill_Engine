@@ -5,12 +5,12 @@
 #include  "utils.h"
 
 
-VkResult  vulkanFrameBufferCreate(vulkanContext* context,
-                                 vulkanRenderPass* renderPass, 
+VkResult  vulkanFrameBufferCreate(VulkanContext* context,
+                                 VulkanRenderPass* renderPass, 
                                  u32 width, u32 height, 
                                  u32 attachmentCount,
                                  VkImageView* attachments, 
-                                 vulkanFrameBuffer* outFrameBuffer){
+                                 VulkanFrameBuffer* outFrameBuffer){
   VkResult  result  = {0};
   // take a copy of attachments , renderpass , attachment count
   outFrameBuffer->attachments = kallocate(sizeof(VkImageView) * attachmentCount, MEMORY_TAG_RENDERER);
@@ -35,7 +35,7 @@ VkResult  vulkanFrameBufferCreate(vulkanContext* context,
   return result;
 }
 
-VkResult  vulkanFrameBufferDestroy(vulkanContext* context, vulkanFrameBuffer* frameBuffer){
+VkResult  vulkanFrameBufferDestroy(VulkanContext* context, VulkanFrameBuffer* frameBuffer){
   vkDestroyFramebuffer(context->device.logicalDevice, frameBuffer->handle, context->allocator);
    if(frameBuffer->attachments){
     kfree(frameBuffer->attachments, sizeof(VkImageView)* frameBuffer->attachmentCount , MEMORY_TAG_RENDERER);

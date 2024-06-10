@@ -18,16 +18,16 @@ void* _darrayCreate(u64 cap , u64 stride){
 
   u64* arr  = darray + DARRAY_FIELD_LENGTH;
   UDEBUG("CREATED: %p --> %p",darray,arr);
-  UDEBUG("CREATED: len  :%"PRIu64" cap : %"PRIu64" stride : %"PRIu64"",darrayLength(arr),darrayCapacity(arr),darrayStride(arr));
+  UDEBUG("CREATED: len  :%"PRIu64" cap : %"PRIu64" stride : %"PRIu64"",DARRAYLENGTH(arr),DARRAYCAPACITY(arr),DARRAYSTRIDE(arr));
   return (void*)(arr);
 }
 
 void* _darrayResize(void* array){
   ISNULL(array ,NULL);
 
-  u64 oldlen    = darrayLength  (array);
-  u64 oldcap    = darrayCapacity(array);
-  u64 oldstride = darrayStride  (array);
+  u64 oldlen    = DARRAYLENGTH  (array);
+  u64 oldcap    = DARRAYCAPACITY(array);
+  u64 oldstride = DARRAYSTRIDE  (array);
   u64 newcap    = oldcap * DARRAY_RESIZE_FACTOR;
   u64* oldhead  = (u64*)array - DARRAY_FIELD_LENGTH;
   UDEBUG("OLD: %p",oldhead);
@@ -58,9 +58,9 @@ void* _darrayResize(void* array){
 void* _darrayPush(void* array , const void* valueptr){
   void* darray = array;
   ISNULL(array , NULL);
-  u64 length    =  darrayLength(darray);
-  u64 stride    =  darrayStride(darray);
-  u64 cap       = darrayCapacity(darray);
+  u64 length    =   DARRAYLENGTH  (darray);
+  u64 stride    =   DARRAYSTRIDE  (darray);
+  u64 cap       =   DARRAYCAPACITY(darray);
   UDEBUG("PUSING IN DARRAY: %p",(u64*)array);
   if (length >= cap) {
     UDEBUG("--------RESIZE CALLED------------");
@@ -72,9 +72,9 @@ void* _darrayPush(void* array , const void* valueptr){
   kcopyMemory((void*)addr, valueptr, stride, __FUNCTION__);
   _darrayFieldSet(darray, DARRAY_LENGTH, ++length);
 
-  length    = darrayLength(darray);
-  stride    = darrayStride(darray);
-  cap       = darrayCapacity(darray);
+  length    = DARRAYLENGTH  (darray);
+  stride    = DARRAYSTRIDE  (darray);
+  cap       = DARRAYCAPACITY(darray);
 
   UDEBUG("len  :%"PRIu64" cap : %"PRIu64" stride : %"PRIu64"",length,cap,stride);
   return darray;
@@ -83,8 +83,8 @@ void* _darrayPush(void* array , const void* valueptr){
 u8 _darrayPop(void* array, void* dest) {
   ISNULL(array, false);
 
-  u64 length = darrayLength(array);
-  u64 stride = darrayStride(array);
+  u64 length = DARRAYLENGTH(array);
+  u64 stride = DARRAYSTRIDE(array);
   if (length == 0) {
     UERROR("Pop called on empty array!");
     return false;
@@ -94,15 +94,15 @@ u8 _darrayPop(void* array, void* dest) {
   kcopyMemory(dest, (void*)addr, stride, __FUNCTION__);
   _darrayFieldSet(array, DARRAY_LENGTH, length - 1);
 
-  UDEBUG("POPPED: len: %" PRIu64 " cap: %" PRIu64 " stride: %" PRIu64 "", darrayLength(array), darrayCapacity(array), stride);
+  UDEBUG("POPPED: len: %" PRIu64 " cap: %" PRIu64 " stride: %" PRIu64 "", DARRAYLENGTH(array), DARRAYCAPACITY(array), stride);
   return true;
 }
 
 void* _darrayPopAt(void* array, u64 index, void* dest) {
   ISNULL(array, NULL);
 
-  u64 length = darrayLength(array);
-  u64 stride = darrayStride(array);
+  u64 length = DARRAYLENGTH(array);
+  u64 stride = DARRAYSTRIDE(array);
   if (index >= length) {
     UERROR("Index outside the bounds of this array! Length: %" PRIu64 ", index: %" PRIu64 "", length, index);
     return array;
@@ -121,16 +121,16 @@ void* _darrayPopAt(void* array, u64 index, void* dest) {
   }
 
   _darrayFieldSet(array, DARRAY_LENGTH, length - 1);
-  UDEBUG("POPPED AT: len: %" PRIu64 " cap: %" PRIu64 " stride: %" PRIu64 "", darrayLength(array), darrayCapacity(array), stride);
+  UDEBUG("POPPED AT: len: %" PRIu64 " cap: %" PRIu64 " stride: %" PRIu64 "", DARRAYLENGTH(array), DARRAYCAPACITY(array), stride);
   return array;
 }
 
 
 void* _darrayInsertAt(void* array, u64 index, void* valueptr) {
   ISNULL(array , NULL);
-  u64 length = darrayLength(array);
-  u64 stride = darrayStride(array);
-  u64 capacity  = darrayCapacity(array);
+  u64 length    = DARRAYLENGTH  (array);
+  u64 stride    = DARRAYSTRIDE  (array);
+  u64 capacity  = DARRAYCAPACITY(array);
   if (index >= length) {
     UERROR("Index outside the bounds of this array! Length: %i, index: %index", length, index);
     return array;
@@ -152,7 +152,7 @@ void* _darrayInsertAt(void* array, u64 index, void* valueptr) {
   kcopyMemory((void*)(addr + (index * stride)), valueptr, stride, __FUNCTION__);
 
   _darrayFieldSet(array, DARRAY_LENGTH, length + 1);
-UDEBUG("INSERTED AT: len: %" PRIu64 " cap: %" PRIu64 " stride: %" PRIu64 "", darrayLength(array), darrayCapacity(array), stride);
+UDEBUG("INSERTED AT: len: %" PRIu64 " cap: %" PRIu64 " stride: %" PRIu64 "", DARRAYLENGTH(array), DARRAYCAPACITY(array), stride);
   return array;
 }
 

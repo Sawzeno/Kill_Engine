@@ -5,9 +5,9 @@
 #include <vulkan/vulkan_core.h>
 
 
-VkResult  vulkanFenceCreate(vulkanContext* context,
+VkResult  vulkanFenceCreate(VulkanContext* context,
                             u8  createSignaled,
-                            vulkanFence* outFence){
+                            VulkanFence* outFence){
   VkResult result = {0};
   // make sure to signal the fence 
   outFence->isSignaled = createSignaled;
@@ -26,8 +26,8 @@ VkResult  vulkanFenceCreate(vulkanContext* context,
   return result;
 }
 
-VkResult  vulkanFenceDestroy(vulkanContext* context, 
-                             vulkanFence* fence){
+VkResult  vulkanFenceDestroy(VulkanContext* context, 
+                             VulkanFence* fence){
   if(fence->handle){
     vkDestroyFence(context->device.logicalDevice, fence->handle, context->allocator);
   }
@@ -35,7 +35,7 @@ VkResult  vulkanFenceDestroy(vulkanContext* context,
   return VK_SUCCESS;
 }
 
-u8  vulkanFenceWait(vulkanContext* context, vulkanFence* fence, u64 timeoutNS){
+u8  vulkanFenceWait(VulkanContext* context, VulkanFence* fence, u64 timeoutNS){
   VkResult  result  = {0};
   if(!fence->isSignaled){
     result  = vkWaitForFences(context->device.logicalDevice,
@@ -50,7 +50,7 @@ u8  vulkanFenceWait(vulkanContext* context, vulkanFence* fence, u64 timeoutNS){
   return false;
 }
 
-VkResult  vulkanFenceReset(vulkanContext* context, vulkanFence* fence){
+VkResult  vulkanFenceReset(VulkanContext* context, VulkanFence* fence){
   VkResult result = {0};
   if(fence->isSignaled){
     result  = vkResetFences(context->device.logicalDevice, 1, &fence->handle);

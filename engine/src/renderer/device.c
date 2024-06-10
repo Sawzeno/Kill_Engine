@@ -7,10 +7,10 @@
 #include <string.h>
 #include <vulkan/vulkan_core.h>
 
-typedef struct vulkanPhysicalDeviceRequirements vulkanPhysicalDeviceRequirements;
-typedef struct vulkanPhysicalDeviceQueueFamilyInfo vulkanPhysicalDeviceQueueFamilyInfo;
+typedef struct VulkanPhysicalDeviceRequirements     VulkanPhysicalDeviceRequirements;
+typedef struct VulkanPhysicalDeviceQueueFamilyInfo  VulkanPhysicalDeviceQueueFamilyInfo;
 
-struct vulkanPhysicalDeviceRequirements {
+struct VulkanPhysicalDeviceRequirements {
   u8 graphics;
   u8 transfer;
   u8 present;
@@ -24,7 +24,7 @@ struct vulkanPhysicalDeviceRequirements {
 //like swapchain present computer,grpahics, , other road onlt stop at compute other only for transfer operation
 //different hardware support differnet number of therse roads, thet all support atleast one queue
 //but as the application size increases you want to divert data traffic 
-struct vulkanPhysicalDeviceQueueFamilyInfo {
+struct VulkanPhysicalDeviceQueueFamilyInfo {
   u32 graphicsFamilyIndex;
   u32 transferFamilyIndex;
   u32 presentFamilyIndex;
@@ -36,13 +36,13 @@ VkResult physicalDeviceMeetsRequirements(
   VkSurfaceKHR surface,
   const VkPhysicalDeviceProperties* properties,
   const VkPhysicalDeviceFeatures* features,
-  const vulkanPhysicalDeviceRequirements* requirements,
-  vulkanPhysicalDeviceQueueFamilyInfo* outQueueFamilyInfo,
-  vulkanSwapchainSupportInfo* outSwapchainSupport);
+  const VulkanPhysicalDeviceRequirements* requirements,
+  VulkanPhysicalDeviceQueueFamilyInfo* outQueueFamilyInfo,
+  VulkanSwapchainSupportInfo* outSwapchainSupport);
 
 VkResult vulkanDeviceQuerySwapchainSupport(VkPhysicalDevice physicalDevice,
                                            VkSurfaceKHR surface,
-                                           vulkanSwapchainSupportInfo *outSupportInfo) {
+                                           VulkanSwapchainSupportInfo *outSupportInfo) {
 
   UDEBUG("----------------------DEVICE SURFACE CAPABILTITIES---------");
   VkResult result = {0};
@@ -82,9 +82,9 @@ VkResult physicalDeviceMeetsRequirements(
   VkSurfaceKHR surface,
   const VkPhysicalDeviceProperties* properties,
   const VkPhysicalDeviceFeatures* features,
-  const vulkanPhysicalDeviceRequirements* requirements,
-  vulkanPhysicalDeviceQueueFamilyInfo* outQueueFamilyInfo,
-  vulkanSwapchainSupportInfo* outSwapchainSupport) {
+  const VulkanPhysicalDeviceRequirements* requirements,
+  VulkanPhysicalDeviceQueueFamilyInfo* outQueueFamilyInfo,
+  VulkanSwapchainSupportInfo* outSwapchainSupport) {
 
   VkResult  result = {0};
   // Evaluate device properties to determine the needs of our application
@@ -194,7 +194,7 @@ VkResult physicalDeviceMeetsRequirements(
         result = vkEnumerateDeviceExtensionProperties(device, NULL, &availableExtensionCount, availableExtensions);
         VK_CHECK2(result, "could not get device extensions");
 
-        u32 requiredExtensionsCount = darrayLength(requirements->deviceExtensionNames);
+        u32 requiredExtensionsCount = DARRAYLENGTH(requirements->deviceExtensionNames);
         for (u32 i = 0; i < requiredExtensionsCount; ++i) {
           u8 found = false;
           for (u32 j = 0; j < availableExtensionCount; ++j) {
@@ -230,7 +230,7 @@ VkResult physicalDeviceMeetsRequirements(
 }
 
 
-VkResult selectPhysicalDevice(vulkanContext* context) {
+VkResult selectPhysicalDevice(VulkanContext* context) {
 
   VkResult  result = {0};
   u32 physicalDeviceCount = 0;
@@ -258,18 +258,18 @@ VkResult selectPhysicalDevice(vulkanContext* context) {
     vkGetPhysicalDeviceMemoryProperties(physicalDevices[i], &memory);
 
     UDEBUG("----------------------REQUIREMENTS----------------------");
-    vulkanPhysicalDeviceRequirements requirements = {0};
+    VulkanPhysicalDeviceRequirements requirements = {0};
     requirements.graphics = true;
     requirements.present = true;
     requirements.transfer = true;
     requirements.compute = true;
     requirements.discreteGPU = true;
     requirements.samplerAnisotropy = true;
-    requirements.deviceExtensionNames = darrayCreate(const char*);
-    darrayPush(requirements.deviceExtensionNames, &VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+    requirements.deviceExtensionNames = DARRAYCREATE(const char*);
+    DARRAYPUSH(requirements.deviceExtensionNames, &VK_KHR_SWAPCHAIN_EXTENSION_NAME);
 
     UINFO("CHECKING IF %s MEETS REQUIREMENTS", properties.deviceName);
-    vulkanPhysicalDeviceQueueFamilyInfo queueInfo = {0};
+    VulkanPhysicalDeviceQueueFamilyInfo queueInfo = {0};
     result = physicalDeviceMeetsRequirements(physicalDevices[i], context->surface, &properties, &features, &requirements, &queueInfo, &context->device.swapchainSupport);
     if (result == VK_SUCCESS) {
       UINFO("SELECTED DEVICE: '%s'", properties.deviceName);
@@ -297,7 +297,7 @@ VkResult selectPhysicalDevice(vulkanContext* context) {
             VK_VERSION_MINOR(properties.driverVersion),
             VK_VERSION_PATCH(properties.driverVersion));
 
-      UINFO("VULKAN API VERSION: %d.%d.%d",
+      UINFO("Vulkan API VERSION: %d.%d.%d",
             VK_VERSION_MAJOR(properties.apiVersion),
             VK_VERSION_MINOR(properties.apiVersion),
             VK_VERSION_PATCH(properties.apiVersion));
@@ -338,7 +338,7 @@ VkResult selectPhysicalDevice(vulkanContext* context) {
 }
 
 
-VkResult vulkanDeviceCreate(vulkanContext* context) {
+VkResult vulkanDeviceCreate(VulkanContext* context) {
   VkResult result = {0};
 
   UINFO("SETTING UP PHYSICAL DEVICE");
@@ -439,7 +439,7 @@ VkResult vulkanDeviceCreate(vulkanContext* context) {
   return result;
 }
 
-VkResult vulkanDeviceDestroy(vulkanContext* context) {
+VkResult vulkanDeviceDestroy(VulkanContext* context) {
 
   UINFO("DESTROYING COMMAND POOLS");
   vkDestroyCommandPool(context->device.logicalDevice,
@@ -484,7 +484,7 @@ VkResult vulkanDeviceDestroy(vulkanContext* context) {
   return VK_SUCCESS;
 }
 
-VkResult  vulkanDeviceDetectDepthFormat(vulkanDevice* device){
+VkResult  vulkanDeviceDetectDepthFormat(VulkanDevice* device){
 
   //format cadidates
   const u64 candidateCount  = 3;

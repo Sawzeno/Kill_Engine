@@ -36,103 +36,103 @@ void* _darrayInsertAt (void* array, u64 index, void* valueptr);
 #define DARRAY_RESIZE_FACTOR    2
 
 #if DARRAY_DEBUG  == 0
-#define darrayCreate(type) \
+#define DARRAYCREATE(type) \
   _darrayCreate(DARRAY_DEFAULT_CAPACITY, sizeof(type))
 
-#define darrayReserve(type, capacity) \
+#define DARRAYRESERVE(type, capacity) \
 _darrayCreate(capacity, sizeof(type))
 
-#define darrayDestroy(array) \
+#define DARRAYDESTROY(array) \
     _darrayDestroy(array);  \
 
-#define darrayPush(array, value) \
+#define DARRAYPUSH(array, value) \
 {                                 \
   typeof(value) temp = value;       \
   array = _darrayPush(array, &temp); \
 }                                   \
 
-#define darrayPop(array, valuePtr) \
+#define DARRAYPOP(array, valuePtr) \
 _darrayPop(array, valuePtr)
 
-#define darrayInsertAt(array, index, value)         \
+#define DARRAYINSERTAT(array, index, value)         \
 {                                               \
   typeof(value) temp = value;                 \
   array = _darrayInsertAt(array, index, &temp);\
 }
 
-#define darrayPopAt(array, index, valuePtr) \
+#define DARRAYPOPAT(array, index, valuePtr) \
 _darrayPopAt(array, index, valuePtr)
 
-#define darrayClear(array) \
+#define DARRAYCLEAR(array) \
 _darrayFieldSet(array, DARRAY_LENGTH, 0)
 
-#define darrayLengthSet(array, value) \
+#define DARRAYLENGTHSET(array, value) \
 _darrayFieldSet(array, DARRAY_LENGTH, value)
 
-#define darrayCapacitySet(array, value) \
+#define DARRAYCAPACITYSET(array, value) \
 _darrayFieldSet(array, DARRAY_CAPACITY, value)
 
-#define darrayCapacity(array) \
+#define DARRAYCAPACITY(array) \
 _darrayFieldGet(array, DARRAY_CAPACITY)
 
-#define darrayLength(array) \
+#define DARRAYLENGTH(array) \
 _darrayFieldGet(array, DARRAY_LENGTH)
 
-#define darrayStride(array) \
+#define DARRAYSTRIDE(array) \
 _darrayFieldGet(array , DARRAY_STRIDE)
 
 #else
-#define darrayCreate(type) \
+#define DARRAYCREATE(type) \
   _darrayCreate(DARRAY_DEFAULT_CAPACITY, sizeof(type));\
   UREPORT(LOG_DEBUG, "_darrayCreate called")
 
-#define darrayReserve(type, capacity) \
+#define DARRAYRESERVE(type, capacity) \
 _darrayCreate(capacity, sizeof(type))\
   UREPORT(LOG_DEBUG, "_darrayReserve called")
 
-#define darrayDestroy(array) \
+#define DARRAYDESTROY(array) \
     _darrayDestroy(array);  \
     UREPORT(LOG_DEBUG, "_darrayDestrsoy called")
 
-#define darrayPush(array, value) \
+#define DARRAYPUSH(array, value) \
 {                                 \
   typeof(value) temp = value;       \
   array = _darrayPush(array, &temp); \
   UREPORT(LOG_DEBUG ,"_darrayPush called"); \
 }                                   \
 
-#define darrayPop(array, valuePtr) \
+#define DARRAYPOP(array, valuePtr) \
 _darrayPop(array, valuePtr)\
   UREPORT(LOG_DEBUG ,"_darrayPop called")     \
 
-#define darrayInsertAt(array, index, value)         \
+#define DARRAYINSERTAT(array, index, value)         \
 {                                               \
   typeof(value) temp = value;                 \
   array = _darrayInsertAt(array, index, &temp);\
   UREPORT(LOG_DEBUG ,"_darrayInsertAt called");     \
 }
 
-#define darrayPopAt(array, index, valuePtr) \
+#define DARRAYPOPAT(array, index, valuePtr) \
 _darrayPopAt(array, index, valuePtr);\
   UREPORT(LOG_DEBUG ,"_darrayPopAt called")
 
-#define darrayClear(array) \
+#define DARRAYCLEAR(array) \
 _darrayFieldSet(array, DARRAY_LENGTH, 0);\
   UREPORT(LOG_DEBUG ,"_darrayClear called")
 
-#define darrayLengthSet(array, value) \
+#define DARRAYLENGTHSET(array, value) \
 _darrayFieldSet(array, DARRAY_LENGTH, value);\
   UREPORT(LOG_DEBUG ,"_darrayLengthSet called")
 
-#define darrayCapacity(array) \
+#define DARRAYCAPACITY(array) \
 _darrayFieldGet(array, DARRAY_CAPACITY);\
   UREPORT(LOG_DEBUG ,"_darrayCapacity called")
 
-#define darrayLength(array) \
+#define DARRAYLENGTH(array) \
 _darrayFieldGet(array, DARRAY_LENGTH);\
   UREPORT(LOG_DEBUG ,"_darrayLength called"); 
 
-#define darrayStride(array) \
+#define DARRAYSTRIDE(array) \
 _darrayFieldGet(array , DARRAY_STRIDE);\
   UREPORT(LOG_DEBUG ,"_darrayStride called"); 
 

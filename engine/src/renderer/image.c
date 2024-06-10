@@ -3,16 +3,16 @@
 #include "renderer/vulkantypes.h"
 #include <vulkan/vulkan_core.h>
 
-VkResult  vulkanImageCreate(vulkanContext* context,
-                            VkImageType type,
-                            u32 width, u32 height,
-                            VkFormat format,
-                            VkImageTiling tiling,
-                            VkImageUsageFlags usage,
+VkResult  vulkanImageCreate(VulkanContext*      context,
+                            VkImageType         type,
+                            u32 width, u32      height,
+                            VkFormat            format,
+                            VkImageTiling       tiling,
+                            VkImageUsageFlags   usage,
                             VkMemoryPropertyFlags memoryFlags,
-                            u32 createView,
-                            VkImageAspectFlags viewAspectFlags,
-                            vulkanImage* outImage)
+                            u32                 createView,
+                            VkImageAspectFlags  viewAspectFlags,
+                            VulkanImage*        outImage)
 { //copy params
   outImage->width = width;
   outImage->height=height;
@@ -75,9 +75,9 @@ VkResult  vulkanImageCreate(vulkanContext* context,
   return result;
 }
 
-VkResult  vulkanImageViewCreate(vulkanContext* context,
+VkResult  vulkanImageViewCreate(VulkanContext* context,
                                 VkFormat format,
-                                vulkanImage* image,
+                                VulkanImage* image,
                                 VkImageAspectFlags aspectFlags)
 {
   VkImageViewCreateInfo createInfo  = {VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO};
@@ -95,7 +95,7 @@ VkResult  vulkanImageViewCreate(vulkanContext* context,
   return result;
 }
 
-void vulkanImageDestroy(vulkanContext* context, vulkanImage* image){
+void vulkanImageDestroy(VulkanContext* context, VulkanImage* image){
   if(image->view){
     vkDestroyImageView(context->device.logicalDevice, image->view, context->allocator);
     image->view = 0;

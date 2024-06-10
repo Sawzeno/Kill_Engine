@@ -2,23 +2,23 @@
 
 #include  "vulkantypes.h"
 
-VkResult  vulkanRenderPassCreate(vulkanContext* context,
-                            vulkanRenderPass* outRenderPass,
+VkResult  vulkanRenderPassCreate(VulkanContext* context,
+                            VulkanRenderPass* outRenderPass,
                             f32 x, f32 y, f32 w, f32 h,
                             f32 r, f32 g, f32 b, f32 a,
                             f32 depth, u32 stencil);
 
-VkResult  vulkanRenderPassDestroy (vulkanContext* context,  vulkanRenderPass* renderPass);
+VkResult  vulkanRenderPassDestroy (VulkanContext* context,  VulkanRenderPass* renderPass);
 
 //COMMAND BUFFER HOLDS A LIST OF COMMMADNS THAT WILL BE EXECUTED BY A QUEUE
 //RENDERPASS NEEDS ONE OF THESE TO PERFORM THEIR OPERATIONS
-VkResult  vulkanRenderPassBegin   (vulkanCommandBuffer* commandBuffer,
-                                   vulkanRenderPass* renderPass, VkFramebuffer frameBuffer);  
+VkResult  vulkanRenderPassBegin   (VulkanCommandBuffer* commandBuffer,
+                                   VulkanRenderPass* renderPass, VkFramebuffer frameBuffer);  
 
-VkResult  vulkanRenderPassEnd     (vulkanCommandBuffer* commandBuffer, vulkanRenderPass* renderPass);
+VkResult  vulkanRenderPassEnd     (VulkanCommandBuffer* commandBuffer, VulkanRenderPass* renderPass);
 
 /*
- * vulkan uses functions fro draw calls and simmilar that are fed into a COMMANDbUFFER
+ * Vulkan uses functions fro draw calls and simmilar that are fed into a COMMANDbUFFER
  * WHICH are a set of commands and those commands are fed into QUEUE which is the fed
  * to the GPU to be executed  
  * ALL of this is done in a very asynchonous manner , it allows us to submit all the 

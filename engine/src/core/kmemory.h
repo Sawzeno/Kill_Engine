@@ -4,7 +4,7 @@
 
 #define MEMORY_TAG_MAX_TAGS 17
 
-typedef enum memory_tag{
+typedef enum Memory_tag{
   MEMORY_TAG_UNKNOWN,
   MEMORY_TAG_ARRAY,
   MEMORY_TAG_DARRAY,
@@ -22,14 +22,14 @@ typedef enum memory_tag{
   MEMORY_TAG_ENTITY,
   MEMORY_TAG_ENTITY_NODE,
   MEMORY_TAG_ENTITY_SCENE,
-}memory_tag;
+}Memory_tag;
 
 void initializeMemory();
 void shutdownMemory();
 
-void* kallocate(u64 size , memory_tag tag);
+void* kallocate(u64 size , Memory_tag tag);
 
-void  kfree(void* block , u64 size , memory_tag tag);
+void  kfree(void* block , u64 size , Memory_tag tag);
 
 void* kzeroMemory(void* block , u64 size);
 

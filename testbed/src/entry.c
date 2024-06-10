@@ -3,7 +3,7 @@
 #include  "game.h"
 #include  "core/kmemory.h"
 
-i8 creategame(Game* outGame){
+i8 createGame(Game* outGame){
 
   //Config
   outGame->appConfig.posX   = 100;

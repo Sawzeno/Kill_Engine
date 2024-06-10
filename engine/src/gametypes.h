@@ -6,7 +6,7 @@ typedef struct Game Game;
 
 //represents the basic game state
 struct Game{
-  applicationConfig appConfig;
+  ApplicationConfig appConfig;
   
   i8    (*initialize) (Game* game);
   i8    (*update)     (Game* game , f32 deltaTime);

@@ -2,16 +2,16 @@
 #include  "utils.h"
 #include  "vulkantypes.h"
 #include  "core/kmemory.h"
-#include <vulkan/vulkan_core.h>
+#include  <vulkan/vulkan_core.h>
 
 
-VkResult  vulkanCommandBufferAllocate(vulkanContext* context,
+VkResult  vulkanCommandBufferAllocate(VulkanContext* context,
                                       VkCommandPool pool ,//pool we want to allocate our buffer from
                                       u8 isPrimary,
-                                      vulkanCommandBuffer* outCommandBuffer){
+                                      VulkanCommandBuffer* outCommandBuffer){
 
   VkResult result   = {0};
-  kzeroMemory(outCommandBuffer, sizeof(vulkanCommandBuffer));
+  kzeroMemory(outCommandBuffer, sizeof(VulkanCommandBuffer));
 
   VkCommandBufferAllocateInfo allocateInfo  = {VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO};
   allocateInfo.commandPool        = pool ;
@@ -29,9 +29,9 @@ VkResult  vulkanCommandBufferAllocate(vulkanContext* context,
   return result;
 }
 
-VkResult  vulkanCommandBufferFree   (vulkanContext* context,
+VkResult  vulkanCommandBufferFree   (VulkanContext* context,
                                      VkCommandPool pool, 
-                                     vulkanCommandBuffer* commandBuffer){
+                                     VulkanCommandBuffer* commandBuffer){
   VkResult result = {0};
   vkFreeCommandBuffers(context->device.logicalDevice, pool, 1, &commandBuffer->handle);
   commandBuffer->handle = 0;
@@ -40,7 +40,7 @@ VkResult  vulkanCommandBufferFree   (vulkanContext* context,
   return VK_SUCCESS;
 }
 
-VkResult  vulkanCommandBufferBegin  (vulkanCommandBuffer* commandBuffer,
+VkResult  vulkanCommandBufferBegin  (VulkanCommandBuffer* commandBuffer,
                                      u8 isSingleUse,
                                      u8 isRenderPassContinue,
                                      u8 isSimultaneousUse){
@@ -67,7 +67,7 @@ VkResult  vulkanCommandBufferBegin  (vulkanCommandBuffer* commandBuffer,
   return result;
 }
 
-VkResult  vulkanCommandBufferEnd        (vulkanCommandBuffer* commandBuffer){
+VkResult  vulkanCommandBufferEnd        (VulkanCommandBuffer* commandBuffer){
   VkResult  result  = vkEndCommandBuffer(commandBuffer->handle);
   VK_CHECK2(result, "failed to end command buffer");
   commandBuffer->state  = COMMAND_BUFFER_STATE_RECORDING;
@@ -75,20 +75,20 @@ VkResult  vulkanCommandBufferEnd        (vulkanCommandBuffer* commandBuffer){
   return result;
 }
 
-VkResult  vulkanCommandBufferUpdateSubmitted(vulkanCommandBuffer* commandBuffer){
+VkResult  vulkanCommandBufferUpdateSubmitted(VulkanCommandBuffer* commandBuffer){
   commandBuffer->state  = COMMAND_BUFFER_STATE_SUBMITTED;
   return VK_SUCCESS;
 }
 
-VkResult  vulkanCommandBufferReset      (vulkanCommandBuffer* commandBuffer){
+VkResult  vulkanCommandBufferReset      (VulkanCommandBuffer* commandBuffer){
   commandBuffer->state  = COMMAND_BUFFER_STATE_READY;
   return VK_SUCCESS;
 }
 
 // allocates and begins recording out to command buffer
-VkResult  vulkanCommandBufferStartSingleUse  (vulkanContext* context,
+VkResult  vulkanCommandBufferStartSingleUse  (VulkanContext* context,
                                               VkCommandPool pool,
-                                              vulkanCommandBuffer* outCommandBuffer){
+                                              VulkanCommandBuffer* outCommandBuffer){
   VkResult result = {0};
   result  = vulkanCommandBufferAllocate(context, pool, true, outCommandBuffer);
   VK_CHECK2(result, __FUNCTION__);
@@ -99,9 +99,9 @@ VkResult  vulkanCommandBufferStartSingleUse  (vulkanContext* context,
 }
 
 //ends recording, submits and waits for queue operation ande frees the provided command buffer
-VkResult  vulkanCommandBufferStopSingleUse    (vulkanContext* context,
+VkResult  vulkanCommandBufferStopSingleUse    (VulkanContext* context,
                                               VkCommandPool pool,
-                                              vulkanCommandBuffer* commandBuffer,
+                                              VulkanCommandBuffer* commandBuffer,
                                               VkQueue queue){
   VkResult  result  = {0};
   //first end the command buffer

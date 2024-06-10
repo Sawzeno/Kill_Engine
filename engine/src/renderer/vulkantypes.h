@@ -7,61 +7,61 @@
 
 
 
-typedef struct  vulkanDevice        vulkanDevice;
-typedef struct  vulkanContext       vulkanContext;
-typedef struct  vulkanSwapchainSupportInfo vulkanSwapchainSupportInfo;
-typedef struct  vulkanSwapchain     vulkanSwapchain;
-typedef struct  vulkanImage         vulkanImage;
-typedef struct  vulkanRenderPass    vulkanRenderPass;
-typedef struct  vulkanCommandBuffer vulkanCommandBuffer;
-typedef struct  vulkanFrameBuffer   vulkanFrameBuffer;
-typedef struct  vulkanFence         vulkanFence;
+typedef struct  VulkanDevice        VulkanDevice;
+typedef struct  VulkanContext       VulkanContext;
+typedef struct  VulkanSwapchainSupportInfo VulkanSwapchainSupportInfo;
+typedef struct  VulkanSwapchain     VulkanSwapchain;
+typedef struct  VulkanImage         VulkanImage;
+typedef struct  VulkanRenderPass    VulkanRenderPass;
+typedef struct  VulkanCommandBuffer VulkanCommandBuffer;
+typedef struct  VulkanFrameBuffer   VulkanFrameBuffer;
+typedef struct  VulkanFence         VulkanFence;
 
-typedef enum  vulkanRenderPassState {
+typedef enum  VulkanRenderPassState {
   READY,
   RECORDING,
   IN_RENDER_PASS,
   RECORDING_ENDED,
   SUBMITTED,
   NOT_ALLOCATED
-}vulkanRenderPassState;
+}VulkanRenderPassState;
 
-typedef enum vulkanCommandBufferState{
+typedef enum VulkanCommandBufferState{
   COMMAND_BUFFER_STATE_READY,
   COMMAND_BUFFER_STATE_RECORDING,
   COMMAND_BUFFER_STATE_IN_RENDER_PASS,
   COMMAND_BUFFER_STATE_RECORDING_ENDED,
   COMMAND_BUFFER_STATE_SUBMITTED,
   COMMAND_BUFFER_STATE_NOT_ALLOCATED,
-}vulkanCommandBufferState;
+}VulkanCommandBufferState;
 
-struct vulkanFence{
+struct VulkanFence{
   VkFence handle;
   u8      isSignaled;
 };
 
-struct  vulkanFrameBuffer{
+struct  VulkanFrameBuffer{
   VkFramebuffer     handle;
   u32               attachmentCount;
   VkImageView*      attachments;
-  vulkanRenderPass* renderPass;
+  VulkanRenderPass* renderPass;
 };
 
-struct vulkanCommandBuffer{
+struct VulkanCommandBuffer{
   VkCommandBuffer               handle;
-  vulkanCommandBufferState      state;
+  VulkanCommandBufferState      state;
 };
 
-struct vulkanRenderPass{
+struct VulkanRenderPass{
   VkRenderPass                  handle;
   f32                           x, y, w, h;
   f32                           r, g, b, a;
   f32                           depth;
   u32                           stencil;
-  vulkanRenderPassState         state;
+  VulkanRenderPassState         state;
 };
 
-struct vulkanImage{
+struct VulkanImage{
   VkImage                       handle;             //handle to the image
   VkDeviceMemory                memory;             //handle to the memory allocated for the image
   VkImageView                   view;               //image  view
@@ -69,18 +69,18 @@ struct vulkanImage{
   u32                           height;             //height of image
 };
 
-struct vulkanSwapchain{
+struct VulkanSwapchain{
   VkSwapchainKHR                handle;             // Handle to the swapchain object
   VkSurfaceFormatKHR            imageFormat;        // Format of the swapchain images
   u16                           maxFramesInFlight;  // Maximum number of frames that can be processed simultaneously
   u32                           imageCount;         // Number of images in the swapchain
   VkImage*                      images;             // Array of swapchain images
   VkImageView*                  views;              // Array of image views corresponding to the swapchain images
-  vulkanImage                   depthAttachment;
-  vulkanFrameBuffer*            frameBuffers;
+  VulkanImage                   depthAttachment;
+  VulkanFrameBuffer*            frameBuffers;
 };
 
-struct vulkanSwapchainSupportInfo{
+struct VulkanSwapchainSupportInfo{
   VkSurfaceCapabilitiesKHR      capabilities;       // Capabilities of the surface
   VkSurfaceFormatKHR*           formats;            // Array of available surface formats
   VkPresentModeKHR*             presentModes;       // Array of presentation modes
@@ -88,10 +88,10 @@ struct vulkanSwapchainSupportInfo{
   u32                           presentModesCount;  // Number of available presentation modes
 };
 
-struct vulkanDevice{
+struct VulkanDevice{
   VkPhysicalDevice              physicalDevice;     // Handle to the physical device
   VkDevice                      logicalDevice;      // Handle to the logical device
-  vulkanSwapchainSupportInfo    swapchainSupport;   // Swapchain support details for the device
+  VulkanSwapchainSupportInfo    swapchainSupport;   // Swapchain support details for the device
  
   i32                           graphicsQueueIndex; // Index of the graphics queue family
   i32                           presentQueueIndex;  // Index of the present queue family
@@ -109,7 +109,7 @@ struct vulkanDevice{
   VkFormat                      depthFormat;        // Depth buffer Format, specifying the layout and bit depth of the depth data
 };
 
-struct vulkanContext{
+struct VulkanContext{
   u32                           frameBufferWidth;    // Framebuffer width
   u32                           frameBufferHeight;   // Framebuffer height
   u64                           frameBufferSizeGeneration;
@@ -118,18 +118,18 @@ struct vulkanContext{
   VkAllocationCallbacks*        allocator;           // Custom memory allocator (optional)
   VkSurfaceKHR                  surface;             // Handle to the window surface
   VkDebugUtilsMessengerEXT      debugMessenger;     // Handle to the debug messenger
-  vulkanDevice                  device;              // Vulkan device (physical and logical)
-  vulkanSwapchain               swapchain;           // Swapchain for image presentation
-  vulkanRenderPass              mainRenderPass;      // mainRenderPass for creation
+  VulkanDevice                  device;              // Vulkan device (physical and logical)
+  VulkanSwapchain               swapchain;           // Swapchain for image presentation
+  VulkanRenderPass              mainRenderPass;      // mainRenderPass for creation
   u32                           imageIndex;          // Index of the current swapchain image
   u32                           currentFrame;        // Index of the current frame being processed
   u8                            recreatingSwapchain; // if swapchain is beign recreated or not
-  vulkanCommandBuffer*          graphicsCommandBuffers;//darray
+  VulkanCommandBuffer*          graphicsCommandBuffers;//darray
   VkSemaphore*                  imageAvailableSemaphores;//darray
   VkSemaphore*                  queueCompleteSemaphores;//darray
   u32                           inFlightFenceCount;  
-  vulkanFence*                  inFlightFences;
-  vulkanFence**                 imagesInFlight;        //holds pointer to fences which exist and aew owned elsewhere
+  VulkanFence*                  inFlightFences;
+  VulkanFence**                 imagesInFlight;        //holds pointer to fences which exist and aew owned elsewhere
   i32(*findMemoryIndex)(u32 typeFilter, u32 propertyFlags);
 };
 

@@ -3,28 +3,28 @@
 #include  "kmemory.h"
 #include  "defines.h"
 
-typedef struct registeredEvent registeredEvent;
-typedef struct eventCodeEntry eventCodeEntry;
-typedef struct eventSystemState eventSystemState;
+typedef struct RegisteredEvent  RegisteredEvent;
+typedef struct EventCodeEntry   EventCodeEntry;
+typedef struct EventSystemState EventSystemState;
 
-struct registeredEvent{
+struct RegisteredEvent{
   void* listener;
   pfnOnEvent  callback;
 };
 
-struct eventCodeEntry{
-  registeredEvent* events;
+struct EventCodeEntry{
+  RegisteredEvent* events;
 };
 
 #define MAX_MESSAGE_CODES 128
 
-struct eventSystemState{
+struct EventSystemState{
   //lookup table for event codes
-  eventCodeEntry registered[MAX_MESSAGE_CODES];
+  EventCodeEntry registered[MAX_MESSAGE_CODES];
 };
 
 static u8 areEventsInitialized  = false;
-static eventSystemState state;
+static EventSystemState state;
 
 u8  initializeEvents(){
   if(areEventsInitialized == true){
@@ -43,7 +43,7 @@ void  shutdownEvents(){
   UINFO("EVENT SUBSYSTEM SHUTDOWN !");
   for(u16 i = 0 ; i < MAX_MESSAGE_CODES ; ++i){
     if(state.registered[i].events != 0){
-      _darrayDestroy(state.registered[i].events);
+      DARRAYDESTROY(state.registered[i].events);
       state.registered[i].events  = 0;
     }
   }
@@ -55,10 +55,10 @@ u8 eventRegister(u16 code, void* listener, pfnOnEvent onEvent) {
     }
 
     if(state.registered[code].events == 0) {
-        state.registered[code].events = darrayCreate(registeredEvent);
+        state.registered[code].events = DARRAYCREATE(RegisteredEvent);
     }
 
-    u64 registeredCount = darrayLength(state.registered[code].events);
+    u64 registeredCount = DARRAYLENGTH(state.registered[code].events);
     for(u64 i = 0; i < registeredCount; ++i) {
         if(state.registered[code].events[i].listener == listener) {
             UREPORT("TODO");
@@ -67,10 +67,10 @@ u8 eventRegister(u16 code, void* listener, pfnOnEvent onEvent) {
     }
 
     // If at this point, no duplicate was found. Proceed with registration.
-    registeredEvent event;
+    RegisteredEvent event;
     event.listener = listener;
     event.callback = onEvent;
-    darrayPush(state.registered[code].events, event);
+    DARRAYPUSH(state.registered[code].events, event);
 
     return true;
 }
@@ -86,13 +86,13 @@ u8 eventUnregister(u16 code, void* listener, pfnOnEvent onEvent) {
         return false;
     }
 
-    u64 registeredCount = darrayLength(state.registered[code].events);
+    u64 registeredCount = DARRAYLENGTH(state.registered[code].events);
     for(u64 i = 0; i < registeredCount; ++i) {
-        registeredEvent e = state.registered[code].events[i];
+        RegisteredEvent e = state.registered[code].events[i];
         if(e.listener == listener && e.callback == onEvent) {
             // Found one, remove it
-            registeredEvent popped_event;
-            darrayPopAt(state.registered[code].events, i, &popped_event);
+            RegisteredEvent popped_event;
+            DARRAYPOPAT(state.registered[code].events, i, &popped_event);
             return true;
         }
     }
@@ -101,7 +101,7 @@ u8 eventUnregister(u16 code, void* listener, pfnOnEvent onEvent) {
     return false;
 }
 
-u8 eventFire(u16 code, void* sender, eventContext context) {
+u8 eventFire(u16 code, void* sender, EventContext context) {
     if(areEventsInitialized == false) {
         return false;
     }
@@ -111,9 +111,9 @@ u8 eventFire(u16 code, void* sender, eventContext context) {
         return false;
     }
 
-    u64 registeredCount = darrayLength(state.registered[code].events);
+    u64 registeredCount = DARRAYLENGTH(state.registered[code].events);
     for(u64 i = 0; i < registeredCount; ++i) {
-        registeredEvent e = state.registered[code].events[i];
+        RegisteredEvent e = state.registered[code].events[i];
         if(e.callback(code, sender, e.listener, context)) {
             // Message has been handled, do not send to other listeners.
             return true;

@@ -4,11 +4,11 @@
 #include  "core/kmemory.h"
 #include  "defines.h"
 
-static rendererBackend* backend = 0;
+static RendererBackend* backend = 0;
 
-u8  initializeRenderer(const char *applicationName, platformState *platState){
+u8  initializeRenderer(const char *applicationName, PlatformState *platState){
 
-  backend = kallocate(sizeof(rendererBackend), MEMORY_TAG_RENDERER);
+  backend = kallocate(sizeof(RendererBackend), MEMORY_TAG_RENDERER);
 
 
   backend->platState    = platState;
@@ -35,7 +35,7 @@ u8  shutdownRenderer(){
   backend->initilaize = 0;
   backend->beginFrame = 0;
 
-  kfree(backend , sizeof(rendererBackend) , MEMORY_TAG_RENDERER);
+  kfree(backend , sizeof(RendererBackend) , MEMORY_TAG_RENDERER);
   UINFO("RENDERER SUBSYTEM SHUTDOWN");
   return true;
 }
@@ -48,7 +48,7 @@ u8 rendererEndFrame(f32 deltaTime){
   return result;
 }
 
-u8  rendererDrawFrame(renderPacket* packet){
+u8  rendererDrawFrame(RenderPacket* packet){
   if(rendererBeginFrame(packet->deltaTime)){
     UTRACE("RENDERER BEGIN FRAME SUCCESFULL");
     if(rendererEndFrame(packet->deltaTime)){

@@ -12,15 +12,15 @@
 
 #define   LIMITFRAMES true
 #define   TARGETFPS  1
-typedef struct  applicationState  applicationState;
+typedef struct  ApplicationState  ApplicationState;
 
-u8  applicationOnEvent    (u16 code , void* sender , void* listener , eventContext context);
-u8  applicationOnKey      (u16 code , void* sender , void* lsitener , eventContext context);
-u8  applicationOnResized  (u16 code , void* sender , void* listener , eventContext context);
+u8  applicationOnEvent    (u16 code , void* sender , void* listener , EventContext context);
+u8  applicationOnKey      (u16 code , void* sender , void* lsitener , EventContext context);
+u8  applicationOnResized  (u16 code , void* sender , void* listener , EventContext context);
 
-struct applicationState{
+struct ApplicationState{
   Game* game;
-  platformState  platform;
+  PlatformState  platform;
   i8    isRunning;
   i8    isSuspended;
   i16   width;
@@ -30,7 +30,7 @@ struct applicationState{
 };
 
 static i8 initalized  = false;
-static applicationState appState;
+static ApplicationState appState;
 
 i8  applicationRun(){
 
@@ -91,7 +91,7 @@ i8  applicationRun(){
       }
 
       //TEST SLAP
-      renderPacket  packet;
+      RenderPacket  packet;
       packet.deltaTime  = delta;
       rendererDrawFrame(&packet);
 
@@ -185,7 +185,7 @@ i8  applicationCreate(Game* game){
 }
 
 
-u8  applicationOnEvent(u16 code , void* sender, void* listener , eventContext context){
+u8  applicationOnEvent(u16 code , void* sender, void* listener , EventContext context){
   switch (code) {
     case EVENT_CODE_APPLICATION_QUIT: {
       UINFO("EVENT_CODEAPPLICATIONQUIT recieved, shutting down.");
@@ -197,11 +197,11 @@ u8  applicationOnEvent(u16 code , void* sender, void* listener , eventContext co
   return false;
 }
 
-u8 applicationOnKey(u16 code , void* sender, void* listener , eventContext context){
+u8 applicationOnKey(u16 code , void* sender, void* listener , EventContext context){
   if(code == EVENT_CODE_KEY_PRESSED){
     u16 keyCode = context.data.u16[0];
     if(keyCode  == KEY_ESCAPE){
-      eventContext  data  = {};
+      EventContext  data  = {};
       eventFire(EVENT_CODE_APPLICATION_QUIT , 0 , data);
       return true;
     }else{
@@ -215,7 +215,7 @@ u8 applicationOnKey(u16 code , void* sender, void* listener , eventContext conte
 }
 
 
-u8  applicationOnResized  (u16 code , void* sender , void* listener , eventContext context){
+u8  applicationOnResized  (u16 code , void* sender , void* listener , EventContext context){
   UDEBUG("------------APPICATION RESIZE CALLED-------------");
   u16 width = context.data.u16[0];
   u16 height = context.data.u16[1];

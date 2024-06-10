@@ -9,15 +9,17 @@
 #include <vulkan/vulkan_core.h>
 
 
-VkResult create                         (vulkanContext* context,
-                                   u32 width, u32 height,
-                                   vulkanSwapchain* swapchain);
+VkResult create                   (VulkanContext*   context,
+                                   u32 width, u32   height,
+                                   VulkanSwapchain* swapchain);
 
-VkResult destroy                        (vulkanContext* context,vulkanSwapchain* swapchain);
+VkResult destroy                  (VulkanContext*   context,
+                                   VulkanSwapchain* swapchain);
 
-VkResult vulkanSwapchainCreate          (vulkanContext* context,
-                                   u32 width, u32 height,
-                                   vulkanSwapchain* outSwapchain){
+VkResult vulkanSwapchainCreate    (VulkanContext*   context,
+                                   u32 width, u32   height,
+                                   VulkanSwapchain* outSwapchain)
+{
   if(create(context,  width, height, outSwapchain) == VK_SUCCESS){
     UINFO("SWAPCHAIN CREATED");
     return VK_SUCCESS;
@@ -27,10 +29,10 @@ VkResult vulkanSwapchainCreate          (vulkanContext* context,
   }
 }
 
-VkResult vulkanSwapchainRecreate        (vulkanContext* context,
-                                   u32 width, u32 height,
-                                   vulkanSwapchain* outSwapchain){
-
+VkResult vulkanSwapchainRecreate  (VulkanContext*   context,
+                                   u32 width, u32   height,
+                                   VulkanSwapchain* outSwapchain)
+{
   destroy(context, outSwapchain);
   if(create(context,  width, height, outSwapchain) == VK_SUCCESS){
     UINFO("SWAPCHAIN CREATED");
@@ -41,17 +43,19 @@ VkResult vulkanSwapchainRecreate        (vulkanContext* context,
   }
 }
 
-VkResult vulkanSwapchainDestroy         (vulkanContext* context, vulkanSwapchain* swapchain){
-
+VkResult vulkanSwapchainDestroy   (VulkanContext*   context,
+                                   VulkanSwapchain* swapchain)
+{
   return destroy(context, swapchain);
 }
 
-VkResult  vulkanSwapchainAcquireNextImageIndex (vulkanContext* context,
-                                     vulkanSwapchain* swapchain,
-                                     u64 timeoutNS, 
-                                     VkSemaphore imageAvailableSemaphore, 
-                                     VkFence fence, 
-                                     u32* outImageIndex){
+VkResult  vulkanSwapchainAcquireNextImageIndex (VulkanContext* context,
+                                     VulkanSwapchain* swapchain,
+                                     u64              timeoutNS, 
+                                     VkSemaphore      imageAvailableSemaphore, 
+                                     VkFence          fence, 
+                                     u32*             outImageIndex)
+{
   VkResult result = vkAcquireNextImageKHR(context->device.logicalDevice, swapchain->handle, timeoutNS, imageAvailableSemaphore, fence, outImageIndex);
 
   // trigger swapchian recreation and boot out of the render loop
@@ -67,13 +71,13 @@ VkResult  vulkanSwapchainAcquireNextImageIndex (vulkanContext* context,
   return VK_SUCCESS;
 }
 
-VkResult vulkanSwapchainPresent         (vulkanContext* context,
-                                   vulkanSwapchain* swapchain, 
-                                   VkQueue graphicsQueue,
-                                   VkQueue presentQueue,
-                                   VkSemaphore renderCompleteSemaphore,
-                                   u32 presentImageIndex){
-
+VkResult vulkanSwapchainPresent   (VulkanContext*   context,
+                                   VulkanSwapchain* swapchain, 
+                                   VkQueue          graphicsQueue,
+                                   VkQueue          presentQueue,
+                                   VkSemaphore      renderCompleteSemaphore,
+                                   u32              presentImageIndex)
+{
   VkPresentInfoKHR  presentInfo = {VK_STRUCTURE_TYPE_PRESENT_INFO_KHR};
   presentInfo.waitSemaphoreCount  = 1;
   presentInfo.pWaitSemaphores     = &renderCompleteSemaphore;
@@ -92,8 +96,11 @@ VkResult vulkanSwapchainPresent         (vulkanContext* context,
   UINFO("SUCCESFULLY PRESENTED A FRAME");
   return result;
 }
-VkResult create(vulkanContext* context,u32 width, u32 height,vulkanSwapchain* swapchain){
- 
+//-----------------------------------------INNER CREATE FUCNTION-----------------------------------
+VkResult create   (VulkanContext*   context,
+                   u32 width, u32   height,
+                   VulkanSwapchain* swapchain)
+{
   VkResult result = {0};
   VkExtent2D swapchainExtent  = {width, height};
 
@@ -261,7 +268,7 @@ VkResult create(vulkanContext* context,u32 width, u32 height,vulkanSwapchain* sw
   return result;
 }
 
-VkResult destroy(vulkanContext* context,vulkanSwapchain* swapchain){
+VkResult destroy(VulkanContext* context,VulkanSwapchain* swapchain){
 
   vkDeviceWaitIdle(context->device.logicalDevice);
   vulkanImageDestroy(context, &swapchain->depthAttachment);

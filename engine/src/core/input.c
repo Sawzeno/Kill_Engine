@@ -48,7 +48,7 @@ void inputProcessKey(keys key, u8 pressed){
   if(state.keyboardCurrent.keys[key] != pressed){
     state.keyboardCurrent.keys[key]   = pressed;
 
-    eventContext context;
+    EventContext context;
     context.data.u16[0] = key;
     eventFire(pressed ? EVENT_CODE_KEY_PRESSED : EVENT_CODE_KEY_RELEASED, NULL, context);
   }
@@ -58,7 +58,7 @@ void inputProcessButton(buttons button, u8 pressed){
   if(state.mouseCurrent.buttons[button] != pressed){
      state.mouseCurrent.buttons[button]  = pressed;
 
-    eventContext context;
+    EventContext context;
     context.data.u16[0] = button;
     eventFire(pressed ? EVENT_CODE_BUTTON_PRESSED : EVENT_CODE_BUTTON_RELEASED ,NULL, context);
   }
@@ -70,7 +70,7 @@ void inputProcessMouseMove(i16 x, i16 y){
     state.mouseCurrent.x  = x;
     state.mouseCurrent.y  = y;
 
-    eventContext context;
+    EventContext context;
     context.data.u16[0]   = x;
     context.data.u16[1]   = y;
 
@@ -79,7 +79,7 @@ void inputProcessMouseMove(i16 x, i16 y){
 }
 
 void inputProcessMouseWheel(i8 z_delta){
-  eventContext context;
+  EventContext context;
   context.data.u16[0] = z_delta;
   eventFire(EVENT_CODE_MOUSE_WHEEL, NULL, context);
 }

@@ -2,21 +2,21 @@
 
 #include  "defines.h"
 
-typedef struct platformState platformState;
+typedef struct PlatformState PlatformState;
 
-struct platformState{
+struct PlatformState{
   void* internalState;
 };
 
-u8    startPlatform       (platformState* platState,
+u8    startPlatform       (PlatformState* platState,
                            const char* appliactionName,
                            i32 x,
                            i32 y,
                            i32 width,
                            i32 height);
 
-void  shutdownPlatform    (platformState* platState);
-u8    platformPumpMessages(platformState* platState);
+void  shutdownPlatform    (PlatformState* platState);
+u8    platformPumpMessages(PlatformState* platState);
 void  platformSleep       (u64 ms);
 f64   platformGetAbsoluteTime();
 

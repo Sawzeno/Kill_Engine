@@ -2,26 +2,26 @@
 
 #include  "vulkantypes.h"
 
-VkResult vulkanSwapchainCreate          (vulkanContext* context,
-                                     u32 width, u32 height,
-                                     vulkanSwapchain* outSwapchain);
+VkResult vulkanSwapchainCreate      (VulkanContext*   context,
+                                     u32 width, u32   height,
+                                     VulkanSwapchain* outSwapchain);
 
-VkResult vulkanSwapchainRecreate        (vulkanContext* context,
-                                     u32 width, u32 height,
-                                     vulkanSwapchain* outSwapchain);
+VkResult vulkanSwapchainRecreate    (VulkanContext*   context,
+                                     u32 width, u32   height,
+                                     VulkanSwapchain* outSwapchain);
 
-VkResult vulkanSwapchainDestroy         (vulkanContext* context, vulkanSwapchain* swapchain);
+VkResult vulkanSwapchainDestroy     (VulkanContext*   context, VulkanSwapchain* swapchain);
 
-VkResult  vulkanSwapchainAcquireNextImageIndex (vulkanContext* context,
-                                     vulkanSwapchain* swapchain,
-                                     u64 timeoutNS, 
-                                     VkSemaphore imageAvailableSemaphore, 
-                                     VkFence fence, 
-                                     u32* outImageIndex);
+VkResult  vulkanSwapchainAcquireNextImageIndex (VulkanContext* context,
+                                     VulkanSwapchain* swapchain,
+                                     u64              timeoutNS, 
+                                     VkSemaphore      imageAvailableSemaphore, 
+                                     VkFence          fence, 
+                                     u32*             outImageIndex);
 
-VkResult vulkanSwapchainPresent         (vulkanContext* context,
-                                     vulkanSwapchain* swapchain, 
-                                     VkQueue graphicsQueue,
-                                     VkQueue presentQueue,
-                                     VkSemaphore renderCompleteSemaphore,
-                                     u32 presentImageIndex);
+VkResult vulkanSwapchainPresent     (VulkanContext*   context,
+                                     VulkanSwapchain* swapchain, 
+                                     VkQueue          graphicsQueue,
+                                     VkQueue          presentQueue,
+                                     VkSemaphore      renderCompleteSemaphore,
+                                     u32              presentImageIndex);

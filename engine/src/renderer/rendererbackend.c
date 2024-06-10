@@ -1,9 +1,9 @@
 #include  "rendererbackend.h"
 #include  "utils.h"
 
+#include  "vulkantypes.h"
 #include  "../core/application.h"
 #include "core/kmemory.h"
-#include  "vulkantypes.h"
 #include  "vulkanplatform.h"
 #include  "device.h"
 #include  "swapchain.h"
@@ -15,19 +15,18 @@
 #include  "containers/darray.h"
 #include  "defines.h"
 #include  "string.h"
-#include <vulkan/vulkan_core.h>
 
 static  u32 cachedFrameBufferWidth    = 0;
 static  u32 cachedFrameBufferHeight   = 0;
 
-static vulkanContext context;
+static VulkanContext context;
 static const char* validationLayers = "VK_LAYER_KHRONOS_validation";
 u8    recreateSwapchain();
 
 i32 findMemoryIndex (u32 typeFilter, u32 propertyFlags);
 
 VkResult  createCommandBuffers();
-VkResult  regenerateFrameBuffers(vulkanSwapchain* swapchain, vulkanRenderPass* renderPass);
+VkResult  regenerateFrameBuffers(VulkanSwapchain* swapchain, VulkanRenderPass* renderPass);
 
 VKAPI_ATTR VkBool32 VKAPI_CALL vkDebugCallback(
   VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
@@ -48,9 +47,9 @@ u8  rendererBackendInitialize(const char* applicationName , platformState* platS
   context.frameBufferWidth  = (cachedFrameBufferWidth != 0 ? cachedFrameBufferWidth : 1280);
   context.frameBufferHeight = (cachedFrameBufferHeight!= 0 ? cachedFrameBufferHeight: 1440);
 
-  //check for each vulkan function
+  //check for each Vulkan function
   VkResult result  = {0};
-  //VULKAN INSTANCE
+  //Vulkan INSTANCE
   VkApplicationInfo appInfo   = {VK_STRUCTURE_TYPE_APPLICATION_INFO};
   appInfo.apiVersion          = VK_API_VERSION_1_2;
   appInfo.pApplicationName    = applicationName;
@@ -60,33 +59,33 @@ u8  rendererBackendInitialize(const char* applicationName , platformState* platS
 
   UDEBUG("----------------------REQUIRED EXTENSIONS----------------------");
   const char** requiredExtensions   = (const char**)_darrayCreate(1,sizeof(const char*));
-  darrayPush(requiredExtensions, &VK_KHR_SURFACE_EXTENSION_NAME);
-  darrayPush(requiredExtensions, &VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-  darrayPush(requiredExtensions, &"VK_KHR_xcb_surface");
+  DARRAYPUSH(requiredExtensions, &VK_KHR_SURFACE_EXTENSION_NAME);
+  DARRAYPUSH(requiredExtensions, &VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+  DARRAYPUSH(requiredExtensions, &"VK_KHR_xcb_surface");
   result  =  checkAvailableExtensions(requiredExtensions);
   VK_CHECK2(result, "REQUIRED EXTENSIONS NOT AVAILABLE");
 
   UDEBUG("----------------------REQUIRED LAYERS----------------------");
-  const char**  requiredLayers  = (const char**)darrayCreate(const char*);
-  darrayPush(requiredLayers, &"VK_LAYER_KHRONOS_validation");
+  const char**  requiredLayers  = (const char**)DARRAYCREATE(const char*);
+  DARRAYPUSH(requiredLayers, &"VK_LAYER_KHRONOS_validation");
   result  = checkAvailableLayers(requiredLayers);
   VK_CHECK2(result, "REQUIRED LAYERS NOT AVAILABLE");
 
-  UDEBUG("----------------------VULKAN INSTANCE----------------------");
+  UDEBUG("----------------------Vulkan INSTANCE----------------------");
   VkInstanceCreateInfo createInfo     = {VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO};
   createInfo.pApplicationInfo         = &appInfo;
-  createInfo.enabledExtensionCount    = darrayLength(requiredExtensions);
+  createInfo.enabledExtensionCount    = DARRAYLENGTH(requiredExtensions);
   createInfo.ppEnabledExtensionNames  = requiredExtensions;
-  createInfo.enabledLayerCount        = darrayLength(requiredLayers);
+  createInfo.enabledLayerCount        = DARRAYLENGTH(requiredLayers);
   createInfo.ppEnabledLayerNames      = requiredLayers;
 
   context.allocator = 0;
   result  = vkCreateInstance(&createInfo, context.allocator, &(context.instance));
   VK_CHECK2(result, "FAILED TO CREATE INSTANCE");
-  UDEBUG("VULKAN ISNTANCE CREATED");
+  UDEBUG("Vulkan ISNTANCE CREATED");
 
-  UDEBUG("----------------------VULKAN DEBUGGER----------------------");
-  UINFO("CREATING VULKAN DEBUGGER");
+  UDEBUG("----------------------Vulkan DEBUGGER----------------------");
+  UINFO("CREATING Vulkan DEBUGGER");
   u32 logSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT    |
     VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT  |
     VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT;  //|
@@ -104,25 +103,25 @@ u8  rendererBackendInitialize(const char* applicationName , platformState* platS
 
   result =  func(context.instance, &debugCreateInfo, context.allocator, &context.debugMessenger);
   VK_CHECK2(result, "FAILED TO CREATE DEBUGGER");
-  UINFO("VULKAN DEBUGGER CREATED");
+  UINFO("Vulkan DEBUGGER CREATED");
 
-  UDEBUG("----------------------VULKAN SURFACE----------------------");
-  UINFO("CREATING VULKAN SURFACE");
-  result  = createvulkanSurface( platState, &context);
-  VK_CHECK2(result, "FAILED TO CREATE VULKAN SURFACE");
+  UDEBUG("----------------------Vulkan SURFACE----------------------");
+  UINFO("CREATING Vulkan SURFACE");
+  result  = createVulkanSurface( platState, &context);
+  VK_CHECK2(result, "FAILED TO CREATE Vulkan SURFACE");
 
-  UDEBUG("----------------------VULKAN DEVICE----------------------");
-  UINFO("CREATING VULKAN DEVICE");
+  UDEBUG("----------------------Vulkan DEVICE----------------------");
+  UINFO("CREATING Vulkan DEVICE");
   result =  vulkanDeviceCreate(&context);
   VK_CHECK2(result, "FAILED TO CREATE DEVICE !");
 
   UDEBUG("----------------------SWAPCHAIN----------------------");
-  UINFO("CREATING VULKAN SWAPCHAIN");
+  UINFO("CREATING Vulkan SWAPCHAIN");
   result = vulkanSwapchainCreate(&context, context.frameBufferWidth, context.frameBufferHeight, &context.swapchain);
   VK_CHECK2(result, "FAILED TO CREATE SWAPCHAIN");
 
   UDEBUG("----------------------RENDERPASS----------------------");
-  UINFO("CREATING VULKAN RENDERPASS");
+  UINFO("CREATING Vulkan RENDERPASS");
   result =  vulkanRenderPassCreate(&context,
                                    &context.mainRenderPass,
                                    0, 0, context.frameBufferWidth, context.frameBufferHeight,
@@ -131,8 +130,8 @@ u8  rendererBackendInitialize(const char* applicationName , platformState* platS
   VK_CHECK2(result, "FAILED TO CREATE RENDERPASS");
 
   UDEBUG("----------------------SWAPCHAIN FRAMEBUFFERS----------------------");
-  UINFO("CREATING VULKAN FRAMEBUFFERS");
-  context.swapchain.frameBuffers  = darrayReserve(vulkanFrameBuffer, context.swapchain.imageCount);
+  UINFO("CREATING Vulkan FRAMEBUFFERS");
+  context.swapchain.frameBuffers  = DARRAYRESERVE(VulkanFrameBuffer, context.swapchain.imageCount);
   regenerateFrameBuffers(&context.swapchain, &context.mainRenderPass);
 
   UDEBUG("----------------------COMMAND BUFFERS----------------------");
@@ -142,9 +141,9 @@ u8  rendererBackendInitialize(const char* applicationName , platformState* platS
 
   UDEBUG("----------------------SYNC OBJECTS----------------------");
   UINFO("CREATING SYNC OBJCTS");
-  context.imageAvailableSemaphores  = darrayReserve(VkSemaphore, context.swapchain.maxFramesInFlight);
-  context.queueCompleteSemaphores   = darrayReserve(VkSemaphore, context.swapchain.maxFramesInFlight);
-  context.inFlightFences            = darrayReserve(vulkanFence, context.swapchain.maxFramesInFlight);
+  context.imageAvailableSemaphores  = DARRAYRESERVE(VkSemaphore, context.swapchain.maxFramesInFlight);
+  context.queueCompleteSemaphores   = DARRAYRESERVE(VkSemaphore, context.swapchain.maxFramesInFlight);
+  context.inFlightFences            = DARRAYRESERVE(VulkanFence, context.swapchain.maxFramesInFlight);
 
   for(u8 i = 0; i < context.swapchain.maxFramesInFlight; ++i){
     VkSemaphoreCreateInfo semaphoreCreateInfo = {VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO};
@@ -162,7 +161,7 @@ u8  rendererBackendInitialize(const char* applicationName , platformState* platS
   // because the initial state shiould be zero , and will be 0 when not in use, ACTUAL FENCES ARE NOT 
   // OWNED BY THE LIST
 
-  context.imagesInFlight  = darrayReserve(vulkanFence, context.swapchain.imageCount);
+  context.imagesInFlight  = DARRAYRESERVE(VulkanFence, context.swapchain.imageCount);
   for(u32 i = 0; i < context.swapchain.imageCount; ++i){
     context.imagesInFlight[i] = 0;
   }
@@ -172,14 +171,14 @@ u8  rendererBackendInitialize(const char* applicationName , platformState* platS
   if(result != VK_SUCCESS){
     return false;
   }
-  UINFO("VULKAN RENDERER BACKEND INITIALIZED");
+  UINFO("Vulkan RENDERER BACKEND INITIALIZED");
   return true;
 }
 
 //-----------------------------------------------------RENDERER BEGIN FRAME---------------------------------------------------------
 
 u8  rendererBackendBeginFrame(f32 deltaTime){
-  vulkanDevice* device  = &context.device;
+  VulkanDevice* device  = &context.device;
   UTRACE("----------------------BEGIN FRAME----------------------");
     
   // logVulkanContext    (&context);
@@ -236,7 +235,7 @@ u8  rendererBackendBeginFrame(f32 deltaTime){
   }
 
   //begin recording commands
-  vulkanCommandBuffer* commandBuffer  =  &context.graphicsCommandBuffers[context.imageIndex];
+  VulkanCommandBuffer* commandBuffer  =  &context.graphicsCommandBuffers[context.imageIndex];
   vulkanCommandBufferReset(commandBuffer);
   vulkanCommandBufferBegin(commandBuffer, false, false, false);
 
@@ -275,7 +274,7 @@ u8  rendererBackendBeginFrame(f32 deltaTime){
 u8  rendererBackendEndFrame(f32 deltaTime){
 
   UTRACE("----------------------END FRAME----------------------");
-  vulkanCommandBuffer* commandBuffer  = &context.graphicsCommandBuffers[context.imageIndex];
+  VulkanCommandBuffer* commandBuffer  = &context.graphicsCommandBuffers[context.imageIndex];
   //end renderpass
   vulkanRenderPassEnd(commandBuffer, &context.mainRenderPass);
   //end commandBuffer
@@ -329,7 +328,7 @@ u8  rendererBackendEndFrame(f32 deltaTime){
                          context.queueCompleteSemaphores[context.currentFrame],
                          context.imageIndex);
 
-  VK_CHECK2(result, "SOMETHING WRONG WITH vulkanSwapchainPresent");
+  VK_CHECK2(result, "SOMETHING WRONG WITH VulkanSwapchainPresent");
   return true;
 }
 
@@ -371,13 +370,13 @@ u8  rendererBackendShutdown(){
     vulkanFenceDestroy(&context, &context.inFlightFences[i]);
   }
   
-  darrayDestroy(context.queueCompleteSemaphores);
+  DARRAYDESTROY(context.queueCompleteSemaphores);
   context.queueCompleteSemaphores = 0;
-  darrayDestroy(context.imageAvailableSemaphores);
+  DARRAYDESTROY(context.imageAvailableSemaphores);
   context.imageAvailableSemaphores = 0;
-  darrayDestroy(context.inFlightFences);
+  DARRAYDESTROY(context.inFlightFences);
   context.inFlightFences = 0;
-  darrayDestroy(context.imagesInFlight);
+  DARRAYDESTROY(context.imagesInFlight);
   context.imagesInFlight = 0;
 
   UDEBUG("DESTROYING COMMAND BUFFERS");
@@ -394,19 +393,19 @@ u8  rendererBackendShutdown(){
   }
 
 
-  darrayDestroy(context.graphicsCommandBuffers);
+  DARRAYDESTROY(context.graphicsCommandBuffers);
   context.graphicsCommandBuffers = 0;
 
   UDEBUG("DESTROYING RENDERPASS");
   vulkanRenderPassDestroy(&context, &context.mainRenderPass);
 
-  UDEBUG("DESTORYIIG VULKAN SWAPCHAIN");
+  UDEBUG("DESTORYIIG Vulkan SWAPCHAIN");
   vulkanSwapchainDestroy(&context, &context.swapchain);
 
-  UDEBUG("DESTOYING VULKAN DEVICE");
+  UDEBUG("DESTOYING Vulkan DEVICE");
   vulkanDeviceDestroy(&context);
 
-  UDEBUG("DESTROYING VULKAN SURFACE");
+  UDEBUG("DESTROYING Vulkan SURFACE");
   if(context.surface){
     vkDestroySurfaceKHR(context.instance,context.surface ,context.allocator);
     context.surface = NULL;
@@ -464,10 +463,10 @@ VKAPI_ATTR VkBool32 VKAPI_CALL vkDebugCallback(
 VkResult createCommandBuffers(){
   VkResult  result = {0};
   if(!context.graphicsCommandBuffers){
-    context.graphicsCommandBuffers  = darrayReserve(vulkanCommandBuffer, context.swapchain.imageCount);
+    context.graphicsCommandBuffers  = DARRAYRESERVE(VulkanCommandBuffer, context.swapchain.imageCount);
     for(u32 i = 0; i < context.swapchain.imageCount; ++i){
       kzeroMemory(&context.graphicsCommandBuffers[i],
-                  sizeof(vulkanCommandBuffer));
+                  sizeof(VulkanCommandBuffer));
     }
   }
 
@@ -478,7 +477,7 @@ VkResult createCommandBuffers(){
                               &context.graphicsCommandBuffers[i]);
       VK_CHECK2(result, __FUNCTION__);
     }
-    kzeroMemory(&context.graphicsCommandBuffers[i], sizeof(vulkanCommandBuffer));
+    kzeroMemory(&context.graphicsCommandBuffers[i], sizeof(VulkanCommandBuffer));
     result = vulkanCommandBufferAllocate(&context,
                                 context.device.graphicsCommandPool, true,
                                 &context.graphicsCommandBuffers[i]);
@@ -488,7 +487,7 @@ VkResult createCommandBuffers(){
   return result;
 }
 //------------------------------------------------regenerateFrameBuffers------------------------------------
-VkResult  regenerateFrameBuffers(vulkanSwapchain* swapchain, vulkanRenderPass* renderPass){
+VkResult  regenerateFrameBuffers(VulkanSwapchain* swapchain, VulkanRenderPass* renderPass){
   VkResult result = {0};
 
   for(u32 i = 0; i < swapchain->imageCount; ++i){

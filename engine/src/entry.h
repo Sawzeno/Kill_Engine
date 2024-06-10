@@ -4,7 +4,7 @@
 #include  "gametypes.h"
 
 
-extern i8 creategame(Game* game);
+extern i8 createGame(Game* game);
 
 int main(void){
 
@@ -16,7 +16,7 @@ int main(void){
   //Request the game instance of the application
   UINFO("INITIALIZING GAME APPLICATION ...");
   Game game;
-  if(creategame(&game) == false){
+  if(createGame(&game) == false){
     UFATAL("Could not initialize the appliaction itself!");
     return -1;
   }

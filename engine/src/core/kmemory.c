@@ -6,9 +6,9 @@
 #include  <unistd.h>
 #include  <string.h>
 
-typedef struct memoryStats memoryStats;
+typedef struct MemoryStats MemoryStats;
 
-struct memoryStats {
+struct MemoryStats {
   u64 totalAllocated;
   u64 taggedAllocations[MEMORY_TAG_MAX_TAGS];
 };
@@ -35,7 +35,7 @@ static const char* memory_tag_strings[MEMORY_TAG_MAX_TAGS] = {
 
 
 #define MEM_STATS_LEN 10240
-static memoryStats stats;
+static MemoryStats stats;
 
 void initializeMemory(){
   memset(&stats , 0 , sizeof(stats));
@@ -80,7 +80,7 @@ char* getMemoryUsage(){
   return outString;
 }
 
-void* kallocate(u64 size , memory_tag tag){
+void* kallocate(u64 size , Memory_tag tag){
   if(tag ==  MEMORY_TAG_UNKNOWN){
     UWARN("kallocate called on MEMORY_TAG_UNKNOWN , reclass this allocation !");
   }
@@ -93,7 +93,7 @@ void* kallocate(u64 size , memory_tag tag){
   return block;
 }
 
-void  kfree(void* block , u64 size , memory_tag tag){
+void  kfree(void* block , u64 size , Memory_tag tag){
   if(tag  == MEMORY_TAG_UNKNOWN){
     UWARN("kfree called on MEMORY_TAG_UNKOWN");
   }
