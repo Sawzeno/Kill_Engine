@@ -15,6 +15,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/gon/Developer/Kill_Engine/engine/src/core/events.c" "engine/CMakeFiles/engine.dir/src/core/events.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/core/events.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/core/input.c" "engine/CMakeFiles/engine.dir/src/core/input.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/core/input.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/core/kmemory.c" "engine/CMakeFiles/engine.dir/src/core/kmemory.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/core/kmemory.c.o.d"
+  "/home/gon/Developer/Kill_Engine/engine/src/math/kmath.c" "engine/CMakeFiles/engine.dir/src/math/kmath.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/math/kmath.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/platform/platform.c" "engine/CMakeFiles/engine.dir/src/platform/platform.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/platform/platform.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/renderer/commandbuffer.c" "engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/renderer/device.c" "engine/CMakeFiles/engine.dir/src/renderer/device.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/renderer/device.c.o.d"

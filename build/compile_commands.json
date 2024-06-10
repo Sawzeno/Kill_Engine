@@ -43,6 +43,12 @@
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/math/kmath.c.o -c /home/gon/Developer/Kill_Engine/engine/src/math/kmath.c",
+  "file": "/home/gon/Developer/Kill_Engine/engine/src/math/kmath.c",
+  "output": "engine/CMakeFiles/engine.dir/src/math/kmath.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/engine",
   "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/platform/platform.c.o -c /home/gon/Developer/Kill_Engine/engine/src/platform/platform.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/platform/platform.c",
   "output": "engine/CMakeFiles/engine.dir/src/platform/platform.c.o"

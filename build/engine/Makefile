@@ -298,6 +298,30 @@ src/core/kmemory.c.s:
 	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/kmemory.c.s
 .PHONY : src/core/kmemory.c.s
 
+src/math/kmath.o: src/math/kmath.c.o
+.PHONY : src/math/kmath.o
+
+# target to build an object file
+src/math/kmath.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/math/kmath.c.o
+.PHONY : src/math/kmath.c.o
+
+src/math/kmath.i: src/math/kmath.c.i
+.PHONY : src/math/kmath.i
+
+# target to preprocess a source file
+src/math/kmath.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/math/kmath.c.i
+.PHONY : src/math/kmath.c.i
+
+src/math/kmath.s: src/math/kmath.c.s
+.PHONY : src/math/kmath.s
+
+# target to generate assembly for a file
+src/math/kmath.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/math/kmath.c.s
+.PHONY : src/math/kmath.c.s
+
 src/platform/platform.o: src/platform/platform.c.o
 .PHONY : src/platform/platform.o
 
@@ -592,6 +616,9 @@ help:
 	@echo "... src/core/kmemory.o"
 	@echo "... src/core/kmemory.i"
 	@echo "... src/core/kmemory.s"
+	@echo "... src/math/kmath.o"
+	@echo "... src/math/kmath.i"
+	@echo "... src/math/kmath.s"
 	@echo "... src/platform/platform.o"
 	@echo "... src/platform/platform.i"
 	@echo "... src/platform/platform.s"
