@@ -243,19 +243,19 @@ KILL_ENGINE_IS_TOP_LEVEL:STATIC=ON
 KILL_ENGINE_SOURCE_DIR:STATIC=/home/gon/Developer/Kill_Engine
 
 //Enable debug logs
-LOG_DEBUG:BOOL=ON
+LOG_DEBUG:BOOL=OFF
 
 //Enable debug logs
 LOG_DEBUG_ENABLED:BOOL=ON
 
 //Enable info logs
-LOG_INFO:BOOL=ON
+LOG_INFO:BOOL=OFF
 
 //Enable info logs
 LOG_INFO_ENABLED:BOOL=ON
 
 //Enable trace logs
-LOG_TRACE:BOOL=ON
+LOG_TRACE:BOOL=OFF
 
 //Enable trace logs
 LOG_TRACE_ENABLED:BOOL=ON
