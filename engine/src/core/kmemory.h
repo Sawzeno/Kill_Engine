@@ -22,6 +22,7 @@ typedef enum Memory_tag{
   MEMORY_TAG_ENTITY,
   MEMORY_TAG_ENTITY_NODE,
   MEMORY_TAG_ENTITY_SCENE,
+  MEMORY_TAG_LINEAR_ALLOCATOR,
 }Memory_tag;
 
 void initializeMemory();

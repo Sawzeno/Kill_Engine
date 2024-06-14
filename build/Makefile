@@ -168,6 +168,19 @@ kmemory.test/fast:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/kmemory.test.dir/build.make tests/CMakeFiles/kmemory.test.dir/build
 .PHONY : kmemory.test/fast
 
+#=============================================================================
+# Target rules for targets named linearallocatortests.test
+
+# Build rule for target.
+linearallocatortests.test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 linearallocatortests.test
+.PHONY : linearallocatortests.test
+
+# fast build rule for target.
+linearallocatortests.test/fast:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/linearallocatortests.test.dir/build.make tests/CMakeFiles/linearallocatortests.test.dir/build
+.PHONY : linearallocatortests.test/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -179,6 +192,7 @@ help:
 	@echo "... darray.test"
 	@echo "... engine"
 	@echo "... kmemory.test"
+	@echo "... linearallocatortests.test"
 	@echo "... testbed"
 .PHONY : help
 

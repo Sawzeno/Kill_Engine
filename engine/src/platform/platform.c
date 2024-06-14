@@ -437,10 +437,11 @@ u8  translateKeycode(u32 xKeycode){
     case XK_Control_L:
       return KEY_LCONTROL;
     case XK_Control_R:
-      return KEY_RCONTROL;
-    // case XK_Menu: return KEY_LMENU;
-    case XK_Menu:
-      return KEY_RMENU;
+      return KEY_CONTROL;
+    case XK_Alt_L:
+      return KEY_LALT;
+    case XK_Alt_R:
+      return KEY_RALT;
 
     case XK_semicolon:
       return KEY_SEMICOLON;

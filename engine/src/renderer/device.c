@@ -96,7 +96,7 @@ VkResult physicalDeviceMeetsRequirements(
   // Check for discreteGPU
   if (requirements->discreteGPU) {
     if (properties->deviceType != VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
-      UINFO("NODE DICSCRETE GPU PRESENTA");
+      UINFO("NO DICSCRETE GPU PRESENT");
       return !VK_SUCCESS;
     }
   }
@@ -105,7 +105,7 @@ VkResult physicalDeviceMeetsRequirements(
   UINFO("CHECKING FOR REQUIRED QUEUES");
   u32 queueFamilyCount = 0;
   vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, NULL);
-  VkQueueFamilyProperties* queueFamilies = kallocate(sizeof(VkQueueFamilyProperties) * queueFamilyCount, MEMORY_TAG_RENDERER);
+  VkQueueFamilyProperties queueFamilies[32]; 
   vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies);
 
   UINFO("GRAPHICS | PRESENT | COMPUTE | TRANSFER | NAME");
@@ -148,7 +148,6 @@ VkResult physicalDeviceMeetsRequirements(
         outQueueFamilyInfo->transferFamilyIndex != -1,
         properties->deviceName);
 
-  kfree(queueFamilies, sizeof(VkQueueFamilyProperties) * queueFamilyCount, MEMORY_TAG_RENDERER);
 
   if (
     (!requirements->graphics ||( outQueueFamilyInfo->graphicsFamilyIndex != -1)) ||
@@ -241,7 +240,8 @@ VkResult selectPhysicalDevice(VulkanContext* context) {
     return false;
   }
 
-  VkPhysicalDevice physicalDevices[physicalDeviceCount];
+  const int maxDeviceCount = 32;
+  VkPhysicalDevice physicalDevices[maxDeviceCount];
   result = vkEnumeratePhysicalDevices(context->instance, &physicalDeviceCount, physicalDevices);
   VK_CHECK2(result, "could not enumerate physical devices");
 
@@ -357,7 +357,7 @@ VkResult vulkanDeviceCreate(VulkanContext* context) {
     indexCount++;
   }
 
-  u32 indices[4] = {0};
+  u32 indices[32] = {0};
   u8 index = 0;
   indices[index++] = context->device.graphicsQueueIndex;
   if(!presentSharedGraphicsQueue){
@@ -368,7 +368,7 @@ VkResult vulkanDeviceCreate(VulkanContext* context) {
   }
 
   UDEBUG("----------------------QUEUE CREATE INFO---------------");
-  VkDeviceQueueCreateInfo queueCreateInfos[4] = {0};
+  VkDeviceQueueCreateInfo queueCreateInfos[32] = {0};
   for(u32 i = 0; i < indexCount; ++i){
     queueCreateInfos[i].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
     queueCreateInfos[i].queueFamilyIndex  = indices[i];

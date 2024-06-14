@@ -181,10 +181,24 @@ engine/CMakeFiles/engine.dir/src/math/kmath.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/engine.dir/src/math/kmath.c.s"
 	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gon/Developer/Kill_Engine/engine/src/math/kmath.c -o CMakeFiles/engine.dir/src/math/kmath.c.s
 
+engine/CMakeFiles/engine.dir/src/memory/linearallocator.c.o: engine/CMakeFiles/engine.dir/flags.make
+engine/CMakeFiles/engine.dir/src/memory/linearallocator.c.o: /home/gon/Developer/Kill_Engine/engine/src/memory/linearallocator.c
+engine/CMakeFiles/engine.dir/src/memory/linearallocator.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object engine/CMakeFiles/engine.dir/src/memory/linearallocator.c.o"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/memory/linearallocator.c.o -MF CMakeFiles/engine.dir/src/memory/linearallocator.c.o.d -o CMakeFiles/engine.dir/src/memory/linearallocator.c.o -c /home/gon/Developer/Kill_Engine/engine/src/memory/linearallocator.c
+
+engine/CMakeFiles/engine.dir/src/memory/linearallocator.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/engine.dir/src/memory/linearallocator.c.i"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gon/Developer/Kill_Engine/engine/src/memory/linearallocator.c > CMakeFiles/engine.dir/src/memory/linearallocator.c.i
+
+engine/CMakeFiles/engine.dir/src/memory/linearallocator.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/engine.dir/src/memory/linearallocator.c.s"
+	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gon/Developer/Kill_Engine/engine/src/memory/linearallocator.c -o CMakeFiles/engine.dir/src/memory/linearallocator.c.s
+
 engine/CMakeFiles/engine.dir/src/platform/platform.c.o: engine/CMakeFiles/engine.dir/flags.make
 engine/CMakeFiles/engine.dir/src/platform/platform.c.o: /home/gon/Developer/Kill_Engine/engine/src/platform/platform.c
 engine/CMakeFiles/engine.dir/src/platform/platform.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object engine/CMakeFiles/engine.dir/src/platform/platform.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object engine/CMakeFiles/engine.dir/src/platform/platform.c.o"
 	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/platform/platform.c.o -MF CMakeFiles/engine.dir/src/platform/platform.c.o.d -o CMakeFiles/engine.dir/src/platform/platform.c.o -c /home/gon/Developer/Kill_Engine/engine/src/platform/platform.c
 
 engine/CMakeFiles/engine.dir/src/platform/platform.c.i: cmake_force
@@ -198,7 +212,7 @@ engine/CMakeFiles/engine.dir/src/platform/platform.c.s: cmake_force
 engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o: engine/CMakeFiles/engine.dir/flags.make
 engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o: /home/gon/Developer/Kill_Engine/engine/src/renderer/commandbuffer.c
 engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o"
 	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o -MF CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o.d -o CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/commandbuffer.c
 
 engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.i: cmake_force
@@ -212,7 +226,7 @@ engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.s: cmake_force
 engine/CMakeFiles/engine.dir/src/renderer/device.c.o: engine/CMakeFiles/engine.dir/flags.make
 engine/CMakeFiles/engine.dir/src/renderer/device.c.o: /home/gon/Developer/Kill_Engine/engine/src/renderer/device.c
 engine/CMakeFiles/engine.dir/src/renderer/device.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object engine/CMakeFiles/engine.dir/src/renderer/device.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object engine/CMakeFiles/engine.dir/src/renderer/device.c.o"
 	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/renderer/device.c.o -MF CMakeFiles/engine.dir/src/renderer/device.c.o.d -o CMakeFiles/engine.dir/src/renderer/device.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/device.c
 
 engine/CMakeFiles/engine.dir/src/renderer/device.c.i: cmake_force
@@ -226,7 +240,7 @@ engine/CMakeFiles/engine.dir/src/renderer/device.c.s: cmake_force
 engine/CMakeFiles/engine.dir/src/renderer/fence.c.o: engine/CMakeFiles/engine.dir/flags.make
 engine/CMakeFiles/engine.dir/src/renderer/fence.c.o: /home/gon/Developer/Kill_Engine/engine/src/renderer/fence.c
 engine/CMakeFiles/engine.dir/src/renderer/fence.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object engine/CMakeFiles/engine.dir/src/renderer/fence.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object engine/CMakeFiles/engine.dir/src/renderer/fence.c.o"
 	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/renderer/fence.c.o -MF CMakeFiles/engine.dir/src/renderer/fence.c.o.d -o CMakeFiles/engine.dir/src/renderer/fence.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/fence.c
 
 engine/CMakeFiles/engine.dir/src/renderer/fence.c.i: cmake_force
@@ -240,7 +254,7 @@ engine/CMakeFiles/engine.dir/src/renderer/fence.c.s: cmake_force
 engine/CMakeFiles/engine.dir/src/renderer/framebuffer.c.o: engine/CMakeFiles/engine.dir/flags.make
 engine/CMakeFiles/engine.dir/src/renderer/framebuffer.c.o: /home/gon/Developer/Kill_Engine/engine/src/renderer/framebuffer.c
 engine/CMakeFiles/engine.dir/src/renderer/framebuffer.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object engine/CMakeFiles/engine.dir/src/renderer/framebuffer.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building C object engine/CMakeFiles/engine.dir/src/renderer/framebuffer.c.o"
 	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/renderer/framebuffer.c.o -MF CMakeFiles/engine.dir/src/renderer/framebuffer.c.o.d -o CMakeFiles/engine.dir/src/renderer/framebuffer.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/framebuffer.c
 
 engine/CMakeFiles/engine.dir/src/renderer/framebuffer.c.i: cmake_force
@@ -254,7 +268,7 @@ engine/CMakeFiles/engine.dir/src/renderer/framebuffer.c.s: cmake_force
 engine/CMakeFiles/engine.dir/src/renderer/image.c.o: engine/CMakeFiles/engine.dir/flags.make
 engine/CMakeFiles/engine.dir/src/renderer/image.c.o: /home/gon/Developer/Kill_Engine/engine/src/renderer/image.c
 engine/CMakeFiles/engine.dir/src/renderer/image.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building C object engine/CMakeFiles/engine.dir/src/renderer/image.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building C object engine/CMakeFiles/engine.dir/src/renderer/image.c.o"
 	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/renderer/image.c.o -MF CMakeFiles/engine.dir/src/renderer/image.c.o.d -o CMakeFiles/engine.dir/src/renderer/image.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/image.c
 
 engine/CMakeFiles/engine.dir/src/renderer/image.c.i: cmake_force
@@ -268,7 +282,7 @@ engine/CMakeFiles/engine.dir/src/renderer/image.c.s: cmake_force
 engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o: engine/CMakeFiles/engine.dir/flags.make
 engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o: /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererbackend.c
 engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building C object engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building C object engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o"
 	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o -MF CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o.d -o CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererbackend.c
 
 engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.i: cmake_force
@@ -282,7 +296,7 @@ engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.s: cmake_force
 engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o: engine/CMakeFiles/engine.dir/flags.make
 engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o: /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererfrontend.c
 engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building C object engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building C object engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o"
 	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o -MF CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o.d -o CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererfrontend.c
 
 engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.i: cmake_force
@@ -296,7 +310,7 @@ engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.s: cmake_force
 engine/CMakeFiles/engine.dir/src/renderer/renderpass.c.o: engine/CMakeFiles/engine.dir/flags.make
 engine/CMakeFiles/engine.dir/src/renderer/renderpass.c.o: /home/gon/Developer/Kill_Engine/engine/src/renderer/renderpass.c
 engine/CMakeFiles/engine.dir/src/renderer/renderpass.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building C object engine/CMakeFiles/engine.dir/src/renderer/renderpass.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building C object engine/CMakeFiles/engine.dir/src/renderer/renderpass.c.o"
 	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/renderer/renderpass.c.o -MF CMakeFiles/engine.dir/src/renderer/renderpass.c.o.d -o CMakeFiles/engine.dir/src/renderer/renderpass.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/renderpass.c
 
 engine/CMakeFiles/engine.dir/src/renderer/renderpass.c.i: cmake_force
@@ -310,7 +324,7 @@ engine/CMakeFiles/engine.dir/src/renderer/renderpass.c.s: cmake_force
 engine/CMakeFiles/engine.dir/src/renderer/swapchain.c.o: engine/CMakeFiles/engine.dir/flags.make
 engine/CMakeFiles/engine.dir/src/renderer/swapchain.c.o: /home/gon/Developer/Kill_Engine/engine/src/renderer/swapchain.c
 engine/CMakeFiles/engine.dir/src/renderer/swapchain.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building C object engine/CMakeFiles/engine.dir/src/renderer/swapchain.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building C object engine/CMakeFiles/engine.dir/src/renderer/swapchain.c.o"
 	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/renderer/swapchain.c.o -MF CMakeFiles/engine.dir/src/renderer/swapchain.c.o.d -o CMakeFiles/engine.dir/src/renderer/swapchain.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/swapchain.c
 
 engine/CMakeFiles/engine.dir/src/renderer/swapchain.c.i: cmake_force
@@ -324,7 +338,7 @@ engine/CMakeFiles/engine.dir/src/renderer/swapchain.c.s: cmake_force
 engine/CMakeFiles/engine.dir/src/renderer/utils.c.o: engine/CMakeFiles/engine.dir/flags.make
 engine/CMakeFiles/engine.dir/src/renderer/utils.c.o: /home/gon/Developer/Kill_Engine/engine/src/renderer/utils.c
 engine/CMakeFiles/engine.dir/src/renderer/utils.c.o: engine/CMakeFiles/engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building C object engine/CMakeFiles/engine.dir/src/renderer/utils.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building C object engine/CMakeFiles/engine.dir/src/renderer/utils.c.o"
 	cd /home/gon/Developer/Kill_Engine/build/engine && clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT engine/CMakeFiles/engine.dir/src/renderer/utils.c.o -MF CMakeFiles/engine.dir/src/renderer/utils.c.o.d -o CMakeFiles/engine.dir/src/renderer/utils.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/utils.c
 
 engine/CMakeFiles/engine.dir/src/renderer/utils.c.i: cmake_force
@@ -345,6 +359,7 @@ engine_OBJECTS = \
 "CMakeFiles/engine.dir/src/core/input.c.o" \
 "CMakeFiles/engine.dir/src/core/kmemory.c.o" \
 "CMakeFiles/engine.dir/src/math/kmath.c.o" \
+"CMakeFiles/engine.dir/src/memory/linearallocator.c.o" \
 "CMakeFiles/engine.dir/src/platform/platform.c.o" \
 "CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o" \
 "CMakeFiles/engine.dir/src/renderer/device.c.o" \
@@ -368,6 +383,7 @@ engine/libengine.so: engine/CMakeFiles/engine.dir/src/core/events.c.o
 engine/libengine.so: engine/CMakeFiles/engine.dir/src/core/input.c.o
 engine/libengine.so: engine/CMakeFiles/engine.dir/src/core/kmemory.c.o
 engine/libengine.so: engine/CMakeFiles/engine.dir/src/math/kmath.c.o
+engine/libengine.so: engine/CMakeFiles/engine.dir/src/memory/linearallocator.c.o
 engine/libengine.so: engine/CMakeFiles/engine.dir/src/platform/platform.c.o
 engine/libengine.so: engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o
 engine/libengine.so: engine/CMakeFiles/engine.dir/src/renderer/device.c.o
@@ -386,7 +402,7 @@ engine/libengine.so: /usr/lib/libICE.so
 engine/libengine.so: /usr/lib/libX11.so
 engine/libengine.so: /usr/lib/libXext.so
 engine/libengine.so: engine/CMakeFiles/engine.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Linking C shared library libengine.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/gon/Developer/Kill_Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Linking C shared library libengine.so"
 	cd /home/gon/Developer/Kill_Engine/build/engine && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/engine.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

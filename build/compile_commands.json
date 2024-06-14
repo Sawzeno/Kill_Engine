@@ -1,140 +1,188 @@
 [
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/containers/darray.c.o -c /home/gon/Developer/Kill_Engine/engine/src/containers/darray.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/containers/darray.c.o -c /home/gon/Developer/Kill_Engine/engine/src/containers/darray.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/containers/darray.c",
   "output": "engine/CMakeFiles/engine.dir/src/containers/darray.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/core/application.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/application.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/core/application.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/application.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/core/application.c",
   "output": "engine/CMakeFiles/engine.dir/src/core/application.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/core/clock.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/clock.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/core/clock.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/clock.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/core/clock.c",
   "output": "engine/CMakeFiles/engine.dir/src/core/clock.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/core/defines.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/defines.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/core/defines.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/defines.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/core/defines.c",
   "output": "engine/CMakeFiles/engine.dir/src/core/defines.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/core/events.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/events.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/core/events.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/events.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/core/events.c",
   "output": "engine/CMakeFiles/engine.dir/src/core/events.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/core/input.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/input.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/core/input.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/input.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/core/input.c",
   "output": "engine/CMakeFiles/engine.dir/src/core/input.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/core/kmemory.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/kmemory.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/core/kmemory.c.o -c /home/gon/Developer/Kill_Engine/engine/src/core/kmemory.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/core/kmemory.c",
   "output": "engine/CMakeFiles/engine.dir/src/core/kmemory.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/math/kmath.c.o -c /home/gon/Developer/Kill_Engine/engine/src/math/kmath.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/math/kmath.c.o -c /home/gon/Developer/Kill_Engine/engine/src/math/kmath.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/math/kmath.c",
   "output": "engine/CMakeFiles/engine.dir/src/math/kmath.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/platform/platform.c.o -c /home/gon/Developer/Kill_Engine/engine/src/platform/platform.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/memory/linearallocator.c.o -c /home/gon/Developer/Kill_Engine/engine/src/memory/linearallocator.c",
+  "file": "/home/gon/Developer/Kill_Engine/engine/src/memory/linearallocator.c",
+  "output": "engine/CMakeFiles/engine.dir/src/memory/linearallocator.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/engine",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/platform/platform.c.o -c /home/gon/Developer/Kill_Engine/engine/src/platform/platform.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/platform/platform.c",
   "output": "engine/CMakeFiles/engine.dir/src/platform/platform.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/commandbuffer.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/commandbuffer.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/renderer/commandbuffer.c",
   "output": "engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/device.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/device.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/device.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/device.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/renderer/device.c",
   "output": "engine/CMakeFiles/engine.dir/src/renderer/device.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/fence.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/fence.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/fence.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/fence.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/renderer/fence.c",
   "output": "engine/CMakeFiles/engine.dir/src/renderer/fence.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/framebuffer.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/framebuffer.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/framebuffer.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/framebuffer.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/renderer/framebuffer.c",
   "output": "engine/CMakeFiles/engine.dir/src/renderer/framebuffer.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/image.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/image.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/image.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/image.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/renderer/image.c",
   "output": "engine/CMakeFiles/engine.dir/src/renderer/image.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererbackend.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererbackend.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/renderer/rendererbackend.c",
   "output": "engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererfrontend.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererfrontend.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/renderer/rendererfrontend.c",
   "output": "engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/renderpass.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/renderpass.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/renderpass.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/renderpass.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/renderer/renderpass.c",
   "output": "engine/CMakeFiles/engine.dir/src/renderer/renderpass.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/swapchain.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/swapchain.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/swapchain.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/swapchain.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/renderer/swapchain.c",
   "output": "engine/CMakeFiles/engine.dir/src/renderer/swapchain.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/engine",
-  "command": "clang -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/utils.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/utils.c",
+  "command": "clang -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -Dengine_EXPORTS -I/home/gon/Developer/Kill_Engine/engine/includes -I/home/gon/Developer/Kill_Engine/engine/src  -g -fPIC -o CMakeFiles/engine.dir/src/renderer/utils.c.o -c /home/gon/Developer/Kill_Engine/engine/src/renderer/utils.c",
   "file": "/home/gon/Developer/Kill_Engine/engine/src/renderer/utils.c",
   "output": "engine/CMakeFiles/engine.dir/src/renderer/utils.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/testbed",
-  "command": "/usr/bin/cc -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -I/home/gon/Developer/Kill_Engine/testbed/../engine/src -I/home/gon/Developer/Kill_Engine/engine/src  -g -o CMakeFiles/testbed.dir/src/entry.c.o -c /home/gon/Developer/Kill_Engine/testbed/src/entry.c",
+  "command": "/usr/bin/cc -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -I/home/gon/Developer/Kill_Engine/testbed/../engine/src -I/home/gon/Developer/Kill_Engine/engine/src  -g -o CMakeFiles/testbed.dir/src/entry.c.o -c /home/gon/Developer/Kill_Engine/testbed/src/entry.c",
   "file": "/home/gon/Developer/Kill_Engine/testbed/src/entry.c",
   "output": "testbed/CMakeFiles/testbed.dir/src/entry.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/testbed",
-  "command": "/usr/bin/cc -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -I/home/gon/Developer/Kill_Engine/testbed/../engine/src -I/home/gon/Developer/Kill_Engine/engine/src  -g -o CMakeFiles/testbed.dir/src/game.c.o -c /home/gon/Developer/Kill_Engine/testbed/src/game.c",
+  "command": "/usr/bin/cc -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -I/home/gon/Developer/Kill_Engine/testbed/../engine/src -I/home/gon/Developer/Kill_Engine/engine/src  -g -o CMakeFiles/testbed.dir/src/game.c.o -c /home/gon/Developer/Kill_Engine/testbed/src/game.c",
   "file": "/home/gon/Developer/Kill_Engine/testbed/src/game.c",
   "output": "testbed/CMakeFiles/testbed.dir/src/game.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/tests",
-  "command": "/usr/bin/cc -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -I/home/gon/Developer/Kill_Engine/tests/../engine/src -I/home/gon/Developer/Kill_Engine/engine/src  -g -o CMakeFiles/darray.test.dir/darray/darray.c.o -c /home/gon/Developer/Kill_Engine/tests/darray/darray.c",
+  "command": "/usr/bin/cc -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -I/home/gon/Developer/Kill_Engine/tests/../engine/src -I/home/gon/Developer/Kill_Engine/engine/src  -g -o CMakeFiles/darray.test.dir/darray/darray.c.o -c /home/gon/Developer/Kill_Engine/tests/darray/darray.c",
   "file": "/home/gon/Developer/Kill_Engine/tests/darray/darray.c",
   "output": "tests/CMakeFiles/darray.test.dir/darray/darray.c.o"
 },
 {
   "directory": "/home/gon/Developer/Kill_Engine/build/tests",
-  "command": "/usr/bin/cc -DLOG_DEBUG_ENABLED=0 -DLOG_INFO_ENABLED=0 -DLOG_TRACE_ENABLED=0 -DLOG_WARN_ENABLED=1 -I/home/gon/Developer/Kill_Engine/tests/../engine/src -I/home/gon/Developer/Kill_Engine/engine/src  -g -o CMakeFiles/kmemory.test.dir/kmemory/kmemory.c.o -c /home/gon/Developer/Kill_Engine/tests/kmemory/kmemory.c",
+  "command": "/usr/bin/cc -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -I/home/gon/Developer/Kill_Engine/tests/../engine/src -I/home/gon/Developer/Kill_Engine/engine/src  -g -o CMakeFiles/darray.test.dir/testmanager.c.o -c /home/gon/Developer/Kill_Engine/tests/testmanager.c",
+  "file": "/home/gon/Developer/Kill_Engine/tests/testmanager.c",
+  "output": "tests/CMakeFiles/darray.test.dir/testmanager.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/tests",
+  "command": "/usr/bin/cc -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -I/home/gon/Developer/Kill_Engine/tests/../engine/src -I/home/gon/Developer/Kill_Engine/engine/src  -g -o CMakeFiles/darray.test.dir/linearallocator/src1.c.o -c /home/gon/Developer/Kill_Engine/tests/linearallocator/src1.c",
+  "file": "/home/gon/Developer/Kill_Engine/tests/linearallocator/src1.c",
+  "output": "tests/CMakeFiles/darray.test.dir/linearallocator/src1.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/tests",
+  "command": "/usr/bin/cc -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -I/home/gon/Developer/Kill_Engine/tests/../engine/src -I/home/gon/Developer/Kill_Engine/engine/src  -g -o CMakeFiles/kmemory.test.dir/kmemory/kmemory.c.o -c /home/gon/Developer/Kill_Engine/tests/kmemory/kmemory.c",
   "file": "/home/gon/Developer/Kill_Engine/tests/kmemory/kmemory.c",
   "output": "tests/CMakeFiles/kmemory.test.dir/kmemory/kmemory.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/tests",
+  "command": "/usr/bin/cc -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -I/home/gon/Developer/Kill_Engine/tests/../engine/src -I/home/gon/Developer/Kill_Engine/engine/src  -g -o CMakeFiles/kmemory.test.dir/testmanager.c.o -c /home/gon/Developer/Kill_Engine/tests/testmanager.c",
+  "file": "/home/gon/Developer/Kill_Engine/tests/testmanager.c",
+  "output": "tests/CMakeFiles/kmemory.test.dir/testmanager.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/tests",
+  "command": "/usr/bin/cc -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -I/home/gon/Developer/Kill_Engine/tests/../engine/src -I/home/gon/Developer/Kill_Engine/engine/src  -g -o CMakeFiles/kmemory.test.dir/linearallocator/src1.c.o -c /home/gon/Developer/Kill_Engine/tests/linearallocator/src1.c",
+  "file": "/home/gon/Developer/Kill_Engine/tests/linearallocator/src1.c",
+  "output": "tests/CMakeFiles/kmemory.test.dir/linearallocator/src1.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/tests",
+  "command": "/usr/bin/cc -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -I/home/gon/Developer/Kill_Engine/tests/../engine/src -I/home/gon/Developer/Kill_Engine/engine/src  -g -o CMakeFiles/linearallocatortests.test.dir/linearallocator/linearallocatortests.c.o -c /home/gon/Developer/Kill_Engine/tests/linearallocator/linearallocatortests.c",
+  "file": "/home/gon/Developer/Kill_Engine/tests/linearallocator/linearallocatortests.c",
+  "output": "tests/CMakeFiles/linearallocatortests.test.dir/linearallocator/linearallocatortests.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/tests",
+  "command": "/usr/bin/cc -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -I/home/gon/Developer/Kill_Engine/tests/../engine/src -I/home/gon/Developer/Kill_Engine/engine/src  -g -o CMakeFiles/linearallocatortests.test.dir/testmanager.c.o -c /home/gon/Developer/Kill_Engine/tests/testmanager.c",
+  "file": "/home/gon/Developer/Kill_Engine/tests/testmanager.c",
+  "output": "tests/CMakeFiles/linearallocatortests.test.dir/testmanager.c.o"
+},
+{
+  "directory": "/home/gon/Developer/Kill_Engine/build/tests",
+  "command": "/usr/bin/cc -DLOG_DEBUG_ENABLED=1 -DLOG_INFO_ENABLED=1 -DLOG_TEST_ENABLED=1 -DLOG_TRACE_ENABLED=1 -DLOG_WARN_ENABLED=1 -I/home/gon/Developer/Kill_Engine/tests/../engine/src -I/home/gon/Developer/Kill_Engine/engine/src  -g -o CMakeFiles/linearallocatortests.test.dir/linearallocator/src1.c.o -c /home/gon/Developer/Kill_Engine/tests/linearallocator/src1.c",
+  "file": "/home/gon/Developer/Kill_Engine/tests/linearallocator/src1.c",
+  "output": "tests/CMakeFiles/linearallocatortests.test.dir/linearallocator/src1.c.o"
 }
 ]

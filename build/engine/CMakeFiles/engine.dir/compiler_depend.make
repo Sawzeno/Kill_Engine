@@ -63,6 +63,7 @@ engine/CMakeFiles/engine.dir/src/containers/darray.c.o: /home/gon/Developer/Kill
   /usr/include/bits/wordsize.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -73,6 +74,8 @@ engine/CMakeFiles/engine.dir/src/containers/darray.c.o: /home/gon/Developer/Kill
   /usr/include/stdint.h \
   /usr/include/stdio.h \
   /usr/include/stdlib.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
   /usr/include/sys/cdefs.h \
   /usr/include/sys/select.h \
   /usr/include/sys/types.h \
@@ -152,6 +155,7 @@ engine/CMakeFiles/engine.dir/src/core/application.c.o: /home/gon/Developer/Kill_
   /usr/include/bits/wordsize.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -162,6 +166,8 @@ engine/CMakeFiles/engine.dir/src/core/application.c.o: /home/gon/Developer/Kill_
   /usr/include/stdint.h \
   /usr/include/stdio.h \
   /usr/include/stdlib.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
   /usr/include/sys/cdefs.h \
   /usr/include/sys/select.h \
   /usr/include/sys/types.h \
@@ -251,6 +257,7 @@ engine/CMakeFiles/engine.dir/src/core/clock.c.o: /home/gon/Developer/Kill_Engine
   /usr/include/complex.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -261,6 +268,8 @@ engine/CMakeFiles/engine.dir/src/core/clock.c.o: /home/gon/Developer/Kill_Engine
   /usr/include/stdint.h \
   /usr/include/stdio.h \
   /usr/include/stdlib.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
   /usr/include/sys/cdefs.h \
   /usr/include/sys/select.h \
   /usr/include/sys/types.h \
@@ -275,6 +284,9 @@ engine/CMakeFiles/engine.dir/src/core/clock.c.o: /home/gon/Developer/Kill_Engine
 engine/CMakeFiles/engine.dir/src/core/defines.c.o: /home/gon/Developer/Kill_Engine/engine/src/core/defines.c \
   /home/gon/Developer/Kill_Engine/engine/src/defines.h \
   /usr/include/alloca.h \
+  /usr/include/asm-generic/errno-base.h \
+  /usr/include/asm-generic/errno.h \
+  /usr/include/asm/errno.h \
   /usr/include/bits/atomic_wide_counter.h \
   /usr/include/bits/byteswap.h \
   /usr/include/bits/confname.h \
@@ -282,6 +294,7 @@ engine/CMakeFiles/engine.dir/src/core/defines.c.o: /home/gon/Developer/Kill_Engi
   /usr/include/bits/endian.h \
   /usr/include/bits/endianness.h \
   /usr/include/bits/environments.h \
+  /usr/include/bits/errno.h \
   /usr/include/bits/floatn-common.h \
   /usr/include/bits/floatn.h \
   /usr/include/bits/getopt_core.h \
@@ -304,6 +317,7 @@ engine/CMakeFiles/engine.dir/src/core/defines.c.o: /home/gon/Developer/Kill_Engi
   /usr/include/bits/sigstksz.h \
   /usr/include/bits/sigthread.h \
   /usr/include/bits/ss_flags.h \
+  /usr/include/bits/stat.h \
   /usr/include/bits/stdint-intn.h \
   /usr/include/bits/stdint-least.h \
   /usr/include/bits/stdint-uintn.h \
@@ -311,6 +325,7 @@ engine/CMakeFiles/engine.dir/src/core/defines.c.o: /home/gon/Developer/Kill_Engi
   /usr/include/bits/stdlib-float.h \
   /usr/include/bits/struct_mutex.h \
   /usr/include/bits/struct_rwlock.h \
+  /usr/include/bits/struct_stat.h \
   /usr/include/bits/thread-shared-types.h \
   /usr/include/bits/time.h \
   /usr/include/bits/time64.h \
@@ -351,19 +366,25 @@ engine/CMakeFiles/engine.dir/src/core/defines.c.o: /home/gon/Developer/Kill_Engi
   /usr/include/bits/wordsize.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/errno.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
   /usr/include/gnu/stubs-64.h \
   /usr/include/gnu/stubs.h \
   /usr/include/inttypes.h \
+  /usr/include/linux/errno.h \
   /usr/include/signal.h \
   /usr/include/stdc-predef.h \
   /usr/include/stdint.h \
   /usr/include/stdio.h \
   /usr/include/stdlib.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
   /usr/include/sys/cdefs.h \
   /usr/include/sys/select.h \
+  /usr/include/sys/stat.h \
   /usr/include/sys/types.h \
   /usr/include/sys/ucontext.h \
   /usr/include/time.h \
@@ -437,6 +458,7 @@ engine/CMakeFiles/engine.dir/src/core/events.c.o: /home/gon/Developer/Kill_Engin
   /usr/include/bits/wordsize.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -447,6 +469,8 @@ engine/CMakeFiles/engine.dir/src/core/events.c.o: /home/gon/Developer/Kill_Engin
   /usr/include/stdint.h \
   /usr/include/stdio.h \
   /usr/include/stdlib.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
   /usr/include/sys/cdefs.h \
   /usr/include/sys/select.h \
   /usr/include/sys/types.h \
@@ -521,6 +545,7 @@ engine/CMakeFiles/engine.dir/src/core/input.c.o: /home/gon/Developer/Kill_Engine
   /usr/include/bits/wordsize.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -531,6 +556,8 @@ engine/CMakeFiles/engine.dir/src/core/input.c.o: /home/gon/Developer/Kill_Engine
   /usr/include/stdint.h \
   /usr/include/stdio.h \
   /usr/include/stdlib.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
   /usr/include/sys/cdefs.h \
   /usr/include/sys/select.h \
   /usr/include/sys/types.h \
@@ -603,6 +630,7 @@ engine/CMakeFiles/engine.dir/src/core/kmemory.c.o: /home/gon/Developer/Kill_Engi
   /usr/include/bits/wordsize.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -697,6 +725,7 @@ engine/CMakeFiles/engine.dir/src/math/kmath.c.o: /home/gon/Developer/Kill_Engine
   /usr/include/bits/wordsize.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -708,6 +737,94 @@ engine/CMakeFiles/engine.dir/src/math/kmath.c.o: /home/gon/Developer/Kill_Engine
   /usr/include/stdint.h \
   /usr/include/stdio.h \
   /usr/include/stdlib.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
+  /usr/include/sys/cdefs.h \
+  /usr/include/sys/select.h \
+  /usr/include/sys/types.h \
+  /usr/include/time.h \
+  /usr/include/unistd.h \
+  /usr/lib/clang/17/include/inttypes.h \
+  /usr/lib/clang/17/include/stdarg.h \
+  /usr/lib/clang/17/include/stdbool.h \
+  /usr/lib/clang/17/include/stddef.h \
+  /usr/lib/clang/17/include/stdint.h
+
+engine/CMakeFiles/engine.dir/src/memory/linearallocator.c.o: /home/gon/Developer/Kill_Engine/engine/src/memory/linearallocator.c \
+  /home/gon/Developer/Kill_Engine/engine/src/core/kmemory.h \
+  /home/gon/Developer/Kill_Engine/engine/src/defines.h \
+  /home/gon/Developer/Kill_Engine/engine/src/memory/linearallocator.h \
+  /usr/include/alloca.h \
+  /usr/include/bits/atomic_wide_counter.h \
+  /usr/include/bits/byteswap.h \
+  /usr/include/bits/confname.h \
+  /usr/include/bits/dlfcn.h \
+  /usr/include/bits/endian.h \
+  /usr/include/bits/endianness.h \
+  /usr/include/bits/environments.h \
+  /usr/include/bits/floatn-common.h \
+  /usr/include/bits/floatn.h \
+  /usr/include/bits/getopt_core.h \
+  /usr/include/bits/getopt_posix.h \
+  /usr/include/bits/libc-header-start.h \
+  /usr/include/bits/long-double.h \
+  /usr/include/bits/posix_opt.h \
+  /usr/include/bits/pthreadtypes-arch.h \
+  /usr/include/bits/pthreadtypes.h \
+  /usr/include/bits/select.h \
+  /usr/include/bits/stdint-intn.h \
+  /usr/include/bits/stdint-least.h \
+  /usr/include/bits/stdint-uintn.h \
+  /usr/include/bits/stdio_lim.h \
+  /usr/include/bits/stdlib-float.h \
+  /usr/include/bits/struct_mutex.h \
+  /usr/include/bits/struct_rwlock.h \
+  /usr/include/bits/thread-shared-types.h \
+  /usr/include/bits/time.h \
+  /usr/include/bits/time64.h \
+  /usr/include/bits/timesize.h \
+  /usr/include/bits/types.h \
+  /usr/include/bits/types/FILE.h \
+  /usr/include/bits/types/__FILE.h \
+  /usr/include/bits/types/__fpos64_t.h \
+  /usr/include/bits/types/__fpos_t.h \
+  /usr/include/bits/types/__locale_t.h \
+  /usr/include/bits/types/__mbstate_t.h \
+  /usr/include/bits/types/__sigset_t.h \
+  /usr/include/bits/types/clock_t.h \
+  /usr/include/bits/types/clockid_t.h \
+  /usr/include/bits/types/cookie_io_functions_t.h \
+  /usr/include/bits/types/locale_t.h \
+  /usr/include/bits/types/sigset_t.h \
+  /usr/include/bits/types/struct_FILE.h \
+  /usr/include/bits/types/struct_itimerspec.h \
+  /usr/include/bits/types/struct_timespec.h \
+  /usr/include/bits/types/struct_timeval.h \
+  /usr/include/bits/types/struct_tm.h \
+  /usr/include/bits/types/time_t.h \
+  /usr/include/bits/types/timer_t.h \
+  /usr/include/bits/typesizes.h \
+  /usr/include/bits/uintn-identity.h \
+  /usr/include/bits/unistd_ext.h \
+  /usr/include/bits/waitflags.h \
+  /usr/include/bits/waitstatus.h \
+  /usr/include/bits/wchar.h \
+  /usr/include/bits/wordsize.h \
+  /usr/include/dlfcn.h \
+  /usr/include/endian.h \
+  /usr/include/error.h \
+  /usr/include/execinfo.h \
+  /usr/include/features-time64.h \
+  /usr/include/features.h \
+  /usr/include/gnu/stubs-64.h \
+  /usr/include/gnu/stubs.h \
+  /usr/include/inttypes.h \
+  /usr/include/stdc-predef.h \
+  /usr/include/stdint.h \
+  /usr/include/stdio.h \
+  /usr/include/stdlib.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
   /usr/include/sys/cdefs.h \
   /usr/include/sys/select.h \
   /usr/include/sys/types.h \
@@ -803,6 +920,7 @@ engine/CMakeFiles/engine.dir/src/platform/platform.c.o: /home/gon/Developer/Kill
   /usr/include/bits/wordsize.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -910,6 +1028,7 @@ engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o: /home/gon/Developer
   /usr/include/bits/wordsize.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -920,6 +1039,8 @@ engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o: /home/gon/Developer
   /usr/include/stdint.h \
   /usr/include/stdio.h \
   /usr/include/stdlib.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
   /usr/include/sys/cdefs.h \
   /usr/include/sys/select.h \
   /usr/include/sys/types.h \
@@ -1008,6 +1129,7 @@ engine/CMakeFiles/engine.dir/src/renderer/device.c.o: /home/gon/Developer/Kill_E
   /usr/include/bits/wordsize.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -1106,6 +1228,7 @@ engine/CMakeFiles/engine.dir/src/renderer/fence.c.o: /home/gon/Developer/Kill_En
   /usr/include/bits/wordsize.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -1116,6 +1239,8 @@ engine/CMakeFiles/engine.dir/src/renderer/fence.c.o: /home/gon/Developer/Kill_En
   /usr/include/stdint.h \
   /usr/include/stdio.h \
   /usr/include/stdlib.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
   /usr/include/sys/cdefs.h \
   /usr/include/sys/select.h \
   /usr/include/sys/types.h \
@@ -1203,6 +1328,7 @@ engine/CMakeFiles/engine.dir/src/renderer/framebuffer.c.o: /home/gon/Developer/K
   /usr/include/bits/wordsize.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -1213,6 +1339,8 @@ engine/CMakeFiles/engine.dir/src/renderer/framebuffer.c.o: /home/gon/Developer/K
   /usr/include/stdint.h \
   /usr/include/stdio.h \
   /usr/include/stdlib.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
   /usr/include/sys/cdefs.h \
   /usr/include/sys/select.h \
   /usr/include/sys/types.h \
@@ -1299,6 +1427,7 @@ engine/CMakeFiles/engine.dir/src/renderer/image.c.o: /home/gon/Developer/Kill_En
   /usr/include/bits/wordsize.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -1309,6 +1438,8 @@ engine/CMakeFiles/engine.dir/src/renderer/image.c.o: /home/gon/Developer/Kill_En
   /usr/include/stdint.h \
   /usr/include/stdio.h \
   /usr/include/stdlib.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
   /usr/include/sys/cdefs.h \
   /usr/include/sys/select.h \
   /usr/include/sys/types.h \
@@ -1406,6 +1537,7 @@ engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o: /home/gon/Develop
   /usr/include/bits/wordsize.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -1506,6 +1638,7 @@ engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o: /home/gon/Develo
   /usr/include/bits/wordsize.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -1516,6 +1649,8 @@ engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o: /home/gon/Develo
   /usr/include/stdint.h \
   /usr/include/stdio.h \
   /usr/include/stdlib.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
   /usr/include/sys/cdefs.h \
   /usr/include/sys/select.h \
   /usr/include/sys/types.h \
@@ -1604,6 +1739,7 @@ engine/CMakeFiles/engine.dir/src/renderer/renderpass.c.o: /home/gon/Developer/Ki
   /usr/include/bits/wordsize.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -1614,6 +1750,8 @@ engine/CMakeFiles/engine.dir/src/renderer/renderpass.c.o: /home/gon/Developer/Ki
   /usr/include/stdint.h \
   /usr/include/stdio.h \
   /usr/include/stdlib.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
   /usr/include/sys/cdefs.h \
   /usr/include/sys/select.h \
   /usr/include/sys/types.h \
@@ -1703,6 +1841,7 @@ engine/CMakeFiles/engine.dir/src/renderer/swapchain.c.o: /home/gon/Developer/Kil
   /usr/include/bits/wordsize.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -1713,6 +1852,8 @@ engine/CMakeFiles/engine.dir/src/renderer/swapchain.c.o: /home/gon/Developer/Kil
   /usr/include/stdint.h \
   /usr/include/stdio.h \
   /usr/include/stdlib.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
   /usr/include/sys/cdefs.h \
   /usr/include/sys/select.h \
   /usr/include/sys/types.h \
@@ -1799,6 +1940,7 @@ engine/CMakeFiles/engine.dir/src/renderer/utils.c.o: /home/gon/Developer/Kill_En
   /usr/include/bits/wordsize.h \
   /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/error.h \
   /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -1839,8 +1981,6 @@ engine/CMakeFiles/engine.dir/src/renderer/utils.c.o: /home/gon/Developer/Kill_En
 /home/gon/Developer/Kill_Engine/engine/src/renderer/utils.c:
 
 /home/gon/Developer/Kill_Engine/engine/src/renderer/swapchain.c:
-
-/home/gon/Developer/Kill_Engine/engine/src/renderer/swapchain.h:
 
 /home/gon/Developer/Kill_Engine/engine/src/renderer/renderpass.h:
 
@@ -1894,17 +2034,13 @@ engine/CMakeFiles/engine.dir/src/renderer/utils.c.o: /home/gon/Developer/Kill_En
 
 /home/gon/Developer/Kill_Engine/engine/src/renderer/utils.h:
 
+/home/gon/Developer/Kill_Engine/engine/src/memory/linearallocator.h:
+
 /usr/include/math.h:
 
 /usr/include/bits/fp-fast.h:
 
 /home/gon/Developer/Kill_Engine/engine/src/math/mathtypes.h:
-
-/usr/include/strings.h:
-
-/usr/include/bits/mathcalls-helper-functions.h:
-
-/usr/include/string.h:
 
 /home/gon/Developer/Kill_Engine/engine/src/core/kmemory.c:
 
@@ -1912,7 +2048,27 @@ engine/CMakeFiles/engine.dir/src/renderer/utils.c.o: /home/gon/Developer/Kill_En
 
 /usr/include/signal.h:
 
+/home/gon/Developer/Kill_Engine/engine/src/renderer/swapchain.h:
+
+/usr/include/linux/errno.h:
+
+/usr/include/errno.h:
+
 /usr/include/bits/types/struct_sigstack.h:
+
+/usr/include/bits/types/sigval_t.h:
+
+/usr/include/bits/sched.h:
+
+/usr/include/bits/types/siginfo_t.h:
+
+/usr/include/bits/types/sigevent_t.h:
+
+/usr/include/bits/types/__sigval_t.h:
+
+/usr/include/bits/stat.h:
+
+/usr/include/bits/struct_stat.h:
 
 /usr/include/bits/types/time_t.h:
 
@@ -1922,9 +2078,27 @@ engine/CMakeFiles/engine.dir/src/renderer/utils.c.o: /home/gon/Developer/Kill_En
 
 /home/gon/Developer/Kill_Engine/engine/src/renderer/rendererfrontend.h:
 
+/usr/include/bits/types/stack_t.h:
+
+/usr/include/bits/sigevent-consts.h:
+
+/home/gon/Developer/Kill_Engine/engine/src/renderer/rendererbackend.c:
+
+/usr/include/sys/stat.h:
+
+/usr/include/bits/ss_flags.h:
+
+/usr/include/bits/types/struct_FILE.h:
+
 /home/gon/Developer/Kill_Engine/engine/src/renderer/fence.c:
 
 /usr/include/bits/types/locale_t.h:
+
+/usr/include/bits/types/sig_atomic_t.h:
+
+/usr/include/bits/typesizes.h:
+
+/home/gon/Developer/Kill_Engine/engine/src/memory/linearallocator.c:
 
 /usr/include/bits/uintn-identity.h:
 
@@ -1966,11 +2140,9 @@ engine/CMakeFiles/engine.dir/src/renderer/utils.c.o: /home/gon/Developer/Kill_En
 
 /usr/include/bits/time64.h:
 
-/home/gon/Developer/Kill_Engine/engine/src/renderer/rendererbackend.c:
+/usr/include/bits/mathcalls-helper-functions.h:
 
-/usr/include/bits/types/struct_FILE.h:
-
-/usr/include/bits/ss_flags.h:
+/usr/include/string.h:
 
 /usr/include/bits/byteswap.h:
 
@@ -2004,7 +2176,7 @@ engine/CMakeFiles/engine.dir/src/renderer/utils.c.o: /home/gon/Developer/Kill_En
 
 /usr/include/bits/timesize.h:
 
-/usr/include/bits/types/__sigval_t.h:
+/usr/include/asm/errno.h:
 
 /usr/include/bits/sigcontext.h:
 
@@ -2074,6 +2246,8 @@ engine/CMakeFiles/engine.dir/src/renderer/utils.c.o: /home/gon/Developer/Kill_En
 
 /usr/include/bits/long-double.h:
 
+/usr/include/error.h:
+
 /usr/include/bits/libc-header-start.h:
 
 /usr/include/bits/siginfo-consts.h:
@@ -2140,6 +2314,8 @@ engine/CMakeFiles/engine.dir/src/renderer/utils.c.o: /home/gon/Developer/Kill_En
 
 /usr/include/vulkan/vulkan_core.h:
 
+/usr/include/strings.h:
+
 /usr/include/sys/cdefs.h:
 
 /usr/include/unistd.h:
@@ -2170,6 +2346,8 @@ engine/CMakeFiles/engine.dir/src/renderer/utils.c.o: /home/gon/Developer/Kill_En
 
 /usr/include/vk_video/vulkan_video_codecs_common.h:
 
+/usr/include/bits/errno.h:
+
 /usr/include/vulkan/vulkan.h:
 
 /usr/include/bits/confname.h:
@@ -2190,9 +2368,13 @@ engine/CMakeFiles/engine.dir/src/renderer/utils.c.o: /home/gon/Developer/Kill_En
 
 /home/gon/Developer/Kill_Engine/engine/src/core/clock.c:
 
+/usr/include/asm-generic/errno-base.h:
+
 /usr/include/bits/fp-logb.h:
 
 /usr/include/bits/mathdef.h:
+
+/usr/include/asm-generic/errno.h:
 
 /usr/include/sys/ucontext.h:
 
@@ -2205,19 +2387,3 @@ engine/CMakeFiles/engine.dir/src/renderer/utils.c.o: /home/gon/Developer/Kill_En
 /usr/include/vk_video/vulkan_video_codec_h265std.h:
 
 /usr/include/bits/signum-arch.h:
-
-/usr/include/bits/sigevent-consts.h:
-
-/usr/include/bits/types/stack_t.h:
-
-/usr/include/bits/typesizes.h:
-
-/usr/include/bits/types/sig_atomic_t.h:
-
-/usr/include/bits/types/sigevent_t.h:
-
-/usr/include/bits/sched.h:
-
-/usr/include/bits/types/siginfo_t.h:
-
-/usr/include/bits/types/sigval_t.h:

@@ -322,6 +322,30 @@ src/math/kmath.c.s:
 	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/math/kmath.c.s
 .PHONY : src/math/kmath.c.s
 
+src/memory/linearallocator.o: src/memory/linearallocator.c.o
+.PHONY : src/memory/linearallocator.o
+
+# target to build an object file
+src/memory/linearallocator.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/memory/linearallocator.c.o
+.PHONY : src/memory/linearallocator.c.o
+
+src/memory/linearallocator.i: src/memory/linearallocator.c.i
+.PHONY : src/memory/linearallocator.i
+
+# target to preprocess a source file
+src/memory/linearallocator.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/memory/linearallocator.c.i
+.PHONY : src/memory/linearallocator.c.i
+
+src/memory/linearallocator.s: src/memory/linearallocator.c.s
+.PHONY : src/memory/linearallocator.s
+
+# target to generate assembly for a file
+src/memory/linearallocator.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/memory/linearallocator.c.s
+.PHONY : src/memory/linearallocator.c.s
+
 src/platform/platform.o: src/platform/platform.c.o
 .PHONY : src/platform/platform.o
 
@@ -619,6 +643,9 @@ help:
 	@echo "... src/math/kmath.o"
 	@echo "... src/math/kmath.i"
 	@echo "... src/math/kmath.s"
+	@echo "... src/memory/linearallocator.o"
+	@echo "... src/memory/linearallocator.i"
+	@echo "... src/memory/linearallocator.s"
 	@echo "... src/platform/platform.o"
 	@echo "... src/platform/platform.i"
 	@echo "... src/platform/platform.s"

@@ -64,4 +64,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "testbed/CMakeFiles/testbed.dir/DependInfo.cmake"
   "tests/CMakeFiles/darray.test.dir/DependInfo.cmake"
   "tests/CMakeFiles/kmemory.test.dir/DependInfo.cmake"
+  "tests/CMakeFiles/linearallocatortests.test.dir/DependInfo.cmake"
   )

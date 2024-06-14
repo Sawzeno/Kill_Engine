@@ -17,6 +17,7 @@ testbed/CMakeFiles/testbed.dir/src/entry.c.o
  /usr/include/bits/endian.h
  /usr/include/bits/endianness.h
  /usr/include/bits/environments.h
+ /usr/include/bits/error.h
  /usr/include/bits/floatn-common.h
  /usr/include/bits/floatn.h
  /usr/include/bits/getopt_core.h
@@ -67,6 +68,7 @@ testbed/CMakeFiles/testbed.dir/src/entry.c.o
  /usr/include/bits/wordsize.h
  /usr/include/dlfcn.h
  /usr/include/endian.h
+ /usr/include/error.h
  /usr/include/execinfo.h
  /usr/include/features-time64.h
  /usr/include/features.h
@@ -77,6 +79,8 @@ testbed/CMakeFiles/testbed.dir/src/entry.c.o
  /usr/include/stdint.h
  /usr/include/stdio.h
  /usr/include/stdlib.h
+ /usr/include/string.h
+ /usr/include/strings.h
  /usr/include/sys/cdefs.h
  /usr/include/sys/select.h
  /usr/include/sys/types.h
@@ -102,6 +106,7 @@ testbed/CMakeFiles/testbed.dir/src/game.c.o
  /usr/include/bits/endian.h
  /usr/include/bits/endianness.h
  /usr/include/bits/environments.h
+ /usr/include/bits/error.h
  /usr/include/bits/floatn-common.h
  /usr/include/bits/floatn.h
  /usr/include/bits/getopt_core.h
@@ -152,6 +157,7 @@ testbed/CMakeFiles/testbed.dir/src/game.c.o
  /usr/include/bits/wordsize.h
  /usr/include/dlfcn.h
  /usr/include/endian.h
+ /usr/include/error.h
  /usr/include/execinfo.h
  /usr/include/features-time64.h
  /usr/include/features.h
@@ -162,6 +168,8 @@ testbed/CMakeFiles/testbed.dir/src/game.c.o
  /usr/include/stdint.h
  /usr/include/stdio.h
  /usr/include/stdlib.h
+ /usr/include/string.h
+ /usr/include/strings.h
  /usr/include/sys/cdefs.h
  /usr/include/sys/select.h
  /usr/include/sys/types.h

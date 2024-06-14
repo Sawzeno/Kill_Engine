@@ -5,31 +5,84 @@
 #include  <stdbool.h>
 #include  <unistd.h>
 #include  <time.h>
+#include  <sys/types.h>
+#include  <sys/stat.h>
+#include  <errno.h>
 
 #include  "defines.h"
 
-static const char* logLevels[6]  = 
-  { "[FATAL]: ",
-    "[ERROR]: ",
-    "[WARN]:  ",
-    "[INFO]:  ",
-    "[DEBUG]: ",
-    "[TRACE]: "
-    //header
-    //code part
-    //input fields
+#define LOG_TYPES  7
+#define PREFIX_LEN 24
+#define BUFFER_LEN 256
+#define SUFFIX_LEN 6
+static const char* logLevels[LOG_TYPES]  = 
+  { "[FATAL]:",
+    "[ERROR]:",
+    "[WARN] :",
+    "[INFO] :",
+    "[DEBUG]:",
+    "[TRACE]:",
+    "[TEST] :"
   };
 
-static const char* logColors[6] =
+static const char* logColors[LOG_TYPES + 1] =
   {
     "\x1b[95m",
     "\x1b[91m",
     "\x1b[93m",
     "\x1b[90m",
     "\x1b[92m",
-    "\x1b[97m"
+    "\x1b[97m",
+    "\x1b[94m",
+    "\x1b[0m\n"
   };
 
+
+#define UBUFF_CHECK(result, limit)                    \
+if(result >= limit){                                  \
+  fprintf(stderr, "result size exceeded limit\n");    \
+  return result;                                      \
+}else if( result < 0){                                \
+  fprintf(stderr, "error in %s\n", __FUNCTION__);     \
+  return result;                                      \
+}
+
+u16   Ulog(log_level level , const char* message , ...){
+  char outmsg[PREFIX_LEN + BUFFER_LEN + SUFFIX_LEN];
+  u16   prefixlen = snprintf  (outmsg,
+                               PREFIX_LEN,"%s%s%2s",logColors[level], logLevels[level],"");
+  UBUFF_CHECK(prefixlen, PREFIX_LEN);
+  va_list args;
+  va_start(args , message);
+  u16   bufferlen    = vsnprintf (outmsg + prefixlen,
+                                  BUFFER_LEN, message , args);
+  va_end(args);
+  UBUFF_CHECK(bufferlen, BUFFER_LEN);
+  u16   suffixlen    = snprintf  (outmsg + prefixlen + bufferlen,
+                                  SUFFIX_LEN, "%s", logColors[LOG_TYPES]);
+  UBUFF_CHECK(suffixlen, SUFFIX_LEN);
+  u16 totallen = prefixlen + bufferlen + suffixlen;
+  if(write(STDOUT_FILENO, outmsg,totallen ) < 0){
+    fprintf(stderr, "ULog failed with %s\n", strerror(errno));
+  }
+
+  return bufferlen ;
+}
+
+u16   Uwrite(u16 limit, const char *message, ...) {
+  va_list args;
+  va_start(args, message);
+  char buffer[limit];
+  u64 size  = vsnprintf(buffer,limit, message, args);
+  UBUFF_CHECK(size, limit);
+  va_end(args);
+
+  if(write(STDOUT_FILENO, buffer, size) < 0){
+    fprintf(stderr," Uwrite FAILED WITH %s\n", strerror(errno));
+    return 0;
+  }; 
+  return size;
+}
 
 void sendSignal( int sig, const char* str, bool e){
   union sigval sv;
@@ -53,7 +106,7 @@ void handle_sigill(int sig, siginfo_t* info, void* context){
       exit(SIGILL);
     }else{
       Uinfo* uinfo  = (Uinfo*)(info->si_value.sival_ptr);
-    
+
       UFATAL("SIGILL raised : %s", uinfo->str);
       if(uinfo->e){
         UFATAL("EXITING!");
@@ -72,27 +125,27 @@ void handle_sigint(int sig){
   }
 }
 
-void handle_sigsegv(int sig){
-  if(sig == SIGSEGV){
+void handle_sigsegv(int sig) {
+  if (sig == SIGSEGV) {
     void* buffer[100];
-    u64 size  = backtrace(buffer,100);
-    char** symbols  = backtrace_symbols(buffer, size);
-    if(symbols != NULL){
-        UERROR("func name : %s",symbols[0]);
-        UERROR("func name : %s",symbols[1]);
-        UERROR("func name : %s",symbols[2]);
-        UERROR("func name : %s",symbols[3]);
-        UERROR("func name : %s",symbols[4]);
-        UERROR("func name : %s",symbols[5]);
-    }else{
-      UERROR("COULD NOT BACKTRACE SYMBOLS");
+    size_t size = backtrace(buffer, 100);
+    char** symbols = backtrace_symbols(buffer, size);
+
+    if (symbols != NULL) {
+      for (size_t i = 0; i < size; i++) {
+        UERROR("Backtrace: %s", symbols[i]);
+      }
+      free(symbols);
+    } else {
+      UERROR("Could not backtrace symbols");
     }
+
     UFATAL("SIGSEGV: TERMINATING...");
     exit(SIGSEGV);
   }
 }
 
-void  initializeLogging(void){
+void  initializeLogging (void){
   stack_t signalStack;
   signalStack.ss_sp = calloc(1,SIGSTKSZ);
   MEMERR(signalStack.ss_sp);
@@ -129,47 +182,65 @@ void  initializeLogging(void){
   }
 }
 
-void  shutdownLogging(){
+void shutdownLogging(void){
+  
   UREPORT("TODO");
 }
 
-#define BUFFER 1024
-void  Ulog(log_level level , const char* message , ...){
-  char out_message[BUFFER];
-  int  prefix_len = sprintf(out_message, "%s", logLevels[level]);
-  va_list args;
-  va_start(args , message);
-  vsnprintf(out_message + prefix_len, BUFFER - prefix_len, message , args);
-  va_end(args);
-
-  Uwrite("%s%s%s\n\0",logColors[level],out_message,"\x1b[0m");
-}
-
-void  Uwrite(const char *message, ...) {
-  va_list args;
-  va_start(args, message);
-  char buffer[BUFFER];
-  u64 size  = vsnprintf(buffer,BUFFER, message, args);
-  va_end(args);
-
-  write(STDOUT_FILENO, buffer, size); 
-}
 
 void elapsed(struct timespec* start, const char* func){
   struct timespec end;
   clock_gettime(CLOCK_MONOTONIC, &end);
 
   f64 elapsed = (end.tv_sec - start->tv_sec) + (end.tv_nsec - start->tv_nsec)/1e9;
-  UDEBUG("%-10s : %.9f",func,elapsed);
+  UTRACE("%-30s : %.9f",func,elapsed);
   *start  = end;
 }
 
-u8* readFile(FILE* file) {
-  ISNULL(file , NULL);
-  fseek(file, 0, SEEK_END);
-  u64 fileSize = ftell(file);
-  fseek(file, 0, SEEK_SET);
+#define RETURN_DEFER(value) do { result = (value); goto defer; } while(0)
 
+char* Ushift_args(int* argc, char*** argv){
+
+  UASSERT(*argc > 0,NULL, "no arguments");
+  char* arg = **argv;
+  ++*argv;
+  --*argc;
+  return arg;
+}
+
+bool UdirExists(const char* path){
+  struct stat stats;
+  stat(path, &stats);
+
+  return S_ISDIR(stats.st_mode) ? true : false;
+}
+
+bool Umkdir(const char* path){
+
+  if(UdirExists(path)){
+    UINFO("'%s' exists", path);
+  }else{
+    UWARN("'%s' does not exists, making one ...",path);
+    if(mkdir(path, S_IFDIR) < 0){
+      UERROR("'%s' could not be made %s",path, strerror(errno));
+    }else{
+      UINFO("'%s' has been made!", path);
+    }
+  } 
+
+  return UdirExists(path) ? true : false; 
+}
+
+u8* UreadFile(const char* path) {
+
+  bool result = true;
+  FILE* file = fopen(path, "rb");
+
+  if(file == NULL)              RETURN_DEFER(false);
+  if(fseek(file, 0, SEEK_END))  RETURN_DEFER(false);
+  u64 fileSize = ftell(file);
+  if(fileSize < 0)              RETURN_DEFER(false);
+  if(fseek(file, 0, SEEK_SET))  RETURN_DEFER(false);
   u8* fileBuffer = calloc(fileSize + 1, sizeof(u8)); 
   MEMERR(fileBuffer);
 
@@ -182,6 +253,64 @@ u8* readFile(FILE* file) {
 
   fileBuffer[fileSize] = '\0'; 
 
+defer:
+  if(!result) UFATAL("COULD NOT READ FILE %s: %s",path, strerror(errno));
+  if(file)  fclose(file);
   return fileBuffer;
 }
+
+bool UwriteFile(const char* path, const void* data, u64 size){
+
+  bool result = true;
+  FILE* file = fopen(path, "wb");
+  if(file == NULL){
+    UFATAL("COULD NOT OPEN FILE %s: %s",path, strerror(errno));
+    RETURN_DEFER(false);
+  }
+  const char* buf = data;
+  while(size > 0){
+    u64 n = fwrite(buf, 1, size, file);
+    if(ferror(file)){
+      UFATAL("COULD NOT WRITE TO FILE %s: %s",path, strerror(errno));
+      RETURN_DEFER(false);     
+    }
+    size -= n;
+    buf  += n;
+  }
+defer:
+  if(file) fclose(file);
+  return result;
+}
+
+
+void writeint(i64 integer) {
+  bool isNegative = false;
+  if (integer < 0) {
+    isNegative = true;
+    integer = -integer;
+  }
+
+  u64 _int = (u64)integer;
+
+  u8 string[24];
+  u8 count = 0;
+  u8 rem = 0;
+
+  do {
+    rem = (u8)(_int % 10);
+    string[count] = rem + '0';
+    _int /= 10;
+    ++count;
+  } while (_int != 0);
+
+  if (isNegative) {
+    putchar('-');
+  }
+
+  for (size_t i = count; i > 0; --i) {
+    putchar(string[i - 1]);
+  }
+  putchar('\n');
+}
+
 

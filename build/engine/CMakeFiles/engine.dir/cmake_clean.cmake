@@ -15,6 +15,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/engine.dir/src/core/kmemory.c.o.d"
   "CMakeFiles/engine.dir/src/math/kmath.c.o"
   "CMakeFiles/engine.dir/src/math/kmath.c.o.d"
+  "CMakeFiles/engine.dir/src/memory/linearallocator.c.o"
+  "CMakeFiles/engine.dir/src/memory/linearallocator.c.o.d"
   "CMakeFiles/engine.dir/src/platform/platform.c.o"
   "CMakeFiles/engine.dir/src/platform/platform.c.o.d"
   "CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o"

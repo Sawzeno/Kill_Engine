@@ -106,7 +106,6 @@ VkResult create   (VulkanContext*   context,
 
   UINFO("GETTING IMAGE FORMATS");
   UDEBUG("----------------------FORMATS----------------------");
-  swapchain->maxFramesInFlight = 2 ;
   //choose a swap surface format
   u8 found = false;
   for(u32 i = 0; i < context->device.swapchainSupport.formatCount; ++i){
@@ -148,25 +147,27 @@ VkResult create   (VulkanContext*   context,
   //u32 checkheight = context->device.swapchainSupport.capabilities.currentExtent.height;
 
   //swapchain extent  if whatever was passed to it is not valid then override it 
-  // if(context->device.swapchainSupport.capabilities.currentExtent.width != UINT32_MAX){
-  //   swapchainExtent = context->device.swapchainSupport.capabilities.currentExtent;
-  //   UERROR("value pased as swapchain extent in %s is unambiguious ",__FUNCTION__);
-  // }
+  if(context->device.swapchainSupport.capabilities.currentExtent.width != UINT32_MAX){
+    swapchainExtent = context->device.swapchainSupport.capabilities.currentExtent;
+    UERROR("value pased as swapchain extent in %s is unambiguious ",__FUNCTION__);
+  }
 
-  //clamp to the value supported by the device
-  //VkExtent2D min  = context->device.swapchainSupport.capabilities.maxImageExtent;
-  //VkExtent2D max  = context->device.swapchainSupport.capabilities.maxImageExtent;
+  // clamp to the value supported by the device
+  VkExtent2D min  = context->device.swapchainSupport.capabilities.maxImageExtent;
+  VkExtent2D max  = context->device.swapchainSupport.capabilities.maxImageExtent;
 
-  //swapchainExtent.width = UCLAMP(swapchainExtent.width , min.width , max.width);
-  //swapchainExtent.height= UCLAMP(swapchainExtent.height, min.height, max.height);
+  swapchainExtent.width = UCLAMP(swapchainExtent.width , min.width , max.width);
+  swapchainExtent.height= UCLAMP(swapchainExtent.height, min.height, max.height);
 
   UINFO("swapchain extent : width, height : %i, %i",swapchainExtent.width, swapchainExtent.height);
   //clamp the value of image count to max allowed by device
   u32 imageCount  = context->device.swapchainSupport.capabilities.minImageCount + 1;
-  if(context->device.swapchainSupport.capabilities.maxImageCount > 0 && imageCount > context->device.swapchainSupport.capabilities.minImageCount){
-    imageCount  = context->device.swapchainSupport.capabilities.minImageCount;
+  if(context->device.swapchainSupport.capabilities.maxImageCount > 0 && imageCount > context->device.swapchainSupport.capabilities.maxImageCount){
+    imageCount  = context->device.swapchainSupport.capabilities.maxImageCount;
     UERROR("value passed as maxImageCount exceeds that maximagecount allowed, resetting !");
   }
+  swapchain->maxFramesInFlight = imageCount;
+  UDEBUG("************************************************************* %d",swapchain->maxFramesInFlight );
 
   UDEBUG("--------------------SWAPCHAIN CREATE INFO----------");
   //SWAPCHAIN CREATE INFO
