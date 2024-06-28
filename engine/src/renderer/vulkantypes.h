@@ -3,10 +3,6 @@
 #include  "defines.h"
 #include  <vulkan/vulkan_core.h>
 
-
-
-
-
 typedef struct  VulkanDevice        VulkanDevice;
 typedef struct  VulkanContext       VulkanContext;
 typedef struct  VulkanSwapchainSupportInfo VulkanSwapchainSupportInfo;
@@ -16,6 +12,9 @@ typedef struct  VulkanRenderPass    VulkanRenderPass;
 typedef struct  VulkanCommandBuffer VulkanCommandBuffer;
 typedef struct  VulkanFrameBuffer   VulkanFrameBuffer;
 typedef struct  VulkanFence         VulkanFence;
+typedef struct  VulkanObjectShader  VulkanObjectShader;
+typedef struct  VulkanShaderStage   VulkanShaderStage;
+typedef struct  VulkanPipeline      VulkanPipeline;
 
 typedef enum  VulkanRenderPassState {
   READY,
@@ -35,9 +34,26 @@ typedef enum VulkanCommandBufferState{
   COMMAND_BUFFER_STATE_NOT_ALLOCATED,
 }VulkanCommandBufferState;
 
+struct VulkanShaderStage{
+  VkShaderModuleCreateInfo  createInfo;
+  VkShaderModule            handle;
+  VkPipelineShaderStageCreateInfo  shaderStageCreateInfo;
+};
+
+struct VulkanPipeline{
+  VkPipeline                handle;
+  VkPipelineLayout          pipelineLayout;
+};
+
+#define   OBJECT_SHADER_STAGE_COUNT 2
+struct VulkanObjectShader{
+  VulkanShaderStage         stages[OBJECT_SHADER_STAGE_COUNT];
+  VulkanPipeline            pipeline; 
+};
+
 struct VulkanFence{
-  VkFence handle;
-  u8      isSignaled;
+  VkFence                   handle;
+  u8                        isSignaled;
 };
 
 struct  VulkanFrameBuffer{
@@ -130,6 +146,7 @@ struct VulkanContext{
   u32                           inFlightFenceCount;  
   VulkanFence*                  inFlightFences;
   VulkanFence**                 imagesInFlight;        //holds pointer to fences which exist and aew owned elsewhere
+  VulkanObjectShader            objectShader;
   i32(*findMemoryIndex)(u32 typeFilter, u32 propertyFlags);
 };
 

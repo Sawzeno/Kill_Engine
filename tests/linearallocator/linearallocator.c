@@ -1,7 +1,15 @@
-#include  "defines.h"
-#include  "../testmanager.h"
-#include  "linearallocatortests.h"
 #include  "memory/linearallocator.h"
+#include  "core/logger.h"
+#include  "../testmanager.h"
+
+void  linearAllocatorRegisterTests();
+int main(void){
+  testManagerInit();   
+  linearAllocatorRegisterTests();
+  UTEST("STARTING LINEAR ALLOCATOR TESTS !");
+  testManagerRunTests();
+  return 0;
+}
 
 u8 CreateAndDestroy(){
   LinearAllocator alloc;

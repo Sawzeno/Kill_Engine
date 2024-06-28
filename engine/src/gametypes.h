@@ -12,5 +12,8 @@ struct Game{
   i8    (*update)     (Game* game , f32 deltaTime);
   i8    (*render)     (Game* game , f32 deltaTime);
   void  (*onResize)   (Game* game , u32 width , u32 height);
+  // game specific state create and managed by the game
   void* state;
+  // application state
+  void* applicationState;
 };

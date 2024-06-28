@@ -1,69 +1,81 @@
 #include  "platform.h"
-#include "core/events.h"
 #include  "core/input.h"
-#include  "defines.h"
+#include  "core/events.h"
+#include  "core/logger.h"
 
 #include  <X11/X.h>
-#include <vulkan/vulkan_core.h>
 #include  <xcb/xcb.h>
 #include  <xcb/xproto.h>
 #include  <X11/keysym.h>
 #include  <X11/XKBlib.h>
 #include  <X11/Xlib.h>
 #include  <X11/Xlib-xcb.h>
-#include  <sys/time.h>
 
 #include  <stdio.h>
 #include  <stdlib.h>
 #include  <unistd.h>
 #include  <string.h>
+#include  <sys/time.h>
 
 #define   VK_USE_PLATFORM_XCB_KHR
 #include  <vulkan/vulkan.h>
+#include  <vulkan/vulkan_core.h>
+
 #include  "renderer/vulkantypes.h"
-#include  "renderer/utils.h"
+#include  "renderer/rendererutils.h"
 
-typedef struct InternalState InternalState;
+typedef struct PlatformSystemState PlatformSystemState;
 
-struct InternalState{
-  Display*          display;
-  xcb_connection_t* connection;
+struct PlatformSystemState{
   xcb_window_t      window;
-  xcb_screen_t*     screen;
   xcb_atom_t        wmProtocols;
   xcb_atom_t        wmDeleteWin;
+  Display*          display;
+  xcb_connection_t* connection;
+  xcb_screen_t*     screen;
   VkSurfaceKHR      surface;
 };
 
-u8  translateKeycode(u32 xKeycode);
+static  PlatformSystemState*  platformSystemStatePtr;
 
-u8  startPlatform(PlatformState* platState,
-                  const char* appliactionName,
+u8    translateKeycode(u32 xKeycode);
+
+bool  initializePlatform(u64* memoryRequirement, void* state){
+TRACEFUNCTION;
+KDEBUG("memoryRequirement :%"PRIu64" state : %p",*memoryRequirement, state);
+  *memoryRequirement  = sizeof(PlatformSystemState);
+  if(state  ==  NULL){
+    KDEBUG("PLATFORM SUSBYSTEM : STATE PASSED AS NULL");
+    return true;
+  }
+  platformSystemStatePtr  = state;
+  KINFO("PLATFORM SUBSYTEM INITIALIZED");
+  return true;
+}
+
+u8    startPlatform(const char* appliactionName,
                   i32 x,
                   i32 y,
                   i32 width,
                   i32 height){
-  //create internal state
-  platState->internalState  = malloc(sizeof(InternalState));
-  MEMERR(platState->internalState);
-  InternalState*  state = (InternalState*)(platState->internalState);
-
+TRACEFUNCTION;
+KDEBUG("applicationName : %s x : %"PRIi32" y : %"PRIi32" width : %"PRIi32" height : %"PRIi32"",appliactionName,x,y,width,height);
   //connect to Xserver
-  state->display  = XOpenDisplay(NULL);
+  platformSystemStatePtr->display  = XOpenDisplay(NULL);
 
   //Turn off keyrepeats
-  XAutoRepeatOn(state->display);
-  //XAutoRepeatOff(state->display);
+  XAutoRepeatOn(platformSystemStatePtr->display);
+  //XAutoRepeatOff(platformSystemStatePtr->display);
 
   //Retrieve the connection from display
-  state->connection = XGetXCBConnection(state->display);
-  if(xcb_connection_has_error(state->connection)){
-    UFATAL("Failed to connect to X server via XCB");
+  platformSystemStatePtr->connection = XGetXCBConnection(platformSystemStatePtr->display);
+  if(xcb_connection_has_error(platformSystemStatePtr->connection)){
+    KFATAL("Failed to connect to X server via XCB");
     return false;
   }
 
   //get data from the Xserver
-  const struct xcb_setup_t *setup = xcb_get_setup(state->connection);
+  const struct xcb_setup_t *setup = xcb_get_setup(platformSystemStatePtr->connection);
 
   //loop through screens using iterator
   u8 screenP  = 0;
@@ -72,10 +84,10 @@ u8  startPlatform(PlatformState* platState,
     xcb_screen_next(&it);
   }
   //after looping till the screen assign it 
-  state->screen = it.data;
+  platformSystemStatePtr->screen = it.data;
 
   //ask for a new ID for the window
-  state->window = xcb_generate_id(state->connection);
+  platformSystemStatePtr->window = xcb_generate_id(platformSystemStatePtr->connection);
 
   //Register event types
   //EVENT_MASK is always required , BACK_PIXEL is to blackout the screen 
@@ -89,85 +101,84 @@ u8  startPlatform(PlatformState* platState,
     XCB_EVENT_MASK_KEY_PRESS      | XCB_EVENT_MASK_KEY_RELEASE    |
     XCB_EVENT_MASK_STRUCTURE_NOTIFY;
   //values to be sent over to XCB
-  u32 valueList[] = {state->screen->black_pixel , eventValues} ;
+  u32 valueList[] = {platformSystemStatePtr->screen->black_pixel , eventValues} ;
 
   //create the window
-  xcb_create_window (state->connection,                             /* Connection          */
+  xcb_create_window (platformSystemStatePtr->connection,            /* Connection          */
                      0,                                             /* depth               */
-                     state->window,                                 /* window Id           */
-                     state->screen->root,                           /* parent window       */
+                     platformSystemStatePtr->window,                /* window Id           */
+                     platformSystemStatePtr->screen->root,          /* parent window       */
                      x, y,                                          /* x, y                */
                      width, height,                                 /* width, height       */
                      0,                                             /* border_width        */
                      XCB_WINDOW_CLASS_INPUT_OUTPUT,                 /* class               */
-                     state->screen->root_visual,                    /* visual              */
+                     platformSystemStatePtr->screen->root_visual,   /* visual              */
                      eventMask, valueList);                         /* masks */
 
   //change title of window
-  xcb_change_property(state->connection,
+  xcb_change_property(platformSystemStatePtr->connection,
                       XCB_PROP_MODE_REPLACE,
-                      state->window,
+                      platformSystemStatePtr->window,
                       XCB_ATOM_WM_NAME,
                       XCB_ATOM_STRING,
                       8,
                       strlen(appliactionName),
                       appliactionName);
   //notify at deleteing the window
-  xcb_intern_atom_cookie_t  wmDeleteCookie    = xcb_intern_atom(state->connection,
+  xcb_intern_atom_cookie_t  wmDeleteCookie    = xcb_intern_atom(platformSystemStatePtr->connection,
                                                                 0,
                                                                 strlen("WM_DELETE_WINDOW"),
                                                                 "WM_DELETE_WINDOW");
-  xcb_intern_atom_cookie_t  wmProtocolsCookie = xcb_intern_atom(state->connection,
+  xcb_intern_atom_cookie_t  wmProtocolsCookie = xcb_intern_atom(platformSystemStatePtr->connection,
                                                                 0,
                                                                 strlen("WM_PROTOCOLS"),
                                                                 "WM_PROTOCOLS");
-  xcb_intern_atom_reply_t   *wmDeleteReply    = xcb_intern_atom_reply(state->connection,
+  xcb_intern_atom_reply_t   *wmDeleteReply    = xcb_intern_atom_reply(platformSystemStatePtr->connection,
                                                                       wmDeleteCookie,
                                                                       NULL);
-  xcb_intern_atom_reply_t   *wmProtocolsReply = xcb_intern_atom_reply(state->connection,
+  xcb_intern_atom_reply_t   *wmProtocolsReply = xcb_intern_atom_reply(platformSystemStatePtr->connection,
                                                                       wmProtocolsCookie,
                                                                       NULL);
-  state->wmDeleteWin  = wmDeleteReply->atom;
-  state->wmProtocols  = wmProtocolsReply->atom;
+  platformSystemStatePtr->wmDeleteWin  = wmDeleteReply->atom;
+  platformSystemStatePtr->wmProtocols  = wmProtocolsReply->atom;
 
-  xcb_change_property(state->connection,
+  xcb_change_property(platformSystemStatePtr->connection,
                       XCB_PROP_MODE_REPLACE,
-                      state->window,
+                      platformSystemStatePtr->window,
                       wmProtocolsReply->atom,
                       4,
                       32,
                       1,
                       &wmDeleteReply->atom);
 
-  xcb_map_window(state->connection, state->window);
+  xcb_map_window(platformSystemStatePtr->connection, platformSystemStatePtr->window);
 
-  i32 streamResult  = xcb_flush(state->connection);
+  i32 streamResult  = xcb_flush(platformSystemStatePtr->connection);
   if(streamResult <=  0 ){
-    UFATAL("an error occured when flushing the stream %d" , streamResult);
+    KFATAL("an error occured when flushing the stream %d" , streamResult);
     return false;
   }
 
-  UINFO("WINDOWING SUBSYSTEM INITIALIZED");
+  KINFO("PLATFORM HAS BEEN STARTED !");
   return true;
 }
 
-void  shutdownPlatform    (PlatformState* platState){
-  UINFO("WINDOWING SUBSYTEM SHUTDOWN");
-
-  InternalState*  state = (InternalState*)(platState->internalState);
-
-  UTRACE("RESTORING STATES");
+void  shutdownPlatform    (void){
+TRACEFUNCTION;
+KDEBUG("void"); 
+  KINFO("WINDOWING SUBSYTEM SHUTDOWN");
+  KINFO("RESTORING STATES");
   //turn repeat keys back ON
-  XAutoRepeatOn(state->display);
+  XAutoRepeatOn(platformSystemStatePtr->display);
 
-  UTRACE("DESTROYING WINDOW");
+  KINFO("DESTROYING WINDOW");
   //destroy window
-  xcb_destroy_window(state->connection, state->window);
+  xcb_destroy_window(platformSystemStatePtr->connection, platformSystemStatePtr->window);
+  platformSystemStatePtr  = NULL;
 }
 
-u8    platformPumpMessages(PlatformState* platState){
-
-  InternalState*  state = (InternalState*)(platState->internalState);
+u8    platformPumpMessages(){
+TRACEFUNCTION;
   xcb_generic_event_t* event;
   xcb_client_message_event_t* cm;
 
@@ -175,8 +186,7 @@ u8    platformPumpMessages(PlatformState* platState){
 
   //poll for events untill NULL returned
   while(event != 0){
-    event = xcb_poll_for_event(state->connection);
-    UTRACE("EVENT POLLED");
+    event = xcb_poll_for_event(platformSystemStatePtr->connection);
     if(event  ==  0){
       break;
     }
@@ -188,7 +198,7 @@ u8    platformPumpMessages(PlatformState* platState){
         xcb_key_release_event_t* keyboardEvent = (xcb_key_release_event_t*)event;
         u8  pressed         = event->response_type  == XCB_KEY_PRESS;
         xcb_keycode_t code  = keyboardEvent->detail;
-        KeySym keysym       = XkbKeycodeToKeysym(state->display, (KeyCode)code, 0, code & ShiftMask ? 1 : 0);
+        KeySym keysym       = XkbKeycodeToKeysym(platformSystemStatePtr->display, (KeyCode)code, 0, code & ShiftMask ? 1 : 0);
         keys key            = translateKeycode(keysym);
         inputProcessKey(key, pressed);
       } break;
@@ -209,7 +219,7 @@ u8    platformPumpMessages(PlatformState* platState){
         }
 
         if(mouseButton != BUTTON_MAX_BUTTONS){
-          UTRACE("PLATFORM MAX BUTTONS PRESSED");
+          UWARN("PLATFORM MAX BUTTONS PRESSED");
           inputProcessButton(mouseButton, pressed);
         }
       }break;
@@ -220,7 +230,7 @@ u8    platformPumpMessages(PlatformState* platState){
         break;
       }
       case  XCB_CONFIGURE_NOTIFY:{
-        UWARN("----------------------------------------------------------RESIZING--------------");
+        UINFO("--------------RESIZING--------------");
         xcb_configure_notify_event_t* configureEvent  = (xcb_configure_notify_event_t*)event;
         //resizing
         EventContext context;
@@ -232,7 +242,7 @@ u8    platformPumpMessages(PlatformState* platState){
       case  XCB_CLIENT_MESSAGE:{
         //UTRACE("PLATFORM CLIENT NOTIFY");
         cm  = (xcb_client_message_event_t*)event;
-        if(cm->data.data32[0] ==  state->wmDeleteWin){
+        if(cm->data.data32[0] ==  platformSystemStatePtr->wmDeleteWin){
           quitFlagged = true;
         }
       }break;
@@ -254,17 +264,17 @@ void  platformSleep(u64 ms){
   usleep((ms%1000) * 1000);
 }
 
-VkResult  createVulkanSurface(PlatformState* platState, VulkanContext* context){
-  InternalState* state  = (InternalState*)(platState->internalState);
-
+VkResult  createVulkanSurface(VulkanContext* context){
+TRACEFUNCTION;
+KDEBUG("context : %p");
   VkXcbSurfaceCreateInfoKHR createInfo  = {VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR};
-  createInfo.connection = state->connection;
-  createInfo.window = state->window;
+  createInfo.connection = platformSystemStatePtr->connection;
+  createInfo.window = platformSystemStatePtr->window;
 
-  VkResult  result  = vkCreateXcbSurfaceKHR(context->instance, &createInfo, context->allocator, &state->surface);
+  VkResult  result  = vkCreateXcbSurfaceKHR(context->instance, &createInfo, context->allocator, &platformSystemStatePtr->surface);
   VK_CHECK2(result, "COULD NOT SETUP VULKAN SURFACE "); 
-  context->surface  = state->surface;
-  UINFO("VULKAN SURFACE INITIALIZED");
+  context->surface  = platformSystemStatePtr->surface;
+  KINFO("VULKAN SURFACE INITIALIZED");
   return result;
 }
 
@@ -541,3 +551,4 @@ u8  translateKeycode(u32 xKeycode){
       return 0;
   }
 }
+

@@ -202,30 +202,6 @@ src/core/clock.c.s:
 	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/clock.c.s
 .PHONY : src/core/clock.c.s
 
-src/core/defines.o: src/core/defines.c.o
-.PHONY : src/core/defines.o
-
-# target to build an object file
-src/core/defines.c.o:
-	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/defines.c.o
-.PHONY : src/core/defines.c.o
-
-src/core/defines.i: src/core/defines.c.i
-.PHONY : src/core/defines.i
-
-# target to preprocess a source file
-src/core/defines.c.i:
-	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/defines.c.i
-.PHONY : src/core/defines.c.i
-
-src/core/defines.s: src/core/defines.c.s
-.PHONY : src/core/defines.s
-
-# target to generate assembly for a file
-src/core/defines.c.s:
-	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/defines.c.s
-.PHONY : src/core/defines.c.s
-
 src/core/events.o: src/core/events.c.o
 .PHONY : src/core/events.o
 
@@ -298,6 +274,54 @@ src/core/kmemory.c.s:
 	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/kmemory.c.s
 .PHONY : src/core/kmemory.c.s
 
+src/core/logger.o: src/core/logger.c.o
+.PHONY : src/core/logger.o
+
+# target to build an object file
+src/core/logger.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/logger.c.o
+.PHONY : src/core/logger.c.o
+
+src/core/logger.i: src/core/logger.c.i
+.PHONY : src/core/logger.i
+
+# target to preprocess a source file
+src/core/logger.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/logger.c.i
+.PHONY : src/core/logger.c.i
+
+src/core/logger.s: src/core/logger.c.s
+.PHONY : src/core/logger.s
+
+# target to generate assembly for a file
+src/core/logger.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/logger.c.s
+.PHONY : src/core/logger.c.s
+
+src/core/strings.o: src/core/strings.c.o
+.PHONY : src/core/strings.o
+
+# target to build an object file
+src/core/strings.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/strings.c.o
+.PHONY : src/core/strings.c.o
+
+src/core/strings.i: src/core/strings.c.i
+.PHONY : src/core/strings.i
+
+# target to preprocess a source file
+src/core/strings.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/strings.c.i
+.PHONY : src/core/strings.c.i
+
+src/core/strings.s: src/core/strings.c.s
+.PHONY : src/core/strings.s
+
+# target to generate assembly for a file
+src/core/strings.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/core/strings.c.s
+.PHONY : src/core/strings.c.s
+
 src/math/kmath.o: src/math/kmath.c.o
 .PHONY : src/math/kmath.o
 
@@ -345,6 +369,30 @@ src/memory/linearallocator.s: src/memory/linearallocator.c.s
 src/memory/linearallocator.c.s:
 	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/memory/linearallocator.c.s
 .PHONY : src/memory/linearallocator.c.s
+
+src/platform/filesystem.o: src/platform/filesystem.c.o
+.PHONY : src/platform/filesystem.o
+
+# target to build an object file
+src/platform/filesystem.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/platform/filesystem.c.o
+.PHONY : src/platform/filesystem.c.o
+
+src/platform/filesystem.i: src/platform/filesystem.c.i
+.PHONY : src/platform/filesystem.i
+
+# target to preprocess a source file
+src/platform/filesystem.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/platform/filesystem.c.i
+.PHONY : src/platform/filesystem.c.i
+
+src/platform/filesystem.s: src/platform/filesystem.c.s
+.PHONY : src/platform/filesystem.s
+
+# target to generate assembly for a file
+src/platform/filesystem.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/platform/filesystem.c.s
+.PHONY : src/platform/filesystem.c.s
 
 src/platform/platform.o: src/platform/platform.c.o
 .PHONY : src/platform/platform.o
@@ -538,6 +586,30 @@ src/renderer/rendererfrontend.c.s:
 	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.s
 .PHONY : src/renderer/rendererfrontend.c.s
 
+src/renderer/rendererutils.o: src/renderer/rendererutils.c.o
+.PHONY : src/renderer/rendererutils.o
+
+# target to build an object file
+src/renderer/rendererutils.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/rendererutils.c.o
+.PHONY : src/renderer/rendererutils.c.o
+
+src/renderer/rendererutils.i: src/renderer/rendererutils.c.i
+.PHONY : src/renderer/rendererutils.i
+
+# target to preprocess a source file
+src/renderer/rendererutils.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/rendererutils.c.i
+.PHONY : src/renderer/rendererutils.c.i
+
+src/renderer/rendererutils.s: src/renderer/rendererutils.c.s
+.PHONY : src/renderer/rendererutils.s
+
+# target to generate assembly for a file
+src/renderer/rendererutils.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/rendererutils.c.s
+.PHONY : src/renderer/rendererutils.c.s
+
 src/renderer/renderpass.o: src/renderer/renderpass.c.o
 .PHONY : src/renderer/renderpass.o
 
@@ -561,6 +633,54 @@ src/renderer/renderpass.s: src/renderer/renderpass.c.s
 src/renderer/renderpass.c.s:
 	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/renderpass.c.s
 .PHONY : src/renderer/renderpass.c.s
+
+src/renderer/shaders/shaderutils.o: src/renderer/shaders/shaderutils.c.o
+.PHONY : src/renderer/shaders/shaderutils.o
+
+# target to build an object file
+src/renderer/shaders/shaderutils.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/shaders/shaderutils.c.o
+.PHONY : src/renderer/shaders/shaderutils.c.o
+
+src/renderer/shaders/shaderutils.i: src/renderer/shaders/shaderutils.c.i
+.PHONY : src/renderer/shaders/shaderutils.i
+
+# target to preprocess a source file
+src/renderer/shaders/shaderutils.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/shaders/shaderutils.c.i
+.PHONY : src/renderer/shaders/shaderutils.c.i
+
+src/renderer/shaders/shaderutils.s: src/renderer/shaders/shaderutils.c.s
+.PHONY : src/renderer/shaders/shaderutils.s
+
+# target to generate assembly for a file
+src/renderer/shaders/shaderutils.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/shaders/shaderutils.c.s
+.PHONY : src/renderer/shaders/shaderutils.c.s
+
+src/renderer/shaders/vulkanshaderobject.o: src/renderer/shaders/vulkanshaderobject.c.o
+.PHONY : src/renderer/shaders/vulkanshaderobject.o
+
+# target to build an object file
+src/renderer/shaders/vulkanshaderobject.c.o:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/shaders/vulkanshaderobject.c.o
+.PHONY : src/renderer/shaders/vulkanshaderobject.c.o
+
+src/renderer/shaders/vulkanshaderobject.i: src/renderer/shaders/vulkanshaderobject.c.i
+.PHONY : src/renderer/shaders/vulkanshaderobject.i
+
+# target to preprocess a source file
+src/renderer/shaders/vulkanshaderobject.c.i:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/shaders/vulkanshaderobject.c.i
+.PHONY : src/renderer/shaders/vulkanshaderobject.c.i
+
+src/renderer/shaders/vulkanshaderobject.s: src/renderer/shaders/vulkanshaderobject.c.s
+.PHONY : src/renderer/shaders/vulkanshaderobject.s
+
+# target to generate assembly for a file
+src/renderer/shaders/vulkanshaderobject.c.s:
+	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/shaders/vulkanshaderobject.c.s
+.PHONY : src/renderer/shaders/vulkanshaderobject.c.s
 
 src/renderer/swapchain.o: src/renderer/swapchain.c.o
 .PHONY : src/renderer/swapchain.o
@@ -586,30 +706,6 @@ src/renderer/swapchain.c.s:
 	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/swapchain.c.s
 .PHONY : src/renderer/swapchain.c.s
 
-src/renderer/utils.o: src/renderer/utils.c.o
-.PHONY : src/renderer/utils.o
-
-# target to build an object file
-src/renderer/utils.c.o:
-	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/utils.c.o
-.PHONY : src/renderer/utils.c.o
-
-src/renderer/utils.i: src/renderer/utils.c.i
-.PHONY : src/renderer/utils.i
-
-# target to preprocess a source file
-src/renderer/utils.c.i:
-	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/utils.c.i
-.PHONY : src/renderer/utils.c.i
-
-src/renderer/utils.s: src/renderer/utils.c.s
-.PHONY : src/renderer/utils.s
-
-# target to generate assembly for a file
-src/renderer/utils.c.s:
-	cd /home/gon/Developer/Kill_Engine/build && $(MAKE) $(MAKESILENT) -f engine/CMakeFiles/engine.dir/build.make engine/CMakeFiles/engine.dir/src/renderer/utils.c.s
-.PHONY : src/renderer/utils.c.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -628,9 +724,6 @@ help:
 	@echo "... src/core/clock.o"
 	@echo "... src/core/clock.i"
 	@echo "... src/core/clock.s"
-	@echo "... src/core/defines.o"
-	@echo "... src/core/defines.i"
-	@echo "... src/core/defines.s"
 	@echo "... src/core/events.o"
 	@echo "... src/core/events.i"
 	@echo "... src/core/events.s"
@@ -640,12 +733,21 @@ help:
 	@echo "... src/core/kmemory.o"
 	@echo "... src/core/kmemory.i"
 	@echo "... src/core/kmemory.s"
+	@echo "... src/core/logger.o"
+	@echo "... src/core/logger.i"
+	@echo "... src/core/logger.s"
+	@echo "... src/core/strings.o"
+	@echo "... src/core/strings.i"
+	@echo "... src/core/strings.s"
 	@echo "... src/math/kmath.o"
 	@echo "... src/math/kmath.i"
 	@echo "... src/math/kmath.s"
 	@echo "... src/memory/linearallocator.o"
 	@echo "... src/memory/linearallocator.i"
 	@echo "... src/memory/linearallocator.s"
+	@echo "... src/platform/filesystem.o"
+	@echo "... src/platform/filesystem.i"
+	@echo "... src/platform/filesystem.s"
 	@echo "... src/platform/platform.o"
 	@echo "... src/platform/platform.i"
 	@echo "... src/platform/platform.s"
@@ -670,15 +772,21 @@ help:
 	@echo "... src/renderer/rendererfrontend.o"
 	@echo "... src/renderer/rendererfrontend.i"
 	@echo "... src/renderer/rendererfrontend.s"
+	@echo "... src/renderer/rendererutils.o"
+	@echo "... src/renderer/rendererutils.i"
+	@echo "... src/renderer/rendererutils.s"
 	@echo "... src/renderer/renderpass.o"
 	@echo "... src/renderer/renderpass.i"
 	@echo "... src/renderer/renderpass.s"
+	@echo "... src/renderer/shaders/shaderutils.o"
+	@echo "... src/renderer/shaders/shaderutils.i"
+	@echo "... src/renderer/shaders/shaderutils.s"
+	@echo "... src/renderer/shaders/vulkanshaderobject.o"
+	@echo "... src/renderer/shaders/vulkanshaderobject.i"
+	@echo "... src/renderer/shaders/vulkanshaderobject.s"
 	@echo "... src/renderer/swapchain.o"
 	@echo "... src/renderer/swapchain.i"
 	@echo "... src/renderer/swapchain.s"
-	@echo "... src/renderer/utils.o"
-	@echo "... src/renderer/utils.i"
-	@echo "... src/renderer/utils.s"
 .PHONY : help
 
 

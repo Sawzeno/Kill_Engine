@@ -1,5 +1,6 @@
 #include  "renderpass.h"
-#include  "utils.h"
+#include  "rendererutils.h"
+#include  "core/logger.h"
 #include  "core/kmemory.h"
 #include  "vulkantypes.h"
 #include  <vulkan/vulkan_core.h>
@@ -9,6 +10,7 @@ VkResult  vulkanRenderPassCreate(VulkanContext*     context,
                                  f32 x, f32 y, f32 w, f32 h,
                                  f32 r, f32 g, f32 b, f32 a,
                                  f32 depth, u32     stencil){
+  TRACEFUNCTION;
   VkResult  result  = 0;
 
   outRenderPass->x =x ;
@@ -27,10 +29,10 @@ VkResult  vulkanRenderPassCreate(VulkanContext*     context,
   subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 
   //Attachements
-  const u32 attachmentDesciptionCount = 2;
-  VkAttachmentDescription attachmentDesciptions[attachmentDesciptionCount] = {0};
+  const u32 attachmentDesciptionCount = 2;//----goes here in attachementDescriptions
+  VkAttachmentDescription attachmentDesciptions[2] = {0};
 
-  UDEBUG("-----------------------COLOR ATTACHMENT________");
+  KDEBUG("-----------------------COLOR ATTACHMENT________");
   // color attachment
   VkAttachmentDescription colorAttachment = {0};
   colorAttachment.format          = context->swapchain.imageFormat.format;
@@ -52,7 +54,7 @@ VkResult  vulkanRenderPassCreate(VulkanContext*     context,
   subpass.colorAttachmentCount  = 1;
   subpass.pColorAttachments     = &colorAttachmentReference;
 
-  UDEBUG("-----------------------DEPTH ATTACHMENT________");
+  KDEBUG("-----------------------DEPTH ATTACHMENT-------------");
   //depth attachment
   VkAttachmentDescription depthAttachment = {0};
   depthAttachment.format          = context->device.depthFormat;
@@ -89,7 +91,7 @@ VkResult  vulkanRenderPassCreate(VulkanContext*     context,
   subpass.preserveAttachmentCount = 0;
   subpass.pPreserveAttachments    = NULL;
 
-  UDEBUG("-----------------------RENDER PASS DEPENDENCY________");
+  KDEBUG("-----------------------RENDER PASS DEPENDENCY________");
   //Render pass depenedencies [what our source subpass is ,if we had more than one subapss]
   VkSubpassDependency subpassDependency = {0};
   subpassDependency.srcSubpass      = VK_SUBPASS_EXTERNAL;
@@ -101,7 +103,7 @@ VkResult  vulkanRenderPassCreate(VulkanContext*     context,
   subpassDependency.dstAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
   subpassDependency.dependencyFlags = 0;
 
-  UDEBUG("-----------------------RENDER PASS CREATE INFO________");
+  KDEBUG("-----------------------RENDER PASS CREATE INFO________");
   //render pass create
   VkRenderPassCreateInfo createInfo = {VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO};
   createInfo.attachmentCount        = attachmentDesciptionCount;
@@ -115,25 +117,26 @@ VkResult  vulkanRenderPassCreate(VulkanContext*     context,
 
   result  = vkCreateRenderPass(context->device.logicalDevice, &createInfo, context->allocator, &outRenderPass->handle);
   VK_CHECK2(result, "failed to createRenderPass");
-  UINFO("SUCCESFULLY CREATED RENDERPASS");
+  KINFO("SUCCESFULLY CREATED RENDERPASS");
   return VK_SUCCESS;
 }
 
 VkResult  vulkanRenderPassDestroy (VulkanContext* context,  VulkanRenderPass* renderPass){
+  TRACEFUNCTION;
   if(renderPass && renderPass->handle){
     vkDestroyRenderPass(context->device.logicalDevice, renderPass->handle, context->allocator);
     renderPass->handle = NULL;
     return VK_SUCCESS;
   }else{
-    UFATAL("NULL PASSED TO %s",__FUNCTION__);
+    KFATAL("NULL PASSED TO %s",__FUNCTION__);
     return !VK_SUCCESS;
   }
 }
 
 VkResult  vulkanRenderPassBegin   (VulkanCommandBuffer* commandBuffer,
                                    VulkanRenderPass* renderPass, VkFramebuffer frameBuffer){
-
-  UDEBUG("-----------------------RENDER PASS BEGIN________");
+TRACEFUNCTION;
+  KDEBUG("-----------------------RENDER PASS BEGIN------------");
   VkRenderPassBeginInfo beginInfo = {VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO};
   beginInfo.renderPass  = renderPass->handle;
   beginInfo.framebuffer = frameBuffer;
@@ -161,6 +164,7 @@ VkResult  vulkanRenderPassBegin   (VulkanCommandBuffer* commandBuffer,
 } 
 
 VkResult  vulkanRenderPassEnd     (VulkanCommandBuffer* commandBuffer, VulkanRenderPass* renderPass){
+  TRACEFUNCTION;
   vkCmdEndRenderPass(commandBuffer->handle);
   commandBuffer->state  = COMMAND_BUFFER_STATE_RECORDING;
   return VK_SUCCESS;

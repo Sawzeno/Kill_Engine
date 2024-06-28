@@ -1,59 +1,67 @@
 #include  "rendererfrontend.h"
+#include  "core/logger.h"
 
 #include  "rendererbackend.h"
-#include  "core/kmemory.h"
 #include  "defines.h"
 
-static RendererBackend* backend = 0;
 
-u8  initializeRenderer(const char *applicationName, PlatformState *platState){
+typedef struct RendererSystemState{
+  RendererBackend backend;
+}RendererSystemState;;
 
-  backend = kallocate(sizeof(RendererBackend), MEMORY_TAG_RENDERER);
+static  RendererSystemState*  rendererSystemStatePtr;
 
+u8  initializeRenderer(u64* requiredMemory, void* state){
+TRACEFUNCTION;
+KDEBUG("requiredMemory : %"PRIu32" state : %p",*requiredMemory,state);
+  *requiredMemory = sizeof(requiredMemory);
+  if(state  ==  NULL){
+    return true;
+  }
+  rendererSystemStatePtr  = state;
+  
+  rendererSystemStatePtr->backend.initilaize   = rendererBackendInitialize;
+  rendererSystemStatePtr->backend.shutdown     = rendererBackendShutdown;
+  rendererSystemStatePtr->backend.endFrame     = rendererBackendEndFrame;
+  rendererSystemStatePtr->backend.beginFrame   = rendererBackendBeginFrame;
+  rendererSystemStatePtr->backend.resized      = rendererBackendResized;
 
-  backend->platState    = platState;
-  backend->initilaize   = rendererBackendInitialize;
-  backend->shutdown     = rendererBackendShutdown;
-  backend->endFrame     = rendererBackendEndFrame;
-  backend->beginFrame   = rendererBackendBeginFrame;
-  backend->resized      = rendererBackendResized;
-
-  if(!(backend->initilaize(applicationName , platState))){
-    UFATAL("FAILED TO INITIALIZE RENDERER BACKEND!!");
+  if(!(rendererSystemStatePtr->backend.initilaize())){
+    KFATAL("FAILED TO INITIALIZE RENDERER BACKEND!!");
     return false;
   }
   return true;
 }
 
 u8  shutdownRenderer(){
+  KTRACE("RENDERER SUBSYTEM SHUTDOWN");
+  rendererSystemStatePtr->backend.shutdown();
+  rendererSystemStatePtr->backend.resized    = 0;
+  rendererSystemStatePtr->backend.endFrame   = 0;
+  rendererSystemStatePtr->backend.shutdown   = 0;
+  rendererSystemStatePtr->backend.initilaize = 0;
+  rendererSystemStatePtr->backend.beginFrame = 0;
 
-  backend->shutdown();
-  backend->platState  = 0;
-  backend->resized    = 0;
-  backend->endFrame   = 0;
-  backend->shutdown   = 0;
-  backend->initilaize = 0;
-  backend->beginFrame = 0;
-
-  kfree(backend , sizeof(RendererBackend) , MEMORY_TAG_RENDERER);
-  UINFO("RENDERER SUBSYTEM SHUTDOWN");
   return true;
 }
 u8 rendererBeginFrame(f32 deltaTime){
-  return backend->beginFrame( deltaTime);
+  UTRACE("%s called", __FUNCTION__);
+  return rendererSystemStatePtr->backend.beginFrame( deltaTime);
 }
 
 u8 rendererEndFrame(f32 deltaTime){
-  u8 result = backend->endFrame( deltaTime);
+  UTRACE("%s called", __FUNCTION__);
+  u8 result = rendererSystemStatePtr->backend.endFrame( deltaTime);
   return result;
 }
 
 u8  rendererDrawFrame(RenderPacket* packet){
+  UTRACE("%s called", __FUNCTION__);
   if(rendererBeginFrame(packet->deltaTime)){
-    UTRACE("RENDERER BEGIN FRAME SUCCESFULL");
+    UINFO("RENDERER BEGIN FRAME SUCCESFULL");
     if(rendererEndFrame(packet->deltaTime)){
-      UTRACE("RENDERER END FRAME SUCCESFULL");
-      backend->frameNumber++;
+      UINFO("RENDERER END FRAME SUCCESFULL");
+      rendererSystemStatePtr->backend.frameNumber++;
       return true;
     }else{
       UERROR("rendererEndFrame Failed !");
@@ -68,10 +76,10 @@ u8  rendererDrawFrame(RenderPacket* packet){
 
 u8  rendererOnResized(u16 width , u16 height){
   UTRACE("RENDRER RESIZE CALLED");
-  if(backend){
-    backend->resized(width, height);
+  if(rendererSystemStatePtr != NULL){
+    rendererSystemStatePtr->backend.resized(width, height);
   }else{
-    UFATAL("RESIZE CALLED WHEN NO BAKEND EXISTS!!, %i, %i",width,height);
+    UFATAL("RESIZE CALLED WHEN NO BACKEND EXISTS!!, %i, %i",width,height);
   }
   return true;
 }

@@ -11,12 +11,14 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/gon/Developer/Kill_Engine/engine/src/containers/darray.c" "engine/CMakeFiles/engine.dir/src/containers/darray.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/containers/darray.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/core/application.c" "engine/CMakeFiles/engine.dir/src/core/application.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/core/application.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/core/clock.c" "engine/CMakeFiles/engine.dir/src/core/clock.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/core/clock.c.o.d"
-  "/home/gon/Developer/Kill_Engine/engine/src/core/defines.c" "engine/CMakeFiles/engine.dir/src/core/defines.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/core/defines.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/core/events.c" "engine/CMakeFiles/engine.dir/src/core/events.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/core/events.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/core/input.c" "engine/CMakeFiles/engine.dir/src/core/input.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/core/input.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/core/kmemory.c" "engine/CMakeFiles/engine.dir/src/core/kmemory.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/core/kmemory.c.o.d"
+  "/home/gon/Developer/Kill_Engine/engine/src/core/logger.c" "engine/CMakeFiles/engine.dir/src/core/logger.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/core/logger.c.o.d"
+  "/home/gon/Developer/Kill_Engine/engine/src/core/strings.c" "engine/CMakeFiles/engine.dir/src/core/strings.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/core/strings.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/math/kmath.c" "engine/CMakeFiles/engine.dir/src/math/kmath.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/math/kmath.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/memory/linearallocator.c" "engine/CMakeFiles/engine.dir/src/memory/linearallocator.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/memory/linearallocator.c.o.d"
+  "/home/gon/Developer/Kill_Engine/engine/src/platform/filesystem.c" "engine/CMakeFiles/engine.dir/src/platform/filesystem.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/platform/filesystem.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/platform/platform.c" "engine/CMakeFiles/engine.dir/src/platform/platform.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/platform/platform.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/renderer/commandbuffer.c" "engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/renderer/commandbuffer.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/renderer/device.c" "engine/CMakeFiles/engine.dir/src/renderer/device.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/renderer/device.c.o.d"
@@ -25,9 +27,11 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/gon/Developer/Kill_Engine/engine/src/renderer/image.c" "engine/CMakeFiles/engine.dir/src/renderer/image.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/renderer/image.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/renderer/rendererbackend.c" "engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/renderer/rendererbackend.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/renderer/rendererfrontend.c" "engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/renderer/rendererfrontend.c.o.d"
+  "/home/gon/Developer/Kill_Engine/engine/src/renderer/rendererutils.c" "engine/CMakeFiles/engine.dir/src/renderer/rendererutils.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/renderer/rendererutils.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/renderer/renderpass.c" "engine/CMakeFiles/engine.dir/src/renderer/renderpass.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/renderer/renderpass.c.o.d"
+  "/home/gon/Developer/Kill_Engine/engine/src/renderer/shaders/shaderutils.c" "engine/CMakeFiles/engine.dir/src/renderer/shaders/shaderutils.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/renderer/shaders/shaderutils.c.o.d"
+  "/home/gon/Developer/Kill_Engine/engine/src/renderer/shaders/vulkanshaderobject.c" "engine/CMakeFiles/engine.dir/src/renderer/shaders/vulkanshaderobject.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/renderer/shaders/vulkanshaderobject.c.o.d"
   "/home/gon/Developer/Kill_Engine/engine/src/renderer/swapchain.c" "engine/CMakeFiles/engine.dir/src/renderer/swapchain.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/renderer/swapchain.c.o.d"
-  "/home/gon/Developer/Kill_Engine/engine/src/renderer/utils.c" "engine/CMakeFiles/engine.dir/src/renderer/utils.c.o" "gcc" "engine/CMakeFiles/engine.dir/src/renderer/utils.c.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

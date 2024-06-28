@@ -1,10 +1,11 @@
 #include  <entry.h>
 
 #include  "game.h"
-#include  "core/kmemory.h"
+#include  "core/logger.h"
 
 i8 createGame(Game* outGame){
 
+  UINFO("INITIALIZING GAME APPLICATION ...");
   //Config
   outGame->appConfig.posX   = 100;
   outGame->appConfig.posY   = 100;
@@ -13,11 +14,13 @@ i8 createGame(Game* outGame){
   outGame->appConfig.name   = "KILL ENGINE";
   
   //Funcrtion Pointers
-  outGame->initialize = gameInitalize;
+  outGame->initialize = gameInitialize;
   outGame->update     = gameUpdate;
   outGame->render     = gameRender;
   outGame->onResize   = gameOnResize;
 
-  outGame->state      = kallocate(sizeof(GameState), MEMORY_TAG_APPLICATION);
+  outGame->state      = calloc(1, sizeof(GameState));
+  MEMERR(outGame->state);
+  outGame->applicationState = NULL;
   return true;
 }

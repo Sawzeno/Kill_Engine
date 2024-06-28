@@ -1,4 +1,7 @@
 #include  "application.h"
+#include  "core/kmemory.h"
+#include  "core/logger.h"
+#include  "memory/linearallocator.h"
 #include  "gametypes.h"
 #include  "defines.h"
 
@@ -20,25 +23,138 @@ u8  applicationOnResized  (u16 code , void* sender , void* listener , EventConte
 
 struct ApplicationState{
   Game* game;
-  PlatformState  platform;
   i8    isRunning;
   i8    isSuspended;
   i16   width;
   i16   height;
   Clock clock;
   f64   lastTime;
+
+  LinearAllocator systemsAllocator;
+
+  u64   memorySystemMemoryRequirement;
+  void* memorySystemState;
+
+  u64   loggingSystemMemoryRequirement;
+  void* loggingSystemState;
+
+  u64   inputSystemMemoryRequirement;
+  void* inputSystemState;
+
+  u64   eventSystemMemoryRequirement;
+  void* eventSystemState;
+
+  u64   platformSystemMenoryRequirement;
+  void* platformSystemState;
+
+  u64   rendererSystemMemoryRequirement;
+  void* rendererSystemState;
 };
 
 static i8 initalized  = false;
-static ApplicationState appState;
+static ApplicationState* appState;
+
+i8  applicationCreate(Game* game){
+  UINFO("CREATING APPLICATION");
+  if(game->applicationState){
+    UERROR("application create called more than once");
+    return false;
+  }
+
+  game->applicationState= calloc(1, sizeof(ApplicationState));
+  MEMERR(game->applicationState);
+  appState  = game->applicationState;
+  appState->game = game;
+  appState->isSuspended  = false;
+  appState->width        = game->appConfig.width;
+  appState->height       = game->appConfig.height;
+
+  //---------------------------------STARTUP CODE---------------------------------
+  //requires calloc as other memory functions use the logging subsytem
+  //so need to only initialize the memory and logging system with calloc
+  UINFO("INITIALZING APPLICATION MEMORY");
+  initializeMemory(&appState->memorySystemMemoryRequirement, NULL);
+  appState->memorySystemState = calloc(1, appState->memorySystemMemoryRequirement);
+  MEMERR(appState->memorySystemState);
+  initializeMemory(&appState->memorySystemMemoryRequirement, appState->memorySystemState);
+
+  UINFO("INITIALZING ENGINE LOGGER");
+  initializeLogging(&appState->loggingSystemMemoryRequirement, NULL);
+  appState->loggingSystemState  = calloc(1, appState->loggingSystemMemoryRequirement);
+  MEMERR(appState->loggingSystemState);
+  if(!initializeLogging(&appState->loggingSystemMemoryRequirement, appState->loggingSystemState)){
+    UFATAL("failed to initialze logging system, shutting down");
+    return false;
+  }
+  //-------------------------------------------------------------------------------
+
+  KINFO("ALLOCATING MEMMORY FOR SUBSYSTEMS");
+  u64 systemsAllocatorTotalSize = 1024 * 1024;
+  linearAllocatorCreate(systemsAllocatorTotalSize, NULL, &appState->systemsAllocator);
+
+  KINFO("INITIALIZING ENGINE INPUT");
+  initializeInput(&appState->inputSystemMemoryRequirement, NULL);
+  appState->inputSystemState  = linearAllocatorAllocate(&appState->systemsAllocator, appState->inputSystemMemoryRequirement);
+  if(!initializeInput(&appState->inputSystemMemoryRequirement, appState->inputSystemState)){
+    KFATAL("failed to initialize input sysytem, shutting down");
+    return false;
+  }
+
+  KINFO("INITIALIZING ENGINE EVENTS");
+  initializeEvents(&appState->eventSystemMemoryRequirement, NULL);
+  appState->eventSystemState  = linearAllocatorAllocate(&appState->systemsAllocator, appState->eventSystemMemoryRequirement);
+  if(!initializeEvents(&appState->eventSystemMemoryRequirement, appState->eventSystemState)){
+    KFATAL("failed to initialize input subsystem, shutting down");
+    return false;
+  }
+
+  eventRegister(EVENT_CODE_APPLICATION_QUIT , NULL  , applicationOnEvent);
+  eventRegister(EVENT_CODE_KEY_PRESSED      , NULL  , applicationOnKey  );
+  eventRegister(EVENT_CODE_KEY_RELEASED     , NULL  , applicationOnKey  );
+  eventRegister(EVENT_CODE_RESIZED          , NULL  , applicationOnResized);
+
+  KINFO("INITIALZING ENGINE PLATFORM");
+  initializePlatform(&appState->platformSystemMenoryRequirement, NULL);
+  appState->platformSystemState = linearAllocatorAllocate(&appState->systemsAllocator, appState->platformSystemMenoryRequirement);
+  if(!initializePlatform(&appState->platformSystemMenoryRequirement, appState->platformSystemState)){
+    KFATAL("failed to initialize platform subsystem, shutting down!");
+  }
+  if (!startPlatform(game->appConfig.name,
+                     game->appConfig.posX,
+                     game->appConfig.posY,
+                     game->appConfig.width,
+                     game->appConfig.height)) {
+    KERROR("FAILED TO SET WINDOWING SYSTEM ON THIS PLATFORM");
+    return false;
+  }
+
+  KINFO("INITIALIZING ENGINE RENDERER");
+  initializeRenderer(&appState->rendererSystemMemoryRequirement, NULL);
+  appState->rendererSystemState = linearAllocatorAllocate(&appState->systemsAllocator, appState->rendererSystemMemoryRequirement);
+  if(!initializeRenderer(&appState->rendererSystemMemoryRequirement, appState->rendererSystemState)){
+    KFATAL("failed to initialize renderer subsystem, shutting down!");
+    return false;
+  }
+  //initialize the game 
+  KINFO("INITIALZING GAME VARIABLES");
+  if(appState->game->initialize(appState->game) == false){
+    KFATAL("FAILED TO INITIALIZE GAME !");
+    return false;
+  }
+
+  initalized  = true;
+  return true;
+}
+
 
 i8  applicationRun(){
+  TRACEFUNCTION;
+  KINFO("APPLICATION STARTED SUCCESSFULY");
+  appState->isRunning    = true;
+  Uwrite(1024, getMemoryUsage());  
 
-  UINFO("APPLICATION STARTED SUCCESFULLY");
-  //UINFO(getMemoryUsage());  
-
-  clockStart  (&appState.clock);
-  clockUpdate (&appState.clock);
+  clockStart  (&appState->clock);
+  clockUpdate (&appState->clock);
 
   //"accumulate time  ,until it exceded targetFramesPerSecond , afteer that reset frameCount"
   f64 runningTime     = 0;
@@ -62,34 +178,32 @@ i8  applicationRun(){
   //remianing milliSeconds
   f64 remainingMs     = 0;
 
-  while (appState.isRunning) {
-    if (platformPumpMessages(&(appState.platform)) == false) {
+  while (appState->isRunning) {
+    if (platformPumpMessages() == false) {
       //flag shutdown
-      appState.isRunning  = false;
+      appState->isRunning  = false;
     } //while game state is not suspended 
-    if(appState.isSuspended == false){
+    if(appState->isSuspended == false){
       //calculate time at start of frame
-      clockUpdate(&appState.clock);
-      currentTime     = appState.clock.elapsed;
-      delta           = currentTime - appState.lastTime;
+      clockUpdate(&appState->clock);
+      currentTime     = appState->clock.elapsed;
+      delta           = currentTime - appState->lastTime;
       frameStartTime  = platformGetAbsoluteTime();
 
-
-
       //call the games update function
-      if(appState.game->update(appState.game , (f32)delta) == false){
+      if(appState->game->update(appState->game , (f32)delta) == false){
         UFATAL("Game Update Failed , Shutting Down!");
-        appState.isRunning  = false;
+        KFATAL("Game Update Failed , Shutting Down!");
+        appState->isRunning  = false;
         break;
       }
-
       //call the games render function
-      if(appState.game->render(appState.game , (f32)delta) == false){
+      if(appState->game->render(appState->game , (f32)delta) == false){
         UFATAL("Game Render Failed , Shutting Down!");
-        appState.isRunning  = false;
+        KFATAL("Game Render Failed , Shutting Down!");
+        appState->isRunning  = false;
         break;
       }
-
       //TEST SLAP
       RenderPacket  packet;
       packet.deltaTime  = delta;
@@ -114,73 +228,25 @@ i8  applicationRun(){
       // As a safety, input is the last thing to be updated before
       // this frame ends.
       inputUpdate(delta);
-      appState.lastTime = currentTime;
+      appState->lastTime = currentTime;
     }
   }
 
   //if for some reason above loop exits without flag being set
   //imma make sure it defineltely happens here
-  appState.isRunning  = false;
+  appState->isRunning  = false;
 
+  UINFO("UNREGISTERING EVENTS");
   eventUnregister (EVENT_CODE_APPLICATION_QUIT , NULL ,  applicationOnEvent);
   eventUnregister (EVENT_CODE_KEY_PRESSED      , NULL ,  applicationOnKey  );
   eventUnregister (EVENT_CODE_KEY_RELEASED     , NULL ,  applicationOnKey  );
+  UINFO("SHUTING DOWN SUBSYSTEMS");
   shutdownInput   ();
   shutdownEvents  ();
   shutdownRenderer();
-  shutdownPlatform(&(appState.platform));
-  return true;
-}
-
-i8  applicationCreate(Game* game){
-  if(initalized){
-    UERROR("application create called more than once");
-    return false;
-  }
-
-  appState.game = game;
-
-  UINFO("INITIALIZING ENGINE INPUT");
-  initializeInput();
-
-  appState.isRunning    = true;
-  appState.isSuspended  = false;
-  appState.width        = game->appConfig.width;
-  appState.height       = game->appConfig.height;
-
-  UINFO("INITIALIZING ENGINE EVENTS");
-  if(initializeEvents() == false){
-    UERROR("Event System initialization failed !!");
-    return false;
-  } 
-
-  eventRegister(EVENT_CODE_APPLICATION_QUIT , NULL  , applicationOnEvent);
-  eventRegister(EVENT_CODE_KEY_PRESSED      , NULL  , applicationOnKey  );
-  eventRegister(EVENT_CODE_KEY_RELEASED     , NULL  , applicationOnKey  );
-  eventRegister(EVENT_CODE_RESIZED          , NULL  , applicationOnResized);
-  UINFO("INITIALZING ENGINE WINDOWING");
-  if (!startPlatform(&(appState.platform),
-                     game->appConfig.name,
-                     game->appConfig.posX,
-                     game->appConfig.posY,
-                     game->appConfig.width,
-                     game->appConfig.height)) {
-    UERROR("FAILED TO LAAUNCHING WINDOWING SYSTEM ON THIS PLATFORM");
-    return false;
-  }
-
-  UINFO("INITIALIZING ENGINE RENDERER");
-  if(initializeRenderer(game->appConfig.name,&appState.platform) == false){
-    UFATAL("FAILED TO INITIALZE RENDERER");
-  }
-  //initialize the game 
-  UINFO("INITIALZING GAME VARIABLES");
-  if(appState.game->initialize(appState.game) == false){
-    UFATAL("FAILED TO INITIALIZE GAME !");
-    return false;
-  }
-
-  initalized  = true;
+  shutdownPlatform();
+  shutdownLogging ();
+  shutdownMemory  ();
   return true;
 }
 
@@ -188,8 +254,9 @@ i8  applicationCreate(Game* game){
 u8  applicationOnEvent(u16 code , void* sender, void* listener , EventContext context){
   switch (code) {
     case EVENT_CODE_APPLICATION_QUIT: {
-      UINFO("EVENT_CODEAPPLICATIONQUIT recieved, shutting down.");
-      appState.isRunning = false;
+      UTRACE("EVENT_CODEAPPLICATIONQUIT recieved, shutting down.");
+      KTRACE("EVENT_CODEAPPLICATIONQUIT recieved, shutting down.");
+      appState->isRunning = false;
       return true;
     }
   }
@@ -198,25 +265,25 @@ u8  applicationOnEvent(u16 code , void* sender, void* listener , EventContext co
 }
 
 u8 applicationOnKey(u16 code , void* sender, void* listener , EventContext context){
+TRACEEVENT;
   if(code == EVENT_CODE_KEY_PRESSED){
     u16 keyCode = context.data.u16[0];
     if(keyCode  == KEY_ESCAPE){
       EventContext  data  = {};
+      EINFO("APPLICATION QUIT EVENT");
       eventFire(EVENT_CODE_APPLICATION_QUIT , 0 , data);
       return true;
-    }else{
-      UINFO("key pressed : %c ", keyCode);
     }
   }else if (code  ==  EVENT_CODE_KEY_RELEASED){
     u16 keyCode = context.data.u16[0];
-    UINFO("key released  : %c" , keyCode);
   }
   return false;
 }
 
 
 u8  applicationOnResized  (u16 code , void* sender , void* listener , EventContext context){
-  UDEBUG("------------APPICATION RESIZE CALLED-------------");
+TRACEEVENT;
+  KDEBUG("code  : %"PRIu16" sender : %p listener : %p context : %p");
   u16 width = context.data.u16[0];
   u16 height = context.data.u16[1];
 
@@ -226,23 +293,23 @@ u8  applicationOnResized  (u16 code , void* sender , void* listener , EventConte
     u16 height = context.data.u16[1];
 
     // Check if different. If so, trigger a resize event.
-    if (width != appState.width || height != appState.height) {
-      appState.width = width;
-      appState.height = height;
+    if (width != appState->width || height != appState->height) {
+      appState->width = width;
+      appState->height = height;
 
-      UDEBUG("Window resized to: %i, %i", width, height);
+      UWARN("Window resized to: %i, %i", width, height);
 
       // Handle minimization
       if (width == 0 || height == 0) {
-        UINFO("Window minimized, suspending application.");
-        appState.isSuspended = true;
+        UWARN("Window minimized, suspending application.");
+        appState->isSuspended = true;
         return true;
       } else {
-        if (appState.isSuspended) {
-          UINFO("Window restored, resuming application.");
-          appState.isSuspended = false;
+        if (appState->isSuspended) {
+          UWARN("Window restored, resuming application.");
+          appState->isSuspended = false;
         }
-        appState.game->onResize(appState.game, width, height);
+        appState->game->onResize(appState->game, width, height);
         rendererOnResized(width, height);
       }
     }
@@ -253,9 +320,15 @@ u8  applicationOnResized  (u16 code , void* sender , void* listener , EventConte
 }
 
 i8  applicationGetFrameBufferSize(u32* width, u32* height){
-  *width  = appState.width;
-  *height = appState.height;
+  *width  = appState->width;
+  *height = appState->height;
   return true;
 }
 
-
+i8  applicationGetName            (char* name){
+  if(appState->game != NULL){
+    name  = appState->game->appConfig.name;
+    return true;
+  }
+  return false;
+}

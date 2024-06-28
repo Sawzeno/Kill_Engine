@@ -2,7 +2,6 @@
 
 #include "defines.h"
 
-#define DARRAY_DEBUG 0
 /*
                                     Memory layout
                 u64 capacity  = number elements that can be held
@@ -12,129 +11,126 @@
 */
 
 enum {
-  DARRAY_CAPACITY,
-  DARRAY_LENGTH,
-  DARRAY_STRIDE,
-  DARRAY_FIELD_LENGTH
+  DARRAY_FILED_CAPACITY,
+  DARRAY_FILED_LENGTH,
+  DARRAY_FILED_STRIDE,
+  DARRAY_FILED_FIELD_LENGTH
 };
 
 void* _darrayCreate   (u64 length, u64 stride);
-u8    _darrayDestroy  (void* array);
+u8    _darrayDestroy  (void* darray);
 
-u64   _darrayFieldGet (void* array, u64 field);
-u8    _darrayFieldSet (void* array, u64 field, u64 value);
+u64   _darrayFieldGet (void* darray, u64 field);
+u8    _darrayFieldSet (void* darray, u64 field, u64 value);
 
-void* _darrayResize   (void* array);
+void* _darrayResize   (void* darray);
 
-void* _darrayPush     (void* array, const void* valueptr);
-u8    _darrayPop      (void* array, void* dest);
+void* _darrayPush     (void* darray, const void* valueptr);
+u8    _darrayPop      (void* darray, void* dest);
 
-void* _darrayPopAt    (void* array, u64 index, void* dest);
-void* _darrayInsertAt (void* array, u64 index, void* valueptr);
+void* _darrayPopAt    (void* darray, u64 index, void* dest);
+void* _darrayInsertAt (void* darray, u64 index, void* valueptr);
 
-#define DARRAY_DEFAULT_CAPACITY 1
-#define DARRAY_RESIZE_FACTOR    2
+#define DARRAY_FILED_DEFAULT_CAPACITY 1
+#define DARRAY_FILED_RESIZE_FACTOR    2
 
-#if DARRAY_DEBUG  == 0
-#define DARRAYCREATE(type) \
-  _darrayCreate(DARRAY_DEFAULT_CAPACITY, sizeof(type))
+#if LOG_MEMORY_ENABLED == 1
+#define DARRAY_CREATE(type) \
+  _darrayCreate(DARRAY_FILED_DEFAULT_CAPACITY, sizeof(type))
 
-#define DARRAYRESERVE(type, capacity) \
+#define DARRAY_RESERVE(type, capacity) \
 _darrayCreate(capacity, sizeof(type))
 
-#define DARRAYDESTROY(array) \
+#define DARRAY_DESTROY(array) \
     _darrayDestroy(array);  \
 
-#define DARRAYPUSH(array, value) \
+#define DARRAY_PUSH(array, value) \
 {                                 \
   typeof(value) temp = value;       \
   array = _darrayPush(array, &temp); \
 }                                   \
 
-#define DARRAYPOP(array, valuePtr) \
+#define DARRAY_POP(array, valuePtr) \
 _darrayPop(array, valuePtr)
 
-#define DARRAYINSERTAT(array, index, value)         \
+#define DARRAY_INSERTAT(array, index, value)         \
 {                                               \
   typeof(value) temp = value;                 \
   array = _darrayInsertAt(array, index, &temp);\
 }
 
-#define DARRAYPOPAT(array, index, valuePtr) \
+#define DARRAY_POPAT(array, index, valuePtr) \
 _darrayPopAt(array, index, valuePtr)
 
-#define DARRAYCLEAR(array) \
-_darrayFieldSet(array, DARRAY_LENGTH, 0)
+#define DARRAY_CLEAR(array) \
+_darrayFieldSet(array, DARRAY_FILED_LENGTH, 0)
 
-#define DARRAYLENGTHSET(array, value) \
-_darrayFieldSet(array, DARRAY_LENGTH, value)
+#define DARRAY_LENGTHSET(array, value) \
+_darrayFieldSet(array, DARRAY_FILED_LENGTH, value)
 
-#define DARRAYCAPACITYSET(array, value) \
-_darrayFieldSet(array, DARRAY_CAPACITY, value)
+#define DARRAY_CAPACITYSET(array, value) \
+_darrayFieldSet(array, DARRAY_FILED_CAPACITY, value)
 
-#define DARRAYCAPACITY(array) \
-_darrayFieldGet(array, DARRAY_CAPACITY)
+#define DARRAY_CAPACITY(array) \
+_darrayFieldGet(array, DARRAY_FILED_CAPACITY)
 
-#define DARRAYLENGTH(array) \
-_darrayFieldGet(array, DARRAY_LENGTH)
+#define DARRAY_LENGTH(array) \
+_darrayFieldGet(array, DARRAY_FILED_LENGTH)
 
-#define DARRAYSTRIDE(array) \
-_darrayFieldGet(array , DARRAY_STRIDE)
+#define DARRAY_STRIDE(array) \
+_darrayFieldGet(array , DARRAY_FILED_STRIDE)
 
 #else
-#define DARRAYCREATE(type) \
-  _darrayCreate(DARRAY_DEFAULT_CAPACITY, sizeof(type));\
-  UREPORT(LOG_DEBUG, "_darrayCreate called")
+#define DARRAY_CREATE(type) \
+  _darrayCreate(DARRAY_FILED_DEFAULT_CAPACITY, sizeof(type));\
+  MINFO("func : %s",__FUNCTION__)
 
-#define DARRAYRESERVE(type, capacity) \
-_darrayCreate(capacity, sizeof(type))\
-  UREPORT(LOG_DEBUG, "_darrayReserve called")
+#define DARRAY_RESERVE(type, capacity) \
+_darrayCreate(capacity, sizeof(type));\
+  MINFO("func : %s",__FUNCTION__)
 
-#define DARRAYDESTROY(array) \
+#define DARRAY_DESTROY(array) \
     _darrayDestroy(array);  \
-    UREPORT(LOG_DEBUG, "_darrayDestrsoy called")
+  MINFO("func : %s",__FUNCTION__)
 
-#define DARRAYPUSH(array, value) \
+#define DARRAY_PUSH(array, value) \
 {                                 \
   typeof(value) temp = value;       \
   array = _darrayPush(array, &temp); \
-  UREPORT(LOG_DEBUG ,"_darrayPush called"); \
-}                                   \
+  MINFO("func : %s",__FUNCTION__);\
+}
 
-#define DARRAYPOP(array, valuePtr) \
-_darrayPop(array, valuePtr)\
-  UREPORT(LOG_DEBUG ,"_darrayPop called")     \
+#define DARRAY_POP(array, valuePtr) \
+_darrayPop(array, valuePtr);\
+  MINFO("func : %s",__FUNCTION__)
 
-#define DARRAYINSERTAT(array, index, value)         \
+#define DARRAY_INSERTAT(array, index, value)         \
 {                                               \
   typeof(value) temp = value;                 \
   array = _darrayInsertAt(array, index, &temp);\
-  UREPORT(LOG_DEBUG ,"_darrayInsertAt called");     \
+  MINFO("func : %s",__FUNCTION__);\
 }
 
-#define DARRAYPOPAT(array, index, valuePtr) \
+#define DARRAY_POPAT(array, index, valuePtr) \
 _darrayPopAt(array, index, valuePtr);\
-  UREPORT(LOG_DEBUG ,"_darrayPopAt called")
+  MINFO("func : %s",__FUNCTION__)
 
-#define DARRAYCLEAR(array) \
-_darrayFieldSet(array, DARRAY_LENGTH, 0);\
-  UREPORT(LOG_DEBUG ,"_darrayClear called")
+#define DARRAY_CLEAR(array) \
+_darrayFieldSet(array, DARRAY_FILED_LENGTH, 0);\
+  MINFO("func : %s",__FUNCTION__)
 
-#define DARRAYLENGTHSET(array, value) \
-_darrayFieldSet(array, DARRAY_LENGTH, value);\
-  UREPORT(LOG_DEBUG ,"_darrayLengthSet called")
+#define DARRAY_LENGTHSET(array, value) \
+_darrayFieldSet(array, DARRAY_FILED_LENGTH, value);\
+  MINFO("func : %s",__FUNCTION__)
 
-#define DARRAYCAPACITY(array) \
-_darrayFieldGet(array, DARRAY_CAPACITY);\
-  UREPORT(LOG_DEBUG ,"_darrayCapacity called")
+#define DARRAY_CAPACITY(array) \
+_darrayFieldGet(array, DARRAY_FILED_CAPACITY)\
 
-#define DARRAYLENGTH(array) \
-_darrayFieldGet(array, DARRAY_LENGTH);\
-  UREPORT(LOG_DEBUG ,"_darrayLength called"); 
+#define DARRAY_LENGTH(array) \
+_darrayFieldGet(array, DARRAY_FILED_LENGTH)\
 
-#define DARRAYSTRIDE(array) \
-_darrayFieldGet(array , DARRAY_STRIDE);\
-  UREPORT(LOG_DEBUG ,"_darrayStride called"); 
+#define DARRAY_STRIDE(array) \
+_darrayFieldGet(array , DARRAY_FILED_STRIDE)\
 
 #endif
 

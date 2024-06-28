@@ -1,13 +1,15 @@
 #include "fence.h"
 
-#include  "utils.h"
+#include  "rendererutils.h"
 #include  "defines.h"
+#include  "core/logger.h"
 #include <vulkan/vulkan_core.h>
 
 
 VkResult  vulkanFenceCreate(VulkanContext* context,
                             u8  createSignaled,
                             VulkanFence* outFence){
+  TRACEFUNCTION;
   VkResult result = {0};
   // make sure to signal the fence 
   outFence->isSignaled = createSignaled;
@@ -21,13 +23,14 @@ VkResult  vulkanFenceCreate(VulkanContext* context,
                           context->allocator, 
                           &outFence->handle);
   VK_CHECK2(result, "FAILED TO CREATE FENCE");
-  UINFO("SCCESFULLY CREATED FENCE");
+  KINFO("SCCESFULLY CREATED FENCE");
 
   return result;
 }
 
 VkResult  vulkanFenceDestroy(VulkanContext* context, 
                              VulkanFence* fence){
+  TRACEFUNCTION;
   if(fence->handle){
     vkDestroyFence(context->device.logicalDevice, fence->handle, context->allocator);
   }
@@ -44,13 +47,14 @@ u8  vulkanFenceWait(VulkanContext* context, VulkanFence* fence, u64 timeoutNS){
     VK_CHECK_FENCE(result);
   }else{
     // if alreasdy singaled NO NOT WAIT 
-    UINFO("FENCE WAS SUCCESFULLY EXECUTED");
+    KINFO("FENCE WAS SUCCESFULLY EXECUTED");
      return true;
   }
   return false;
 }
 
 VkResult  vulkanFenceReset(VulkanContext* context, VulkanFence* fence){
+  TRACEFUNCTION;
   VkResult result = {0};
   if(fence->isSignaled){
     result  = vkResetFences(context->device.logicalDevice, 1, &fence->handle);

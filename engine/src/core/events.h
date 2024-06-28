@@ -47,7 +47,7 @@ typedef enum SystemEventCode{
 
 typedef u8(*pfnOnEvent)(u16 code , void* sender  , void* listener , EventContext data);
 
-u8    initializeEvents();
+bool    initializeEvents(u64* memoryRequirement, void* state);
 void  shutdownEvents  ();
 
 u8    eventRegister   (u16 code, void* listener , pfnOnEvent onEvent);

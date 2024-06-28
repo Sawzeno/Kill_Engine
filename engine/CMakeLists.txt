@@ -8,9 +8,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror=vla")
 
 message(STATUS "Compiler being used: ${CMAKE_C_COMPILER}")
 
-# Include the headers from the includes directory
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/includes)
-
 # Automatically add all source files from the src directory
 file(GLOB_RECURSE SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
 

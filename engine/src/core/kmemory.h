@@ -2,7 +2,7 @@
 
 #include  "defines.h"
 
-#define MEMORY_TAG_MAX_TAGS 17
+#define MEMORY_TAG_MAX_TAGS 18
 
 typedef enum Memory_tag{
   MEMORY_TAG_UNKNOWN,
@@ -25,8 +25,9 @@ typedef enum Memory_tag{
   MEMORY_TAG_LINEAR_ALLOCATOR,
 }Memory_tag;
 
-void initializeMemory();
-void shutdownMemory();
+
+void  initializeMemory(u64*  memoryRequirement, void* state);
+void  shutdownMemory();
 
 void* kallocate(u64 size , Memory_tag tag);
 
@@ -39,3 +40,5 @@ void* kcopyMemory(void* dest , const void* source , u64 size, const char* func);
 void* ksetMemory(void* dest , i32 value , u64 size);
 
 char* getMemoryUsage();
+
+u64   getMemoryAllocCount();

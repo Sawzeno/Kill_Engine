@@ -1,5 +1,6 @@
-#include  "utils.h"
+#include  "rendererutils.h"
 #include  "containers/darray.h"
+#include  "core/logger.h"
 #include  "defines.h"
 
 #include  <string.h>
@@ -102,15 +103,14 @@ u8 vulkanResultIsSuccess(VkResult result) {
 
 
 void printAvailableExtenesions(){
-
   u32 extensionCount = 0;
   vkEnumerateInstanceExtensionProperties(NULL, &extensionCount, NULL);
   VkExtensionProperties* extensions = (VkExtensionProperties*)malloc(extensionCount * sizeof(VkExtensionProperties));
   vkEnumerateInstanceExtensionProperties(NULL, &extensionCount, extensions);
 
-  UTRACE("Available Vulkan extensions:");
+  KTRACE("Available Vulkan extensions:");
   for (u32 i = 0; i < extensionCount; ++i) {
-    UTRACE("%s", extensions[i].extensionName);
+    KTRACE("%s", extensions[i].extensionName);
   }
 }
 
@@ -121,9 +121,9 @@ void printAvailableLayers() {
   VkLayerProperties* layers = (VkLayerProperties*)malloc(layerCount * sizeof(VkLayerProperties));
   vkEnumerateInstanceLayerProperties(&layerCount, layers);
 
-  UTRACE("Available Vulkan instance layers:");
+  KTRACE("Available Vulkan instance layers:");
   for (u32 i = 0; i < layerCount; ++i) {
-    UTRACE("%s", layers[i].layerName);
+    KTRACE("%s", layers[i].layerName);
   }
 }
 
@@ -139,25 +139,25 @@ VkResult checkAvailableExtensions(const char** requiredExtensions) {
   result = vkEnumerateInstanceExtensionProperties(NULL, &extensionCount, availableExtensions);
   VK_CHECK2(result, "failed to get the names of extension properties");
 
-  for (u32 i = 0; i < DARRAYLENGTH(requiredExtensions) ; ++i) {
+  for (u32 i = 0; i < DARRAY_LENGTH(requiredExtensions) ; ++i) {
     u8 found = false;
     const char* requiredExtension = requiredExtensions[i];
     for (u32 j = 0; j < extensionCount; ++j) {
       if (strcmp(requiredExtension, availableExtensions[j].extensionName) == 0) {
-        UTRACE("FOUND EXTENSION: %s", requiredExtension);
+        KTRACE("FOUND EXTENSION: %s", requiredExtension);
         found = true;
         break;
       }
     }
     if (!found) {
-      UFATAL("Required extension is missing: %s", requiredExtension);
+      KFATAL("Required extension is missing: %s", requiredExtension);
       free(availableExtensions);
       return !VK_SUCCESS;
     }
   }
 
-  UINFO("ALL REQUIRED EXTENSIONS ARE PRESENT");
-  DARRAYDESTROY(availableExtensions);
+  KINFO("ALL REQUIRED EXTENSIONS ARE PRESENT");
+  DARRAY_DESTROY(availableExtensions);
   return VK_SUCCESS;
 }
 
@@ -172,23 +172,23 @@ VkResult checkAvailableLayers(const char** requiredLayers){
   result = vkEnumerateInstanceLayerProperties(&layerCount, availableLayers);
   VK_CHECK2(result, "failed to names of layers");
 
-  for(u32 i = 0; i < DARRAYLENGTH(requiredLayers); ++i){
+  for(u32 i = 0; i < DARRAY_LENGTH(requiredLayers); ++i){
     u8 found = false;
     const char* layer = requiredLayers[i];
     for( u32 j= 0; j < layerCount; ++j ){
       if(strcmp(layer, availableLayers[j].layerName) == 0){
-        UTRACE("FOUND LAYER : %s",layer);
+        KTRACE("FOUND LAYER : %s",layer);
         found = true;
         break;
       }
     }
     if(!found){
-      UFATAL("%s is missing", layer);
+      KFATAL("%s is missing", layer);
       return !VK_SUCCESS;
     }
   }
-  UINFO("ALL REQUIRED LAYERS ARE PRESENT");
-  DARRAYDESTROY(availableLayers);
+  KINFO("ALL REQUIRED LAYERS ARE PRESENT");
+  DARRAY_DESTROY(availableLayers);
   return VK_SUCCESS;
 }
 
@@ -210,7 +210,7 @@ void logVulkanCommandBuffer(const VulkanCommandBuffer* commandBuffer) {
   UINFO("Vulkan Command Buffer Details:");
   UINFO("  Handle: %p", (void*)commandBuffer->handle);
   // Print state if needed
-  // UINFO("  State: ...");
+  // KINFO("  State: ...");
 }
 
 void logVulkanRenderPass(const VulkanRenderPass* renderPass) {
@@ -221,7 +221,7 @@ void logVulkanRenderPass(const VulkanRenderPass* renderPass) {
   UINFO("  Depth: %f", renderPass->depth);
   UINFO("  Stencil: %u", renderPass->stencil);
   // Print state if needed
-  // UINFO("  State: ...");
+  // KINFO("  State: ...");
 }
 
 void logVulkanImage(const VulkanImage* image) {
@@ -255,8 +255,8 @@ void logVulkanSwapchain(const VulkanSwapchain* swapchain) {
 }
 
 void logVulkanSwapchainSupportInfo(const VulkanSwapchainSupportInfo* supportInfo) {
-  UINFO("Vulkan Swapchain Support Info Details:");
-  UINFO("  Capabilities: ..."); 
+  KINFO("Vulkan Swapchain Support Info Details:");
+  KINFO("  Capabilities: ..."); 
   for (u32 i = 0; i < supportInfo->formatCount; ++i) {
     UINFO("  Format[%u]: ...", i); 
   }

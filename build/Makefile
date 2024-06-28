@@ -156,30 +156,43 @@ darray.test/fast:
 .PHONY : darray.test/fast
 
 #=============================================================================
-# Target rules for targets named kmemory.test
+# Target rules for targets named filesystem.test
 
 # Build rule for target.
-kmemory.test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 kmemory.test
-.PHONY : kmemory.test
+filesystem.test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 filesystem.test
+.PHONY : filesystem.test
 
 # fast build rule for target.
-kmemory.test/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/kmemory.test.dir/build.make tests/CMakeFiles/kmemory.test.dir/build
-.PHONY : kmemory.test/fast
+filesystem.test/fast:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/filesystem.test.dir/build.make tests/CMakeFiles/filesystem.test.dir/build
+.PHONY : filesystem.test/fast
 
 #=============================================================================
-# Target rules for targets named linearallocatortests.test
+# Target rules for targets named linearallocator.test
 
 # Build rule for target.
-linearallocatortests.test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 linearallocatortests.test
-.PHONY : linearallocatortests.test
+linearallocator.test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 linearallocator.test
+.PHONY : linearallocator.test
 
 # fast build rule for target.
-linearallocatortests.test/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/linearallocatortests.test.dir/build.make tests/CMakeFiles/linearallocatortests.test.dir/build
-.PHONY : linearallocatortests.test/fast
+linearallocator.test/fast:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/linearallocator.test.dir/build.make tests/CMakeFiles/linearallocator.test.dir/build
+.PHONY : linearallocator.test/fast
+
+#=============================================================================
+# Target rules for targets named logger.test
+
+# Build rule for target.
+logger.test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 logger.test
+.PHONY : logger.test
+
+# fast build rule for target.
+logger.test/fast:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/logger.test.dir/build.make tests/CMakeFiles/logger.test.dir/build
+.PHONY : logger.test/fast
 
 # Help Target
 help:
@@ -191,8 +204,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... darray.test"
 	@echo "... engine"
-	@echo "... kmemory.test"
-	@echo "... linearallocatortests.test"
+	@echo "... filesystem.test"
+	@echo "... linearallocator.test"
+	@echo "... logger.test"
 	@echo "... testbed"
 .PHONY : help
 

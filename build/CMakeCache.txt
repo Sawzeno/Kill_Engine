@@ -28,7 +28,7 @@ CMAKE_BUILD_TYPE:STRING=
 CMAKE_COLOR_MAKEFILE:BOOL=ON
 
 //CXX compiler
-CMAKE_CXX_COMPILER:STRING=/usr/bin/c++
+CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -54,7 +54,7 @@ CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
 CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 
 //C compiler
-CMAKE_C_COMPILER:STRING=/usr/bin/cc
+CMAKE_C_COMPILER:FILEPATH=/usr/bin/cc
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -245,29 +245,20 @@ KILL_ENGINE_SOURCE_DIR:STATIC=/home/gon/Developer/Kill_Engine
 //Enable debug logs
 LOG_DEBUG:BOOL=ON
 
-//Enable debug logs
-LOG_DEBUG_ENABLED:BOOL=ON
+//Enable files logs
+LOG_FILES:BOOL=ON
 
 //Enable info  logs
 LOG_INFO:BOOL=ON
 
-//Enable info logs
-LOG_INFO_ENABLED:BOOL=ON
-
 //Enable debug logs
-LOG_TEST:BOOL=ON
+LOG_TEST:BOOL=OFF
 
 //Enable trace logs
 LOG_TRACE:BOOL=ON
 
-//Enable trace logs
-LOG_TRACE_ENABLED:BOOL=ON
-
 //Enable warn  logs
 LOG_WARN:BOOL=ON
-
-//Enable warning logs
-LOG_WARN_ENABLED:BOOL=ON
 
 //Arguments to supply to pkg-config
 PKG_CONFIG_ARGN:STRING=
@@ -312,10 +303,10 @@ X11_X11_xcb_INCLUDE_PATH:PATH=/usr/include
 X11_X11_xcb_LIB:FILEPATH=/usr/lib/libX11-xcb.so
 
 //Path to a file.
-X11_XRes_INCLUDE_PATH:PATH=/usr/include
+X11_XRes_INCLUDE_PATH:PATH=X11_XRes_INCLUDE_PATH-NOTFOUND
 
 //Path to a library.
-X11_XRes_LIB:FILEPATH=/usr/lib/libXRes.so
+X11_XRes_LIB:FILEPATH=X11_XRes_LIB-NOTFOUND
 
 //Path to a file.
 X11_XShm_INCLUDE_PATH:PATH=/usr/include
@@ -704,9 +695,6 @@ engine_LIB_DEPENDS:STATIC=general;/lib/libvulkan.so;general;/usr/lib/libSM.so;ge
 //Value Computed by CMake
 engine_SOURCE_DIR:STATIC=/home/gon/Developer/Kill_Engine/engine
 
-//The directory containing a CMake configuration file for glfw3.
-glfw3_DIR:PATH=/usr/lib/cmake/glfw3
-
 //Path to a library.
 pkgcfg_lib_PKG_FONTCONFIG_fontconfig:FILEPATH=/usr/lib/libfontconfig.so
 
@@ -750,7 +738,7 @@ CMAKE_CACHE_MAJOR_VERSION:INTERNAL=3
 //Minor version of cmake used to create the current loaded cache
 CMAKE_CACHE_MINOR_VERSION:INTERNAL=29
 //Patch version of cmake used to create the current loaded cache
-CMAKE_CACHE_PATCH_VERSION:INTERNAL=5
+CMAKE_CACHE_PATCH_VERSION:INTERNAL=6
 //ADVANCED property for variable: CMAKE_COLOR_MAKEFILE
 CMAKE_COLOR_MAKEFILE-ADVANCED:INTERNAL=1
 //Path to CMake executable.
@@ -821,8 +809,6 @@ CMAKE_GENERATOR_TOOLSET:INTERNAL=
 CMAKE_HAVE_CONNECT:INTERNAL=1
 //Have function gethostbyname
 CMAKE_HAVE_GETHOSTBYNAME:INTERNAL=1
-//Test CMAKE_HAVE_LIBC_PTHREAD
-CMAKE_HAVE_LIBC_PTHREAD:INTERNAL=1
 //Have function remove
 CMAKE_HAVE_REMOVE:INTERNAL=1
 //Have function shmat
@@ -898,8 +884,6 @@ CMAKE_UNAME:INTERNAL=/usr/bin/uname
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding PkgConfig
 FIND_PACKAGE_MESSAGE_DETAILS_PkgConfig:INTERNAL=[/usr/bin/pkg-config][v2.1.1()]
-//Details about finding Threads
-FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //Details about finding Vulkan
 FIND_PACKAGE_MESSAGE_DETAILS_Vulkan:INTERNAL=[/lib/libvulkan.so][/usr/include][cfound components: glslc glslangValidator ][v1.3.285()]
 //Details about finding X11
@@ -1263,7 +1247,7 @@ XCB_STATIC_LIBS:INTERNAL=
 XCB_STATIC_LIBS_L:INTERNAL=
 XCB_STATIC_LIBS_OTHER:INTERNAL=
 XCB_STATIC_LIBS_PATHS:INTERNAL=
-XCB_VERSION:INTERNAL=1.16.1
+XCB_VERSION:INTERNAL=1.17.0
 XCB_xcb_INCLUDEDIR:INTERNAL=
 XCB_xcb_LIBDIR:INTERNAL=
 XCB_xcb_PREFIX:INTERNAL=

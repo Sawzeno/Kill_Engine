@@ -1,11 +1,13 @@
 #include  "image.h"
-#include  "utils.h"
+#include  "rendererutils.h"
+#include  "core/logger.h"
 #include "renderer/vulkantypes.h"
 #include <vulkan/vulkan_core.h>
 
 VkResult  vulkanImageCreate(VulkanContext*      context,
                             VkImageType         type,
-                            u32 width, u32      height,
+                            u32                 width,
+                            u32                 height,
                             VkFormat            format,
                             VkImageTiling       tiling,
                             VkImageUsageFlags   usage,
@@ -14,6 +16,7 @@ VkResult  vulkanImageCreate(VulkanContext*      context,
                             VkImageAspectFlags  viewAspectFlags,
                             VulkanImage*        outImage)
 { //copy params
+  TRACEFUNCTION;
   outImage->width = width;
   outImage->height=height;
 
@@ -32,7 +35,7 @@ VkResult  vulkanImageCreate(VulkanContext*      context,
   createInfo.samples            = VK_SAMPLE_COUNT_1_BIT;
   createInfo.sharingMode        = VK_SHARING_MODE_EXCLUSIVE;
 
-  UINFO("DEPTH VIEW IMAGE CREATED");
+  KINFO("DEPTH VIEW IMAGE CREATED");
   VkResult result = vkCreateImage(context->device.logicalDevice,&createInfo , context->allocator, &outImage->handle);
   if(result != VK_SUCCESS){
     vkResultToString(result);
@@ -40,13 +43,13 @@ VkResult  vulkanImageCreate(VulkanContext*      context,
   }
 
   VkMemoryRequirements memoryRequirements;
-  UINFO("GETTING IMAGE MEMORY REQUIREMENTS");
+  KINFO("GETTING IMAGE MEMORY REQUIREMENTS");
   vkGetImageMemoryRequirements(context->device.logicalDevice, outImage->handle, &memoryRequirements);
 
   //                        function pointer
   i32 memoryType  = context->findMemoryIndex(memoryRequirements.memoryTypeBits, memoryFlags);
   if(memoryType == -1){
-    UERROR("REQUIRED MEMORY TYPE NOT FOUND, IMAGE NOT VALID");
+    KERROR("REQUIRED MEMORY TYPE NOT FOUND, IMAGE NOT VALID");
   }
 
   VkMemoryAllocateInfo memInfo  = {VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO};
@@ -69,7 +72,7 @@ VkResult  vulkanImageCreate(VulkanContext*      context,
     outImage->view  = 0;
     result = vulkanImageViewCreate(context, format, outImage, viewAspectFlags);
     VK_CHECK2(result, "FAILED TO CREATE IMAGE VIEW");
-    UINFO("IMAGE VIEW CREATED SUCCESFULLY!");
+    KINFO("IMAGE VIEW CREATED SUCCESFULLY!");
     return result;
   }
   return result;
@@ -80,6 +83,7 @@ VkResult  vulkanImageViewCreate(VulkanContext* context,
                                 VulkanImage* image,
                                 VkImageAspectFlags aspectFlags)
 {
+  TRACEFUNCTION;
   VkImageViewCreateInfo createInfo  = {VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO};
   createInfo.image                          = image->handle;
   createInfo.viewType                       = VK_IMAGE_VIEW_TYPE_2D ;

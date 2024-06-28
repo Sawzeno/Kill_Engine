@@ -3,19 +3,22 @@
 
 testbed/CMakeFiles/testbed.dir/src/entry.c.o: /home/gon/Developer/Kill_Engine/testbed/src/entry.c \
   /home/gon/Developer/Kill_Engine/engine/src/core/application.h \
-  /home/gon/Developer/Kill_Engine/engine/src/core/kmemory.h \
+  /home/gon/Developer/Kill_Engine/engine/src/core/logger.h \
   /home/gon/Developer/Kill_Engine/engine/src/defines.h \
   /home/gon/Developer/Kill_Engine/engine/src/entry.h \
   /home/gon/Developer/Kill_Engine/engine/src/gametypes.h \
   /home/gon/Developer/Kill_Engine/testbed/src/game.h \
   /usr/include/alloca.h \
+  /usr/include/asm-generic/errno-base.h \
+  /usr/include/asm-generic/errno.h \
+  /usr/include/asm/errno.h \
   /usr/include/bits/atomic_wide_counter.h \
   /usr/include/bits/byteswap.h \
   /usr/include/bits/confname.h \
-  /usr/include/bits/dlfcn.h \
   /usr/include/bits/endian.h \
   /usr/include/bits/endianness.h \
   /usr/include/bits/environments.h \
+  /usr/include/bits/errno.h \
   /usr/include/bits/error.h \
   /usr/include/bits/floatn-common.h \
   /usr/include/bits/floatn.h \
@@ -65,15 +68,15 @@ testbed/CMakeFiles/testbed.dir/src/entry.c.o: /home/gon/Developer/Kill_Engine/te
   /usr/include/bits/waitstatus.h \
   /usr/include/bits/wchar.h \
   /usr/include/bits/wordsize.h \
-  /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/errno.h \
   /usr/include/error.h \
-  /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
   /usr/include/gnu/stubs-64.h \
   /usr/include/gnu/stubs.h \
   /usr/include/inttypes.h \
+  /usr/include/linux/errno.h \
   /usr/include/stdc-predef.h \
   /usr/include/stdint.h \
   /usr/include/stdio.h \
@@ -93,17 +96,22 @@ testbed/CMakeFiles/testbed.dir/src/entry.c.o: /home/gon/Developer/Kill_Engine/te
 testbed/CMakeFiles/testbed.dir/src/game.c.o: /home/gon/Developer/Kill_Engine/testbed/src/game.c \
   /home/gon/Developer/Kill_Engine/engine/src/core/application.h \
   /home/gon/Developer/Kill_Engine/engine/src/core/input.h \
+  /home/gon/Developer/Kill_Engine/engine/src/core/kmemory.h \
+  /home/gon/Developer/Kill_Engine/engine/src/core/logger.h \
   /home/gon/Developer/Kill_Engine/engine/src/defines.h \
   /home/gon/Developer/Kill_Engine/engine/src/gametypes.h \
   /home/gon/Developer/Kill_Engine/testbed/src/game.h \
   /usr/include/alloca.h \
+  /usr/include/asm-generic/errno-base.h \
+  /usr/include/asm-generic/errno.h \
+  /usr/include/asm/errno.h \
   /usr/include/bits/atomic_wide_counter.h \
   /usr/include/bits/byteswap.h \
   /usr/include/bits/confname.h \
-  /usr/include/bits/dlfcn.h \
   /usr/include/bits/endian.h \
   /usr/include/bits/endianness.h \
   /usr/include/bits/environments.h \
+  /usr/include/bits/errno.h \
   /usr/include/bits/error.h \
   /usr/include/bits/floatn-common.h \
   /usr/include/bits/floatn.h \
@@ -153,15 +161,15 @@ testbed/CMakeFiles/testbed.dir/src/game.c.o: /home/gon/Developer/Kill_Engine/tes
   /usr/include/bits/waitstatus.h \
   /usr/include/bits/wchar.h \
   /usr/include/bits/wordsize.h \
-  /usr/include/dlfcn.h \
   /usr/include/endian.h \
+  /usr/include/errno.h \
   /usr/include/error.h \
-  /usr/include/execinfo.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
   /usr/include/gnu/stubs-64.h \
   /usr/include/gnu/stubs.h \
   /usr/include/inttypes.h \
+  /usr/include/linux/errno.h \
   /usr/include/stdc-predef.h \
   /usr/include/stdint.h \
   /usr/include/stdio.h \
@@ -193,6 +201,10 @@ testbed/CMakeFiles/testbed.dir/src/game.c.o: /home/gon/Developer/Kill_Engine/tes
 
 /usr/include/stdint.h:
 
+/usr/lib/gcc/x86_64-pc-linux-gnu/14.1.1/include/stdbool.h:
+
+/usr/include/linux/errno.h:
+
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.1.1/include/stddef.h:
 
 /usr/include/inttypes.h:
@@ -203,12 +215,6 @@ testbed/CMakeFiles/testbed.dir/src/game.c.o: /home/gon/Developer/Kill_Engine/tes
 
 /usr/include/features-time64.h:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/14.1.1/include/stdbool.h:
-
-/usr/include/execinfo.h:
-
-/usr/include/dlfcn.h:
-
 /usr/include/bits/wordsize.h:
 
 /usr/include/bits/waitstatus.h:
@@ -217,11 +223,13 @@ testbed/CMakeFiles/testbed.dir/src/game.c.o: /home/gon/Developer/Kill_Engine/tes
 
 /usr/include/bits/unistd_ext.h:
 
-/usr/include/bits/stdint-least.h:
+/usr/include/bits/uintn-identity.h:
 
-/usr/include/alloca.h:
+/usr/include/bits/typesizes.h:
 
-/usr/include/bits/stdint-intn.h:
+/usr/include/stdio.h:
+
+/usr/include/bits/types/timer_t.h:
 
 /usr/include/bits/select.h:
 
@@ -253,6 +261,10 @@ testbed/CMakeFiles/testbed.dir/src/game.c.o: /home/gon/Developer/Kill_Engine/tes
 
 /usr/include/bits/floatn-common.h:
 
+/usr/include/bits/error.h:
+
+/usr/include/bits/errno.h:
+
 /usr/include/sys/select.h:
 
 /usr/include/bits/environments.h:
@@ -260,6 +272,8 @@ testbed/CMakeFiles/testbed.dir/src/game.c.o: /home/gon/Developer/Kill_Engine/tes
 /usr/include/bits/endianness.h:
 
 /home/gon/Developer/Kill_Engine/engine/src/entry.h:
+
+/usr/include/bits/confname.h:
 
 /home/gon/Developer/Kill_Engine/testbed/src/entry.c:
 
@@ -271,33 +285,17 @@ testbed/CMakeFiles/testbed.dir/src/game.c.o: /home/gon/Developer/Kill_Engine/tes
 
 /usr/include/bits/time64.h:
 
-/usr/include/bits/types/__mbstate_t.h:
-
-/usr/include/bits/confname.h:
-
-/usr/include/stdio.h:
-
-/usr/include/bits/types/timer_t.h:
-
-/usr/include/bits/error.h:
-
-/usr/include/bits/dlfcn.h:
-
-/home/gon/Developer/Kill_Engine/engine/src/gametypes.h:
-
-/usr/include/endian.h:
-
-/usr/include/bits/types/cookie_io_functions_t.h:
-
-/usr/include/bits/stdint-uintn.h:
+/home/gon/Developer/Kill_Engine/engine/src/core/kmemory.h:
 
 /usr/include/gnu/stubs.h:
-
-/home/gon/Developer/Kill_Engine/engine/src/core/kmemory.h:
 
 /home/gon/Developer/Kill_Engine/engine/src/core/application.h:
 
 /usr/include/bits/types/sigset_t.h:
+
+/home/gon/Developer/Kill_Engine/engine/src/gametypes.h:
+
+/home/gon/Developer/Kill_Engine/engine/src/core/logger.h:
 
 /usr/include/bits/getopt_posix.h:
 
@@ -305,7 +303,15 @@ testbed/CMakeFiles/testbed.dir/src/game.c.o: /home/gon/Developer/Kill_Engine/tes
 
 /home/gon/Developer/Kill_Engine/engine/src/defines.h:
 
+/usr/include/asm-generic/errno-base.h:
+
+/usr/include/asm-generic/errno.h:
+
+/usr/include/bits/types/__fpos_t.h:
+
 /usr/include/bits/posix_opt.h:
+
+/usr/include/asm/errno.h:
 
 /usr/include/bits/timesize.h:
 
@@ -316,6 +322,18 @@ testbed/CMakeFiles/testbed.dir/src/game.c.o: /home/gon/Developer/Kill_Engine/tes
 /usr/include/sys/types.h:
 
 /usr/include/bits/types/struct_itimerspec.h:
+
+/usr/include/alloca.h:
+
+/usr/include/bits/stdint-least.h:
+
+/usr/include/bits/stdint-intn.h:
+
+/usr/include/endian.h:
+
+/usr/include/bits/types/cookie_io_functions_t.h:
+
+/usr/include/bits/stdint-uintn.h:
 
 /usr/include/bits/types/struct_timeval.h:
 
@@ -333,15 +351,13 @@ testbed/CMakeFiles/testbed.dir/src/game.c.o: /home/gon/Developer/Kill_Engine/tes
 
 /usr/include/bits/types/__FILE.h:
 
-/usr/include/bits/types/__fpos_t.h:
-
-/usr/include/bits/typesizes.h:
-
-/usr/include/bits/uintn-identity.h:
-
 /usr/include/bits/types/__locale_t.h:
 
+/usr/include/bits/types/__mbstate_t.h:
+
 /usr/include/bits/types/clock_t.h:
+
+/usr/include/errno.h:
 
 /usr/include/bits/atomic_wide_counter.h:
 

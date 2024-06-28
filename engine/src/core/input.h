@@ -141,17 +141,19 @@ typedef enum keys {
 } keys;
 
 //Input setup
-void  initializeInput   ();
+bool  initializeInput    (u64* memoryRequirement, void* state);
 void  shutdownInput     ();
 void  inputUpdate       (f64 deltaTime);
 
 //Keyboard input
+void  testInput(char c);
 u8    inputIsKeyUp      (keys key);
 u8    inputIsKeyDown    (keys key);
 u8    inputWasKeyUp     (keys key);
 u8    inputWasKeyDown   (keys key);
 
 void  inputProcessKey   (keys key ,u8 pressed);
+
 
 //Mouse Input
 u8    inputIsMouseUp    (buttons button);

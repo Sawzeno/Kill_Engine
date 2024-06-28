@@ -1,8 +1,12 @@
 #include  "linearallocator.h"
 #include  "defines.h"
+#include  "core/logger.h"
 #include  "core/kmemory.h"
 
 void linearAllocatorCreate(u64 totalSize, void* memory, LinearAllocator* outAllocator){
+  TRACEMEMORY;
+  MDEBUG("totalSize : %" PRIu64 " memory : %p outAllocator : %p", totalSize,
+          memory, outAllocator);
   if(outAllocator){
     outAllocator->totalSize = totalSize;
     outAllocator->allocated = 0;
@@ -16,6 +20,8 @@ void linearAllocatorCreate(u64 totalSize, void* memory, LinearAllocator* outAllo
 }
 
 void linearAllocatorDestroy(LinearAllocator* allocator){
+  TRACEMEMORY;
+  MDEBUG("allocator : %p",allocator);
   if(allocator){
     allocator->allocated   = 0;
     if(allocator->ownsMemory && allocator->memory){
@@ -28,22 +34,25 @@ void linearAllocatorDestroy(LinearAllocator* allocator){
 }
 
 void* linearAllocatorAllocate(LinearAllocator* allocator, u64 size){
+  TRACEMEMORY;
+  MDEBUG("allocator : %p size :"PRIu64"",allocator,size);
   if(allocator && allocator->memory){
     if(allocator->allocated + size > allocator->totalSize){
       u64 remaining = allocator->totalSize - allocator->allocated;
-      UFATAL("linear allocator tried to allcoate %llu bytes, only %llu remaining", size, remaining);
+      MDEBUG("hinear allocator tried to allcoate %llu bytes, only %llu remaining", size, remaining);
       return NULL;
     }
     void* block = allocator->memory + allocator->allocated;
     allocator->allocated  += size;
     return block;
   }
-
-  UERROR("LINEAR ALLOCATOR FAILED , PROBABLY NOT INITALIZED");
+  KERROR("LINEAR ALLOCATOR FAILED , PROBABLY NOT INITALIZED");
   return NULL;
 }
 
 void linearAllocatorFreeAll(LinearAllocator* allocator){
+  TRACEMEMORY;
+  MDEBUG("allocator : %p",allocator);
   if(allocator && allocator->memory){
     allocator->allocated= 0;
     kzeroMemory(allocator->memory, allocator->totalSize);

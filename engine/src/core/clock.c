@@ -1,6 +1,7 @@
 #include  "clock.h"
 
 #include  "defines.h"
+#include  "core/logger.h"
 #include  "platform/platform.h"
 #include  <complex.h>
 

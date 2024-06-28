@@ -13,7 +13,7 @@ set(TEST_SOURCES "")
 
 foreach(sourcefile ${ROOT_SOURCES} ${SUBDIR_SOURCES})
     get_filename_component(filename ${sourcefile} NAME)
-    if(filename STREQUAL "testmanager.c" OR filename MATCHES "^src.*")
+    if(filename STREQUAL "testmanager.c")
         list(APPEND NON_TEST_SOURCES ${sourcefile})
     else()
         list(APPEND TEST_SOURCES ${sourcefile})

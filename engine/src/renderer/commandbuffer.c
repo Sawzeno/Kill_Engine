@@ -1,5 +1,6 @@
 #include  "commandbuffer.h"
-#include  "utils.h"
+#include  "rendererutils.h"
+#include  "core/logger.h"
 #include  "vulkantypes.h"
 #include  "core/kmemory.h"
 #include  <vulkan/vulkan_core.h>
@@ -9,7 +10,7 @@ VkResult  vulkanCommandBufferAllocate(VulkanContext* context,
                                       VkCommandPool pool ,//pool we want to allocate our buffer from
                                       u8 isPrimary,
                                       VulkanCommandBuffer* outCommandBuffer){
-
+TRACEFUNCTION;
   VkResult result   = {0};
   kzeroMemory(outCommandBuffer, sizeof(VulkanCommandBuffer));
 
@@ -25,18 +26,19 @@ VkResult  vulkanCommandBufferAllocate(VulkanContext* context,
                                      &outCommandBuffer->handle);
   VK_CHECK2(result, "FAILED TO ALLOCATE A COMMAND BUFFER");
   outCommandBuffer->state = COMMAND_BUFFER_STATE_READY;
-  UINFO("SUCCESFULLY ALLOCATED A COMANND BUFFER");
+  KINFO("SUCCESFULLY ALLOCATED A COMANND BUFFER");
   return result;
 }
 
 VkResult  vulkanCommandBufferFree   (VulkanContext* context,
                                      VkCommandPool pool, 
                                      VulkanCommandBuffer* commandBuffer){
+TRACEFUNCTION;
   VkResult result = {0};
   vkFreeCommandBuffers(context->device.logicalDevice, pool, 1, &commandBuffer->handle);
   commandBuffer->handle = 0;
   commandBuffer->state  = COMMAND_BUFFER_STATE_NOT_ALLOCATED;
-  UINFO("COMMAND BUFFER HAS BEEN FREED !");
+  KINFO("COMMAND BUFFER HAS BEEN FREED !");
   return VK_SUCCESS;
 }
 
@@ -44,6 +46,7 @@ VkResult  vulkanCommandBufferBegin  (VulkanCommandBuffer* commandBuffer,
                                      u8 isSingleUse,
                                      u8 isRenderPassContinue,
                                      u8 isSimultaneousUse){
+  TRACEFUNCTION;
   VkResult result = {0};
   VkCommandBufferBeginInfo beginInfo  = {VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};
   beginInfo.flags = 0;
@@ -63,24 +66,27 @@ VkResult  vulkanCommandBufferBegin  (VulkanCommandBuffer* commandBuffer,
   result = vkBeginCommandBuffer(commandBuffer->handle, &beginInfo);
   VK_CHECK2(result, "failed to begin command buffer");
   commandBuffer->state  = COMMAND_BUFFER_STATE_RECORDING;
-  UINFO("SUCCESFULLY BEGIN COMMAND BUFFER");
+  KDEBUG("SUCCESFULLY BEGIN COMMAND BUFFER");
   return result;
 }
 
 VkResult  vulkanCommandBufferEnd        (VulkanCommandBuffer* commandBuffer){
+  TRACEFUNCTION;
   VkResult  result  = vkEndCommandBuffer(commandBuffer->handle);
   VK_CHECK2(result, "failed to end command buffer");
   commandBuffer->state  = COMMAND_BUFFER_STATE_RECORDING;
-  UINFO("SUCCESFULLY END COMMAND BUFFER");
+  KDEBUG("SUCCESFULLY END COMMAND BUFFER");
   return result;
 }
 
 VkResult  vulkanCommandBufferUpdateSubmitted(VulkanCommandBuffer* commandBuffer){
+  TRACEFUNCTION;
   commandBuffer->state  = COMMAND_BUFFER_STATE_SUBMITTED;
   return VK_SUCCESS;
 }
 
 VkResult  vulkanCommandBufferReset      (VulkanCommandBuffer* commandBuffer){
+  TRACEFUNCTION;
   commandBuffer->state  = COMMAND_BUFFER_STATE_READY;
   return VK_SUCCESS;
 }
@@ -89,12 +95,13 @@ VkResult  vulkanCommandBufferReset      (VulkanCommandBuffer* commandBuffer){
 VkResult  vulkanCommandBufferStartSingleUse  (VulkanContext* context,
                                               VkCommandPool pool,
                                               VulkanCommandBuffer* outCommandBuffer){
+  TRACEFUNCTION;
   VkResult result = {0};
   result  = vulkanCommandBufferAllocate(context, pool, true, outCommandBuffer);
   VK_CHECK2(result, __FUNCTION__);
   result  = vulkanCommandBufferBegin(outCommandBuffer, true, false, false);
   VK_CHECK2(result, __FUNCTION__);
-  UINFO("SUCCESFULLY STARTED SINGLE USE BUFFER");
+  KDEBUG("SUCCESFULLY STARTED SINGLE USE BUFFER");
   return VK_SUCCESS;
 }
 
@@ -103,6 +110,7 @@ VkResult  vulkanCommandBufferStopSingleUse    (VulkanContext* context,
                                               VkCommandPool pool,
                                               VulkanCommandBuffer* commandBuffer,
                                               VkQueue queue){
+  TRACEFUNCTION;
   VkResult  result  = {0};
   //first end the command buffer
   result  = vulkanCommandBufferEnd(commandBuffer);
@@ -118,7 +126,7 @@ VkResult  vulkanCommandBufferStopSingleUse    (VulkanContext* context,
   VK_CHECK2(result, "command buffer finished with an error");
   //free the command buffer
   vulkanCommandBufferFree(context, pool, commandBuffer);
-  UINFO("SUCCESFULLY ENDED SINGLE USE BUFFER");
+  UDEBUG("SUCCESFULLY ENDED SINGLE USE BUFFER");
   return result;
 }
 

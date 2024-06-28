@@ -1,7 +1,7 @@
 #include  "events.h"
 #include  "containers/darray.h"
-#include  "kmemory.h"
 #include  "defines.h"
+#include  "logger.h"
 
 typedef struct RegisteredEvent  RegisteredEvent;
 typedef struct EventCodeEntry   EventCodeEntry;
@@ -23,103 +23,106 @@ struct EventSystemState{
   EventCodeEntry registered[MAX_MESSAGE_CODES];
 };
 
-static u8 areEventsInitialized  = false;
-static EventSystemState state;
+static EventSystemState* eventSystemStatePtr;
 
-u8  initializeEvents(){
-  if(areEventsInitialized == true){
-    return false;
-  }
- 
-  areEventsInitialized = false;
-  kzeroMemory(&state , sizeof(state));
-  areEventsInitialized = true;
-  
-  UINFO("EVENT SUBSYSTEM INITIALIZED !");
+bool  initializeEvents(u64* memoryRequirement, void* state ){
+TRACEEVENT;
+EDEBUG("memoryRequirement :%"PRIu64" state : %p",*memoryRequirement, state);
+
+  *memoryRequirement = sizeof(EventSystemState);
+  if(state == NULL){
+    EDEBUG("EVENT SUBSYSTEM : STATE PASSED AS NULL");
+    return true;
+  } 
+  eventSystemStatePtr = state;
+
+  KINFO("EVENT SUBSYSTEM INITIALIZED !");
   return true;
 }
 
 void  shutdownEvents(){
-  UINFO("EVENT SUBSYSTEM SHUTDOWN !");
+  KINFO("EVENT SUBSYSTEM SHUTDOWN !");
   for(u16 i = 0 ; i < MAX_MESSAGE_CODES ; ++i){
-    if(state.registered[i].events != 0){
-      DARRAYDESTROY(state.registered[i].events);
-      state.registered[i].events  = 0;
+    if(eventSystemStatePtr->registered[i].events != 0){
+      DARRAY_DESTROY(eventSystemStatePtr->registered[i].events);
+      eventSystemStatePtr->registered[i].events  = 0;
     }
   }
+  eventSystemStatePtr = NULL;
 }
 
 u8 eventRegister(u16 code, void* listener, pfnOnEvent onEvent) {
-    if(areEventsInitialized == false) {
-        return false;
+  TRACEMEMORY;
+  EDEBUG("code : %"PRIu16" listener : %p onEvent : %p",code,listener,onEvent);
+  if(eventSystemStatePtr  ==  NULL){
+    return false;
+  }
+  if(eventSystemStatePtr->registered[code].events == 0) {
+    eventSystemStatePtr->registered[code].events = DARRAY_CREATE(RegisteredEvent);
+  }
+
+  u64 registeredCount = DARRAY_LENGTH(eventSystemStatePtr->registered[code].events);
+  for(u64 i = 0; i < registeredCount; ++i) {
+    if(eventSystemStatePtr->registered[code].events[i].listener == listener) {
+      UREPORT("TODO");
+      return false;
     }
+  }
 
-    if(state.registered[code].events == 0) {
-        state.registered[code].events = DARRAYCREATE(RegisteredEvent);
-    }
+  // If at this point, no duplicate was found. Proceed with registration.
+  RegisteredEvent event;
+  event.listener = listener;
+  event.callback = onEvent;
+  DARRAY_PUSH(eventSystemStatePtr->registered[code].events, event);
 
-    u64 registeredCount = DARRAYLENGTH(state.registered[code].events);
-    for(u64 i = 0; i < registeredCount; ++i) {
-        if(state.registered[code].events[i].listener == listener) {
-            UREPORT("TODO");
-            return false;
-        }
-    }
-
-    // If at this point, no duplicate was found. Proceed with registration.
-    RegisteredEvent event;
-    event.listener = listener;
-    event.callback = onEvent;
-    DARRAYPUSH(state.registered[code].events, event);
-
-    return true;
+  return true;
 }
 
 u8 eventUnregister(u16 code, void* listener, pfnOnEvent onEvent) {
-    if(areEventsInitialized == false) {
-        return false;
-    }
-
-    // On nothing is registered for the code, boot out.
-    if(state.registered[code].events == 0) {
-        // TODO: warn
-        return false;
-    }
-
-    u64 registeredCount = DARRAYLENGTH(state.registered[code].events);
-    for(u64 i = 0; i < registeredCount; ++i) {
-        RegisteredEvent e = state.registered[code].events[i];
-        if(e.listener == listener && e.callback == onEvent) {
-            // Found one, remove it
-            RegisteredEvent popped_event;
-            DARRAYPOPAT(state.registered[code].events, i, &popped_event);
-            return true;
-        }
-    }
-
-    // Not found.
+  TRACEEVENT;
+  EDEBUG("code : %"PRIu16" listener : %p onEvent : %p",code,listener,onEvent);
+  if(eventSystemStatePtr  ==  NULL){
     return false;
+  }
+  // On nothing is registered for the code, boot out.
+  if(eventSystemStatePtr->registered[code].events == 0) {
+    // TODO: warn
+    return false;
+  }
+
+  u64 registeredCount = DARRAY_LENGTH(eventSystemStatePtr->registered[code].events);
+  for(u64 i = 0; i < registeredCount; ++i) {
+    RegisteredEvent e = eventSystemStatePtr->registered[code].events[i];
+    if(e.listener == listener && e.callback == onEvent) {
+      // Found one, remove it
+      RegisteredEvent popped_event;
+      DARRAY_POPAT(eventSystemStatePtr->registered[code].events, i, &popped_event);
+      return true;
+    }
+  }
+
+  // Not found.
+  return false;
 }
 
 u8 eventFire(u16 code, void* sender, EventContext context) {
-    if(areEventsInitialized == false) {
-        return false;
-    }
-
-    // If nothing is registered for the code, boot out.
-    if(state.registered[code].events == 0) {
-        return false;
-    }
-
-    u64 registeredCount = DARRAYLENGTH(state.registered[code].events);
-    for(u64 i = 0; i < registeredCount; ++i) {
-        RegisteredEvent e = state.registered[code].events[i];
-        if(e.callback(code, sender, e.listener, context)) {
-            // Message has been handled, do not send to other listeners.
-            return true;
-        }
-    }
-
-    // Not found.
+  TRACEEVENT;
+  EDEBUG("code : %"PRIu16" sender : %p context : %p",code,sender,context);
+  if(eventSystemStatePtr  ==  NULL){
     return false;
+  }
+  // If nothing is registered for the code, boot out.
+  if(eventSystemStatePtr->registered[code].events == 0) {
+    return false;
+  }
+  u64 registeredCount = DARRAY_LENGTH(eventSystemStatePtr->registered[code].events);
+  for(u64 i = 0; i < registeredCount; ++i) {
+    RegisteredEvent e = eventSystemStatePtr->registered[code].events[i];
+    if(e.callback(code, sender, e.listener, context)) {
+      // Message has been handled, do not send to other listeners.
+      return true;
+    }
+  }
+  // Not found.
+  return false;
 }

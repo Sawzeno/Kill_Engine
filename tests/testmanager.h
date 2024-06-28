@@ -1,8 +1,21 @@
 #include "defines.h"
-
+#include  "core/logger.h"
 #define BYPASS 2
 
 typedef u8 (*PFN_TEST)();
+
+#ifndef LOG_TEST_ENABLED
+#define LOG_TEST_ENABLED 1
+#endif
+
+#if LOG_TEST_ENABLED == 1
+#define UTEST(fmt, ...)  testLog(fmt, ##__VA_ARGS__)
+#else
+#define UTEST(fmt, ...)
+#endif
+
+#define INITCLOCK   struct timespec start; clock_gettime(CLOCK_MONOTONIC, &start) 
+#define WATCH(X) elapsed(&start, X)
 
 #define EXPECTED_AS(expected, actual)                                                              \
 if(actual != expected){                                                                            \
@@ -37,3 +50,5 @@ if(actual != false){                                                            
 void testManagerInit();
 void testManagerRegisterTest(PFN_TEST, char* desc);
 void testManagerRunTests();
+u16  testLog(const char* message , ...);
+void elapsed(struct timespec* start, const char* func);

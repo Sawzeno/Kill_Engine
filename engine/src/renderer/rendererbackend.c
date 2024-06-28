@@ -1,5 +1,6 @@
 #include  "rendererbackend.h"
-#include  "utils.h"
+#include  "rendererutils.h"
+#include  "core/logger.h"
 
 #include  "vulkantypes.h"
 #include  "../core/application.h"
@@ -12,12 +13,15 @@
 #include  "framebuffer.h"
 #include  "fence.h"
 
+#include  "shaders/vulkanshaderobject.h"
+
 #include  "containers/darray.h"
 #include  "defines.h"
 #include  "string.h"
 
 static  u32 cachedFrameBufferWidth    = 0;
 static  u32 cachedFrameBufferHeight   = 0;
+static  char* applicationName;
 
 static VulkanContext context;
 static const char* validationLayers = "VK_LAYER_KHRONOS_validation";
@@ -36,17 +40,17 @@ VKAPI_ATTR VkBool32 VKAPI_CALL vkDebugCallback(
 
 
 
-u8  rendererBackendInitialize(const char* applicationName , platformState* platState){
-
+u8  rendererBackendInitialize(){
+TRACEFUNCTION;
   //function pointers
   context.findMemoryIndex = findMemoryIndex;
   //TODO
   context.allocator = NULL;
   //get applications size
-  applicationGetFrameBufferSize(&cachedFrameBufferWidth, &cachedFrameBufferHeight);
-  context.frameBufferWidth  = (cachedFrameBufferWidth != 0 ? cachedFrameBufferWidth : 1280);
-  context.frameBufferHeight = (cachedFrameBufferHeight!= 0 ? cachedFrameBufferHeight: 1440);
-
+  applicationGetFrameBufferSize (&cachedFrameBufferWidth, &cachedFrameBufferHeight);
+  applicationGetName            (applicationName);
+  context.frameBufferWidth    = (cachedFrameBufferWidth != 0 ? cachedFrameBufferWidth : 1280);
+  context.frameBufferHeight   = (cachedFrameBufferHeight!= 0 ? cachedFrameBufferHeight: 1440);
   //check for each Vulkan function
   VkResult result  = {0};
   //Vulkan INSTANCE
@@ -57,35 +61,36 @@ u8  rendererBackendInitialize(const char* applicationName , platformState* platS
   appInfo.pEngineName         = "KILL ENGINE";
   appInfo.engineVersion       = VK_MAKE_VERSION(1, 0, 0);
 
-  UDEBUG("----------------------REQUIRED EXTENSIONS----------------------");
+  KDEBUG("----------------------REQUIRED EXTENSIONS----------------------");
   const char** requiredExtensions   = (const char**)_darrayCreate(1,sizeof(const char*));
-  DARRAYPUSH(requiredExtensions, &VK_KHR_SURFACE_EXTENSION_NAME);
-  DARRAYPUSH(requiredExtensions, &VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-  DARRAYPUSH(requiredExtensions, &"VK_KHR_xcb_surface");
+  DARRAY_PUSH(requiredExtensions, &VK_KHR_SURFACE_EXTENSION_NAME);
+  DARRAY_PUSH(requiredExtensions, &VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+  DARRAY_PUSH(requiredExtensions, &"VK_KHR_xcb_surface");
   result  =  checkAvailableExtensions(requiredExtensions);
-  VK_CHECK2(result, "REQUIRED EXTENSIONS NOT AVAILABLE");
+  VK_CHECK(result, "REQUIRED EXTENSIONS NOT AVAILABLE");
 
-  UDEBUG("----------------------REQUIRED LAYERS----------------------");
-  const char**  requiredLayers  = (const char**)DARRAYCREATE(const char*);
-  DARRAYPUSH(requiredLayers, &"VK_LAYER_KHRONOS_validation");
+  KDEBUG("----------------------REQUIRED LAYERS----------------------");
+  const char**  requiredLayers  = (const char**)DARRAY_CREATE(const char*);
+  DARRAY_PUSH(requiredLayers, &"VK_LAYER_KHRONOS_validation");
   result  = checkAvailableLayers(requiredLayers);
-  VK_CHECK2(result, "REQUIRED LAYERS NOT AVAILABLE");
+  VK_CHECK(result, "REQUIRED LAYERS NOT AVAILABLE");
 
-  UDEBUG("----------------------Vulkan INSTANCE----------------------");
+  KDEBUG("----------------------Vulkan INSTANCE----------------------");
   VkInstanceCreateInfo createInfo     = {VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO};
   createInfo.pApplicationInfo         = &appInfo;
-  createInfo.enabledExtensionCount    = DARRAYLENGTH(requiredExtensions);
+  createInfo.enabledExtensionCount    = DARRAY_LENGTH(requiredExtensions);
   createInfo.ppEnabledExtensionNames  = requiredExtensions;
-  createInfo.enabledLayerCount        = DARRAYLENGTH(requiredLayers);
+  createInfo.enabledLayerCount        = DARRAY_LENGTH(requiredLayers);
   createInfo.ppEnabledLayerNames      = requiredLayers;
 
   context.allocator = 0;
   result  = vkCreateInstance(&createInfo, context.allocator, &(context.instance));
-  VK_CHECK2(result, "FAILED TO CREATE INSTANCE");
-  UDEBUG("Vulkan ISNTANCE CREATED");
+  VK_CHECK(result, "FAILED TO CREATE INSTANCE");
+  KINFO("VULKAN ISNTANCE CREATED");
+  UINFO("VULKAN ISNTANCE CREATED");
 
-  UDEBUG("----------------------Vulkan DEBUGGER----------------------");
-  UINFO("CREATING Vulkan DEBUGGER");
+  KDEBUG("----------------------Vulkan DEBUGGER----------------------");
+  KDEBUG("CREATING VULKAN DEBUGGER");
   u32 logSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT    |
     VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT  |
     VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT;  //|
@@ -102,48 +107,48 @@ u8  rendererBackendInitialize(const char* applicationName , platformState* platS
     (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(context.instance, "vkCreateDebugUtilsMessengerEXT");
 
   result =  func(context.instance, &debugCreateInfo, context.allocator, &context.debugMessenger);
-  VK_CHECK2(result, "FAILED TO CREATE DEBUGGER");
-  UINFO("Vulkan DEBUGGER CREATED");
+  VK_CHECK(result, "FAILED TO CREATE DEBUGGER");
+  KINFO("Vulkan DEBUGGER CREATED");
 
-  UDEBUG("----------------------Vulkan SURFACE----------------------");
-  UINFO("CREATING Vulkan SURFACE");
-  result  = createVulkanSurface( platState, &context);
-  VK_CHECK2(result, "FAILED TO CREATE Vulkan SURFACE");
+  KDEBUG("----------------------Vulkan SURFACE----------------------");
+  KINFO("CREATING VULKAN SURFACE");
+  result  = createVulkanSurface(&context);
+  VK_CHECK(result, "FAILED TO CREATE Vulkan SURFACE");
 
-  UDEBUG("----------------------Vulkan DEVICE----------------------");
-  UINFO("CREATING Vulkan DEVICE");
+  KDEBUG("----------------------Vulkan DEVICE----------------------");
+  KINFO("CREATING VULKAN DEVICE");
   result =  vulkanDeviceCreate(&context);
-  VK_CHECK2(result, "FAILED TO CREATE DEVICE !");
+  VK_CHECK(result, "FAILED TO CREATE DEVICE !");
 
-  UDEBUG("----------------------SWAPCHAIN----------------------");
-  UINFO("CREATING Vulkan SWAPCHAIN");
+  KDEBUG("----------------------SWAPCHAIN----------------------");
+  KINFO("CREATING VULKAN SWAPCHAIN");
   result = vulkanSwapchainCreate(&context, context.frameBufferWidth, context.frameBufferHeight, &context.swapchain);
-  VK_CHECK2(result, "FAILED TO CREATE SWAPCHAIN");
+  VK_CHECK(result, "FAILED TO CREATE SWAPCHAIN");
 
-  UDEBUG("----------------------RENDERPASS----------------------");
-  UINFO("CREATING Vulkan RENDERPASS");
+  KDEBUG("----------------------RENDERPASS----------------------");
+  KINFO("CREATING VULKAN RENDERPASS");
   result =  vulkanRenderPassCreate(&context,
                                    &context.mainRenderPass,
                                    0, 0, context.frameBufferWidth, context.frameBufferHeight,
                                    0.0f, 0.0f, 0.2f, 1.0f,
                                    1.0f, 0);
-  VK_CHECK2(result, "FAILED TO CREATE RENDERPASS");
+  VK_CHECK(result, "FAILED TO CREATE RENDERPASS");
 
-  UDEBUG("----------------------SWAPCHAIN FRAMEBUFFERS----------------------");
-  UINFO("CREATING Vulkan FRAMEBUFFERS");
-  context.swapchain.frameBuffers  = DARRAYRESERVE(VulkanFrameBuffer, context.swapchain.imageCount);
+  KDEBUG("----------------------SWAPCHAIN FRAMEBUFFERS----------------------");
+  KINFO("CREATING VULKAN FRAMEBUFFERS");
+  context.swapchain.frameBuffers  = DARRAY_RESERVE(VulkanFrameBuffer, context.swapchain.imageCount);
   regenerateFrameBuffers(&context.swapchain, &context.mainRenderPass);
 
-  UDEBUG("----------------------COMMAND BUFFERS----------------------");
-  UINFO("CREATING COMMAND BUFFERS");
+  KDEBUG("----------------------COMMAND BUFFERS----------------------");
+  KINFO("CREATING COMMAND BUFFERS");
   result = createCommandBuffers();
-  VK_CHECK2(result, "FAILED TO CREATE COMMAND BUFFERS");
+  VK_CHECK(result, "FAILED TO CREATE COMMAND BUFFERS");
 
-  UDEBUG("----------------------SYNC OBJECTS----------------------");
-  UINFO("CREATING SYNC OBJCTS");
-  context.imageAvailableSemaphores  = DARRAYRESERVE(VkSemaphore, context.swapchain.maxFramesInFlight);
-  context.queueCompleteSemaphores   = DARRAYRESERVE(VkSemaphore, context.swapchain.maxFramesInFlight);
-  context.inFlightFences            = DARRAYRESERVE(VulkanFence, context.swapchain.maxFramesInFlight);
+  KDEBUG("----------------------SYNC OBJECTS----------------------");
+  KINFO("CREATING SYNC OBJCTS");
+  context.imageAvailableSemaphores  = DARRAY_RESERVE(VkSemaphore, context.swapchain.maxFramesInFlight);
+  context.queueCompleteSemaphores   = DARRAY_RESERVE(VkSemaphore, context.swapchain.maxFramesInFlight);
+  context.inFlightFences            = DARRAY_RESERVE(VulkanFence, context.swapchain.maxFramesInFlight);
 
   for(u8 i = 0; i < context.swapchain.maxFramesInFlight; ++i){
     VkSemaphoreCreateInfo semaphoreCreateInfo = {VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO};
@@ -154,23 +159,25 @@ u8  rendererBackendInitialize(const char* applicationName , platformState* platS
     //this will prevent the application from waiting indefinitely for the first frame to render since i t
     //cannot be renderer until a frame is RENDERED BEFORE it
     result = vulkanFenceCreate(&context, true, &context.inFlightFences[i]);  
-    VK_CHECK2(result, "FAILED TO CERATE SEMAPHORES");
+    VK_CHECK(result, "FAILED TO CERATE SEMAPHORES");
   }
 
   // in flight images should not exist at this point, so CLEAR THE LIST , these are sorted in POINTERS
   // because the initial state shiould be zero , and will be 0 when not in use, ACTUAL FENCES ARE NOT 
   // OWNED BY THE LIST
 
-  context.imagesInFlight  = DARRAYRESERVE(VulkanFence, context.swapchain.imageCount);
+  context.imagesInFlight  = DARRAY_RESERVE(VulkanFence, context.swapchain.imageCount);
   for(u32 i = 0; i < context.swapchain.imageCount; ++i){
     context.imagesInFlight[i] = 0;
   }
 
-
-
-  if(result != VK_SUCCESS){
-    return false;
-  }
+  KDEBUG("----------------------SHADER OBJECTS----------------------");
+  KINFO("CREATING SHADER OBJECTS");
+  result  = vulkanObjectShaderCreate(&context, &context.objectShader);
+  VK_CHECK(result, "ERROR LOADING BUILTIN BASIC LIGHTING SHADER");
+  
+  
+  KINFO("Vulkan RENDERER BACKEND INITIALIZED");
   UINFO("Vulkan RENDERER BACKEND INITIALIZED");
   return true;
 }
@@ -178,8 +185,9 @@ u8  rendererBackendInitialize(const char* applicationName , platformState* platS
 //-----------------------------------------------------RENDERER BEGIN FRAME---------------------------------------------------------
 
 u8  rendererBackendBeginFrame(f32 deltaTime){
+  KTRACE("----------------------BEGIN FRAME-----------------");
+  KDEBUG("deltatime : %f",deltaTime);
   VulkanDevice* device  = &context.device;
-  UTRACE("----------------------BEGIN FRAME----------------------");
     
   // logVulkanContext    (&context);
   // logVulkanDevice     (&context.device) ;
@@ -189,29 +197,29 @@ u8  rendererBackendBeginFrame(f32 deltaTime){
   // logVulkanCommandBuffer(context.graphicsCommandBuffers) ;
   //check if recreating swap chain and boot out 
   if(context.recreatingSwapchain){
-    UINFO("RECREATING SWAPCHAIN");
+    KWARN("MIDST OF RECREATING SWAPCHAIN");
     VkResult result =  vkDeviceWaitIdle(device->logicalDevice);
     if(!vulkanResultIsSuccess(result)){
       UERROR("rendererBackendBeginFrame vkDeviceWaitIdle (1) failed : %s", vkResultToString(result));
       return false;
     }
-    UINFO("RECREATED SWAPCHAIN, BOOTED!");
+    KINFO("RECREATED SWAPCHAIN, BOOTED!");
     return false;
   }
 
   //check if frameBuffer has been resized , if so then swapchain must be recreated 
   if(context.frameBufferSizeGeneration != context.frameBufferSizeLastGeneration){
-    UINFO("FRAME BUFFER SIZE CAHANGED");
+    KWARN("FRAME BUFFER SIZE CAHANGED");
     VkResult result = vkDeviceWaitIdle(device->logicalDevice);
     //if swapchain recreation failed (ex : if the window was minimized);
-    VK_CHECK2(result, "SWAPCHAIN RECRETION FAILED");
+    VK_CHECK(result, "SWAPCHAIN RECRETION FAILED");
 
     if(!recreateSwapchain()){
       
       return false;
     }
 
-    UINFO("RECREATING SWAPCHAIN BOOTING!!");
+    KWARN("RECREATING SWAPCHAIN BOOTING!!");
     return false;
   }
 
@@ -219,7 +227,7 @@ u8  rendererBackendBeginFrame(f32 deltaTime){
   if(!vulkanFenceWait(&context,
                       &context.inFlightFences[context.currentFrame],
                       UINT64_MAX)){
-    UWARN("IN FLIGHT FENCE WAIT FAILURE !");
+    KWARN("IN FLIGHT FENCE WAIT FAILURE !");
   }
 
   //acquire the next image from the swapchain. pass along the semaphore that should be signaled when it completes
@@ -230,7 +238,7 @@ u8  rendererBackendBeginFrame(f32 deltaTime){
                                            context.imageAvailableSemaphores[context.currentFrame],
                                            0,
                                            &context.imageIndex)){
-    UINFO("FAILED TO ACQUIRE NEXT IMAGE INDEX FRM SWAPCHAIN");
+    KWARN("FAILED TO ACQUIRE NEXT IMAGE INDEX FRM SWAPCHAIN");
     return false;
   }
 
@@ -272,8 +280,8 @@ u8  rendererBackendBeginFrame(f32 deltaTime){
 //-----------------------------------------------------RENDERER END FRAME---------------------------------------------------------
 
 u8  rendererBackendEndFrame(f32 deltaTime){
-
-  UTRACE("----------------------END FRAME----------------------");
+  KTRACE("----------------------END FRAME-------------------");
+  KDEBUG("deltatime : %f",deltaTime);
   VulkanCommandBuffer* commandBuffer  = &context.graphicsCommandBuffers[context.imageIndex];
   //end renderpass
   vulkanRenderPassEnd(commandBuffer, &context.mainRenderPass);
@@ -328,142 +336,16 @@ u8  rendererBackendEndFrame(f32 deltaTime){
                          context.queueCompleteSemaphores[context.currentFrame],
                          context.imageIndex);
 
-  VK_CHECK2(result, "SOMETHING WRONG WITH VulkanSwapchainPresent");
+  VK_CHECK(result, "SOMETHING WRONG WITH VulkanSwapchainPresent");
   return true;
 }
 
-
-//-----------------------------------------------------RENDERER RESIZED---------------------------------------------------------
-
-
-u8  rendererBackendResized(u16 width, u16 height){
-
-  UWARN("----------------------------->WINDOW RESIZED");
-  cachedFrameBufferWidth   = width;
-  cachedFrameBufferHeight  = height;
-  context.frameBufferSizeGeneration++;
-
-  UINFO("resized[%i %i %i]", width, height, context.frameBufferSizeGeneration);
-
-  return true;
-}
-
-u8  rendererBackendShutdown(){
-  
-  vkDeviceWaitIdle(context.device.logicalDevice);
-
-  UDEBUG("DESTROYING SYNC OBJECTS");
-  for(u32 i = 0; i < context.swapchain.imageCount; ++i){
-    if(context.imageAvailableSemaphores[i]){
-      vkDestroySemaphore(context.device.logicalDevice,
-                         context.imageAvailableSemaphores[i],
-                         context.allocator);
-      context.imageAvailableSemaphores[i] = 0;
-    }
-    if(context.queueCompleteSemaphores[i]){
-      vkDestroySemaphore(context.device.logicalDevice,
-                         context.queueCompleteSemaphores[i],
-                         context.allocator);
-      context.queueCompleteSemaphores[i] = 0;
-    }
-
-    vulkanFenceDestroy(&context, &context.inFlightFences[i]);
-  }
-  
-  DARRAYDESTROY(context.queueCompleteSemaphores);
-  context.queueCompleteSemaphores = 0;
-  DARRAYDESTROY(context.imageAvailableSemaphores);
-  context.imageAvailableSemaphores = 0;
-  DARRAYDESTROY(context.inFlightFences);
-  context.inFlightFences = 0;
-  DARRAYDESTROY(context.imagesInFlight);
-  context.imagesInFlight = 0;
-
-  UDEBUG("DESTROYING COMMAND BUFFERS");
-  for(u32 i = 0 ;i< context.swapchain.imageCount ; ++i){
-    if(context.graphicsCommandBuffers[i].handle){
-      vulkanCommandBufferFree(&context, context.device.graphicsCommandPool, &context.graphicsCommandBuffers[i]);
-      context.graphicsCommandBuffers[i].handle = 0;
-    }
-  }
-
-  UDEBUG("DESTROYING FRAMEBUFFERS");
-  for(u32 i = 0; i < context.swapchain.imageCount; ++i){
-    vulkanFrameBufferDestroy(&context, &context.swapchain.frameBuffers[i]);
-  }
-
-
-  DARRAYDESTROY(context.graphicsCommandBuffers);
-  context.graphicsCommandBuffers = 0;
-
-  UDEBUG("DESTROYING RENDERPASS");
-  vulkanRenderPassDestroy(&context, &context.mainRenderPass);
-
-  UDEBUG("DESTORYIIG Vulkan SWAPCHAIN");
-  vulkanSwapchainDestroy(&context, &context.swapchain);
-
-  UDEBUG("DESTOYING Vulkan DEVICE");
-  vulkanDeviceDestroy(&context);
-
-  UDEBUG("DESTROYING Vulkan SURFACE");
-  if(context.surface){
-    vkDestroySurfaceKHR(context.instance,context.surface ,context.allocator);
-    context.surface = NULL;
-  }
-
-  UDEBUG("Destroying Vulkan debugger...");
-  if (context.debugMessenger) {
-    PFN_vkDestroyDebugUtilsMessengerEXT func =
-      (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(context.instance, "vkDestroyDebugUtilsMessengerEXT");
-    func(context.instance, context.debugMessenger, context.allocator);
-  }
-
-  UDEBUG("Destroying Vulkan instance...");
-  vkDestroyInstance(context.instance, context.allocator);
-  return true;
-}
-
-i32 findMemoryIndex(u32 typeFilter, u32 propertyFlags){
-  VkPhysicalDeviceMemoryProperties  memoryProperties;
-  vkGetPhysicalDeviceMemoryProperties(context.device.physicalDevice, &memoryProperties);
-  for(u32 i =0; i < memoryProperties.memoryTypeCount; ++i){
-    if(typeFilter & (1 << i) && (memoryProperties.memoryTypes[i].propertyFlags & propertyFlags) == propertyFlags){
-      UINFO("MEMORY TYPE FOUND");
-      return i;
-    }
-  }
-
-  UWARN("UNABLE TO FIND MEMORY TYPE");
-  return -1;
-}
-
-VKAPI_ATTR VkBool32 VKAPI_CALL vkDebugCallback(
-  VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
-  VkDebugUtilsMessageTypeFlagsEXT message_types,
-  const VkDebugUtilsMessengerCallbackDataEXT* callback_data,
-  void* user_data) {
-  switch (message_severity) {
-    default:
-    case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
-      UERROR(callback_data->pMessage);
-      break;
-    case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
-      UWARN(callback_data->pMessage);
-      break;
-    case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
-      UINFO(callback_data->pMessage);
-      break;
-    case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
-      UTRACE(callback_data->pMessage);
-      break;
-  }
-  return VK_FALSE;
-}
 //------------------------------------------------createCommandBuffers---------------------------------
 VkResult createCommandBuffers(){
+  KTRACE("-------------------CREATING COMMAND BUFFERS-------");
   VkResult  result = {0};
   if(!context.graphicsCommandBuffers){
-    context.graphicsCommandBuffers  = DARRAYRESERVE(VulkanCommandBuffer, context.swapchain.imageCount);
+    context.graphicsCommandBuffers  = DARRAY_RESERVE(VulkanCommandBuffer, context.swapchain.imageCount);
     for(u32 i = 0; i < context.swapchain.imageCount; ++i){
       kzeroMemory(&context.graphicsCommandBuffers[i],
                   sizeof(VulkanCommandBuffer));
@@ -484,10 +366,13 @@ VkResult createCommandBuffers(){
 
       VK_CHECK2(result, __FUNCTION__);
   }
+  KINFO("CREATED COMMAND BUFFERS");
   return result;
 }
 //------------------------------------------------regenerateFrameBuffers------------------------------------
 VkResult  regenerateFrameBuffers(VulkanSwapchain* swapchain, VulkanRenderPass* renderPass){
+  KTRACE("-------------------REGENERATE SWAPCHAIN-----------");
+  KDEBUG("swapchain : %p renderpass : %p", swapchain, renderPass);
   VkResult result = {0};
 
   for(u32 i = 0; i < swapchain->imageCount; ++i){
@@ -506,18 +391,19 @@ VkResult  regenerateFrameBuffers(VulkanSwapchain* swapchain, VulkanRenderPass* r
   return result;
 }
 
+//------------------------------------------------RECREATE SWAPCHAIN------------------------------------
 u8 recreateSwapchain(){
-  UTRACE("-------------------RECREATING SWAPCHAIN-----------");
+  KTRACE("-------------------RECREATING SWAPCHAIN-----------");
   // if already created do not try again
   VkResult result = {0};
   if(context.recreatingSwapchain){
-    UDEBUG("recreting swapchin called when already recreating, booting !!");
+    KDEBUG("recreting swapchin called when already recreating, booting !!");
     return false;
   }
 
   //detect if windows is too small to be drawn to
   if(context.frameBufferWidth == 0 || context.frameBufferHeight == 0){
-    UDEBUG("recreateSwapchain called when window size is too small");
+    KDEBUG("recreateSwapchain called when window size is too small");
     return false;
   }
 
@@ -585,3 +471,133 @@ u8 recreateSwapchain(){
   return true;
 }
 
+//-----------------------------------------------------RENDERER RESIZED---------------------------------------------------------
+
+
+u8  rendererBackendResized(u16 width, u16 height){
+TRACEFUNCTION;
+KDEBUG("width : %"PRIu64" height : %"PRIu64"",width,height);
+  UWARN("------RENDERER BACKEND RESIZE INITIALTED-------");
+  cachedFrameBufferWidth   = width;
+  cachedFrameBufferHeight  = height;
+  context.frameBufferSizeGeneration++;
+
+  UINFO("resized[%i %i %i]", width, height, context.frameBufferSizeGeneration);
+
+  return true;
+}
+
+u8  rendererBackendShutdown(){
+TRACEFUNCTION;
+  vkDeviceWaitIdle(context.device.logicalDevice);
+
+  KDEBUG("DESTROYING SYNC OBJECTS");
+  for(u32 i = 0; i < context.swapchain.imageCount; ++i){
+    if(context.imageAvailableSemaphores[i]){
+      vkDestroySemaphore(context.device.logicalDevice,
+                         context.imageAvailableSemaphores[i],
+                         context.allocator);
+      context.imageAvailableSemaphores[i] = 0;
+    }
+    if(context.queueCompleteSemaphores[i]){
+      vkDestroySemaphore(context.device.logicalDevice,
+                         context.queueCompleteSemaphores[i],
+                         context.allocator);
+      context.queueCompleteSemaphores[i] = 0;
+    }
+
+    vulkanFenceDestroy(&context, &context.inFlightFences[i]);
+  }
+  
+  DARRAY_DESTROY(context.queueCompleteSemaphores);
+  context.queueCompleteSemaphores = 0;
+  DARRAY_DESTROY(context.imageAvailableSemaphores);
+  context.imageAvailableSemaphores = 0;
+  DARRAY_DESTROY(context.inFlightFences);
+  context.inFlightFences = 0;
+  DARRAY_DESTROY(context.imagesInFlight);
+  context.imagesInFlight = 0;
+
+  KINFO("DESTROYING COMMAND BUFFERS");
+  for(u32 i = 0 ;i< context.swapchain.imageCount ; ++i){
+    if(context.graphicsCommandBuffers[i].handle){
+      vulkanCommandBufferFree(&context, context.device.graphicsCommandPool, &context.graphicsCommandBuffers[i]);
+      context.graphicsCommandBuffers[i].handle = 0;
+    }
+  }
+
+  KINFO("DESTROYING FRAMEBUFFERS");
+  for(u32 i = 0; i < context.swapchain.imageCount; ++i){
+    vulkanFrameBufferDestroy(&context, &context.swapchain.frameBuffers[i]);
+  }
+
+
+  DARRAY_DESTROY(context.graphicsCommandBuffers);
+  context.graphicsCommandBuffers = 0;
+
+  KINFO("DESTROYING RENDERPASS");
+  vulkanRenderPassDestroy(&context, &context.mainRenderPass);
+
+  KINFO("DESTORYIIG Vulkan SWAPCHAIN");
+  vulkanSwapchainDestroy(&context, &context.swapchain);
+
+  KINFO("DESTOYING Vulkan DEVICE");
+  vulkanDeviceDestroy(&context);
+
+  KINFO("DESTROYING Vulkan SURFACE");
+  if(context.surface){
+    vkDestroySurfaceKHR(context.instance,context.surface ,context.allocator);
+    context.surface = NULL;
+  }
+
+  KINFO("Destroying Vulkan debugger...");
+  if (context.debugMessenger) {
+    PFN_vkDestroyDebugUtilsMessengerEXT func =
+      (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(context.instance, "vkDestroyDebugUtilsMessengerEXT");
+    func(context.instance, context.debugMessenger, context.allocator);
+  }
+
+  KINFO("Destroying Vulkan instance...");
+  vkDestroyInstance(context.instance, context.allocator);
+  return true;
+}
+
+i32 findMemoryIndex(u32 typeFilter, u32 propertyFlags){
+  TRACEFUNCTION;
+  VkPhysicalDeviceMemoryProperties  memoryProperties;
+  vkGetPhysicalDeviceMemoryProperties(context.device.physicalDevice, &memoryProperties);
+  for(u32 i =0; i < memoryProperties.memoryTypeCount; ++i){
+    if(typeFilter & (1 << i) && (memoryProperties.memoryTypes[i].propertyFlags & propertyFlags) == propertyFlags){
+      KINFO("MEMORY TYPE FOUND");
+      return i;
+    }
+  }
+
+  UWARN("UNABLE TO FIND MEMORY TYPE");
+  return -1;
+}
+
+VKAPI_ATTR VkBool32 VKAPI_CALL vkDebugCallback(
+  VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
+  VkDebugUtilsMessageTypeFlagsEXT message_types,
+  const VkDebugUtilsMessengerCallbackDataEXT* callback_data,
+  void* user_data) {
+  switch (message_severity) {
+    default:
+    case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
+      UERROR(callback_data->pMessage);
+      KERROR(callback_data->pMessage);
+      break;
+    case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
+      UWARN(callback_data->pMessage);
+      KWARN(callback_data->pMessage);
+      break;
+    case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
+      KINFO(callback_data->pMessage);
+      break;
+    case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
+      KTRACE(callback_data->pMessage);
+      break;
+  }
+  return VK_FALSE;
+}
