@@ -71,10 +71,16 @@ typedef enum LOG_TYPE{
 #define UDEBUG(fmt, ...)
 #endif
 
+#if LOG_WARN_ENABLED == 1 && LOG_FILES_ENABLED == 1
 #define KFATAL(fmt, ...) fileLog    (LOG_ENGINE,LOG_FATAL, fmt, ##__VA_ARGS__)
 #define KERROR(fmt, ...) fileLog    (LOG_ENGINE,LOG_ERROR, fmt, ##__VA_ARGS__)
+#else
+#define KFATAL(fmt, ...)
+#define KERROR(fmt, ...)
+#endif
 
-#if LOG_WARN_ENABLED == 1
+
+#if LOG_WARN_ENABLED == 1 && LOG_FILES_ENABLED == 1
 #define KWARN(fmt, ...)  fileLog    (LOG_ENGINE,LOG_WARN , fmt, ##__VA_ARGS__)
 #else
 #define KWARN(fmt, ...)
