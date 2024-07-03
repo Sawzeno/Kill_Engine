@@ -1,12 +1,10 @@
-#include "device.h"
+#include  "vulkandevice.h"
+#include  "vulkantypes.h"
 #include  "rendererutils.h"
-#include "core/kmemory.h"
+
+#include  "core/kmemory.h"
 #include  "core/logger.h"
-#include "vulkantypes.h"
-#include "containers/darray.h"
-#include "defines.h"
-#include <string.h>
-#include <vulkan/vulkan_core.h>
+#include  "containers/darray.h"
 
 typedef struct VulkanPhysicalDeviceRequirements     VulkanPhysicalDeviceRequirements;
 typedef struct VulkanPhysicalDeviceQueueFamilyInfo  VulkanPhysicalDeviceQueueFamilyInfo;
@@ -48,21 +46,21 @@ TRACEFUNCTION;
   KDEBUG("----------------------DEVICE SURFACE CAPABILTITIES---------");
   VkResult result = {0};
   result = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, surface, &outSupportInfo->capabilities);
-  VK_CHECK2(result, "failed to get device surface capabilities");
+  VK_CHECK_VERBOSE(result, "failed to get device surface capabilities");
 
   KDEBUG("----------------------SURFACE FORMATS----------------------");
   result  = vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &outSupportInfo->formatCount, 0);
-  VK_CHECK2(result, "failed to get device formats count");
+  VK_CHECK_VERBOSE(result, "failed to get device formats count");
 
   if (outSupportInfo->formatCount != 0) {
     outSupportInfo->formats = kallocate(sizeof(VkSurfaceFormatKHR) * outSupportInfo->formatCount, MEMORY_TAG_RENDERER);
     result = vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &outSupportInfo->formatCount, outSupportInfo->formats);
-    VK_CHECK2(result, "failed to get device formats available");
+    VK_CHECK_VERBOSE(result, "failed to get device formats available");
   }
 
-  KDEBUG("----------------------PRESENT MODES-_---------------------");
+  KDEBUG("----------------------PRESENT MODES-----------------------");
   result  = vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, &outSupportInfo->presentModesCount, 0);
-  VK_CHECK2(result, "failed to get present modes count");
+  VK_CHECK_VERBOSE(result, "failed to get present modes count");
 
   if (outSupportInfo->presentModesCount != 0) {
     outSupportInfo->presentModes = kallocate(sizeof(VkPresentModeKHR) * outSupportInfo->presentModesCount, MEMORY_TAG_RENDERER);
@@ -70,7 +68,7 @@ TRACEFUNCTION;
                                                         surface,
                                                         &outSupportInfo->presentModesCount,
                                                         outSupportInfo->presentModes);
-    VK_CHECK2(result, "failed to get present modes");
+    VK_CHECK_VERBOSE(result, "failed to get present modes");
   }
 
   KINFO("QUERIED SWAPCHAIN SUPPORT SUCCESFULLY");
@@ -137,7 +135,7 @@ TRACEFUNCTION;
     // Present?
     VkBool32 supportsPresent = VK_FALSE;
     result =   vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &supportsPresent);
-    VK_CHECK2(result, "failed to check physical device suface support");
+    VK_CHECK_VERBOSE(result, "failed to check physical device suface support");
     if (supportsPresent) {
       outQueueFamilyInfo->presentFamilyIndex = i;
     }
@@ -167,7 +165,7 @@ TRACEFUNCTION;
     KDEBUG("--------------------SWAPCHAIN SUPPORT----------------------");
     KINFO("CHECKING FOR SWAPCHAIN SPPORT");
     result = vulkanDeviceQuerySwapchainSupport(device, surface, outSwapchainSupport);
-    VK_CHECK2(result, "could not query all swapchain requirements");
+    VK_CHECK_VERBOSE(result, "could not query all swapchain requirements");
 
     if (outSwapchainSupport->formatCount < 1 || outSwapchainSupport->presentModesCount < 1) {
       if (outSwapchainSupport->formats) {
@@ -188,12 +186,12 @@ TRACEFUNCTION;
       u32 availableExtensionCount = 0;
       VkExtensionProperties* availableExtensions = NULL;
       result =  vkEnumerateDeviceExtensionProperties(device, NULL, &availableExtensionCount, NULL);
-      VK_CHECK2( result, "could not get number of deviceExtensionProperties");
+      VK_CHECK_VERBOSE( result, "could not get number of deviceExtensionProperties");
 
       if (availableExtensionCount != 0) {
         availableExtensions = kallocate(sizeof(VkExtensionProperties) * availableExtensionCount, MEMORY_TAG_RENDERER);
         result = vkEnumerateDeviceExtensionProperties(device, NULL, &availableExtensionCount, availableExtensions);
-        VK_CHECK2(result, "could not get device extensions");
+        VK_CHECK_VERBOSE(result, "could not get device extensions");
 
         u32 requiredExtensionsCount = DARRAY_LENGTH(requirements->deviceExtensionNames);
         for (u32 i = 0; i < requiredExtensionsCount; ++i) {
@@ -236,16 +234,16 @@ VkResult selectPhysicalDevice(VulkanContext* context) {
   VkResult  result = {0};
   u32 physicalDeviceCount = 0;
   result =  vkEnumeratePhysicalDevices(context->instance, &physicalDeviceCount, NULL);
-  VK_CHECK2(result, "could not enumerate physical devices");
+  VK_CHECK_VERBOSE(result, "vkEnumeratePhysicalDevices failed");
   if (physicalDeviceCount == 0) {
     KFATAL("No devices which support Vulkan were found.");
-    return false;
+    return !VK_SUCCESS;
   }
 
   const int maxDeviceCount = 32;
   VkPhysicalDevice physicalDevices[maxDeviceCount];
   result = vkEnumeratePhysicalDevices(context->instance, &physicalDeviceCount, physicalDevices);
-  VK_CHECK2(result, "could not enumerate physical devices");
+  VK_CHECK_VERBOSE(result, "vkEnumeratePhysicalDevices failed");
 
   for (u32 i = 0; i < physicalDeviceCount; ++i) {
     VkPhysicalDeviceProperties properties;
@@ -342,11 +340,11 @@ VkResult selectPhysicalDevice(VulkanContext* context) {
 
 VkResult vulkanDeviceCreate(VulkanContext* context) {
   TRACEFUNCTION;
-  VkResult result = {0};
+  VkResult result = !VK_SUCCESS;
 
   KINFO("SETTING UP PHYSICAL DEVICE");
   result  = selectPhysicalDevice(context);
-  VK_CHECK2(result, "FAILED TO SELECT A PHYSICAL DEVICE");
+  VK_CHECK_RESULT(result, "FAILED TO SELECT A PHYSICAL DEVICE");
 
 
   KINFO("SETTING UP LOGICAL DEVICE");
@@ -406,7 +404,7 @@ VkResult vulkanDeviceCreate(VulkanContext* context) {
                           &createInfo,
                           context->allocator,
                           &context->device.logicalDevice);
-  VK_CHECK2(result,  "COULD NOT CREATE LOGICAL DEVICE");
+  VK_CHECK_VERBOSE(result,  "COULD NOT CREATE LOGICAL DEVICE");
   KINFO("LOGICAL DEVICE CREATED!");
 
   KDEBUG("------------------DEVICE QUEUES--------------------");
@@ -437,7 +435,7 @@ VkResult vulkanDeviceCreate(VulkanContext* context) {
 
   result  = vkCreateCommandPool(context->device.logicalDevice, &poolCreateInfo,
                                 context->allocator, &context->device.graphicsCommandPool);
-  VK_CHECK2(result, "FAILED TO CREATE COMMAND POOLS");
+  VK_CHECK_VERBOSE(result, "FAILED TO CREATE COMMAND POOLS");
   KINFO("GRPAHICS COMMAND POOL HAS BEEN CREATED");
   return result;
 }

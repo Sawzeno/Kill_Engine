@@ -730,9 +730,6 @@ int cmd_run_async(NobStrings* commands){
 
   return cpid;
 }
-
-
-
 bool proc_wait(int p){
   for(;;){
     int wstatus = 0;

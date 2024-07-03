@@ -272,7 +272,7 @@ KDEBUG("context : %p");
   createInfo.window = platformSystemStatePtr->window;
 
   VkResult  result  = vkCreateXcbSurfaceKHR(context->instance, &createInfo, context->allocator, &platformSystemStatePtr->surface);
-  VK_CHECK2(result, "COULD NOT SETUP VULKAN SURFACE "); 
+  VK_CHECK_VERBOSE(result, "COULD NOT SETUP VULKAN SURFACE "); 
   context->surface  = platformSystemStatePtr->surface;
   KINFO("VULKAN SURFACE INITIALIZED");
   return result;

@@ -14,7 +14,7 @@
 #include  "core/clock.h"
 
 #define   LIMITFRAMES true
-#define   TARGETFPS  1
+#define   TARGETFPS  2
 typedef struct  ApplicationState  ApplicationState;
 
 u8  applicationOnEvent    (u16 code , void* sender , void* listener , EventContext context);

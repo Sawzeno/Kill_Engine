@@ -43,3 +43,24 @@ the code base is shameless right now please dont judge:wq!
 
 Wed Jun 26 08:27:13 PM IST 2024
 // regex :  %s/return \("\(.*\zs.*:\ze\)\)/
+
+
+Sun Jun 30 01:41:03 PM IST 2024
+some iddeas i would like to check out to keep track of how data is being passed in the application
+and enhance the debugger , i have a conjecture that an AST like form , completely specific for the 
+application needs to be developed , this shall enhance beugging ability by a lot
+Abstract Semantic Graph
+Composite Pattern
+Control flow Graph -> spectral graph theory
+Directed Acyclic Graph
+Document Object Model
+Expression Tree -> thisa shits crazy !!
+Extended Backus-Naur form
+Lisp
+Semantic Resolution Tree
+shuting-Yard Problem
+Tree DL
+Abstract Syntax Tree Interpreters
+
+
+Tue Jul  2 12:35:24 PM IST 2024

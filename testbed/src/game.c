@@ -1,10 +1,8 @@
 #include  "game.h"
-#include "core/kmemory.h"
 
-#include  <defines.h>
-#include  <core/logger.h>
-#include  <core/input.h>
-#include  <unistd.h>
+#include  "core/kmemory.h"
+#include  "core/logger.h"
+#include  "core/input.h"  
 
 //initise the function pontiers
 //for setting up the game config

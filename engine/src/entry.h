@@ -1,7 +1,8 @@
 #include  "defines.h"
+#include  "gametypes.h"
+
 #include  "core/logger.h"
 #include  "core/application.h"
-#include  "gametypes.h"
 
 
 extern i8 createGame(Game* game);

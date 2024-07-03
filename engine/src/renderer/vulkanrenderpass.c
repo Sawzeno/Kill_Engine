@@ -1,9 +1,8 @@
-#include  "renderpass.h"
+#include  "vulkanrenderpass.h"
 #include  "rendererutils.h"
+
 #include  "core/logger.h"
 #include  "core/kmemory.h"
-#include  "vulkantypes.h"
-#include  <vulkan/vulkan_core.h>
 
 VkResult  vulkanRenderPassCreate(VulkanContext*     context,
                                  VulkanRenderPass*  outRenderPass,
@@ -91,7 +90,7 @@ VkResult  vulkanRenderPassCreate(VulkanContext*     context,
   subpass.preserveAttachmentCount = 0;
   subpass.pPreserveAttachments    = NULL;
 
-  KDEBUG("-----------------------RENDER PASS DEPENDENCY________");
+  KDEBUG("-----------------------RENDER PASS DEPENDENCY----------");
   //Render pass depenedencies [what our source subpass is ,if we had more than one subapss]
   VkSubpassDependency subpassDependency = {0};
   subpassDependency.srcSubpass      = VK_SUBPASS_EXTERNAL;
@@ -103,7 +102,7 @@ VkResult  vulkanRenderPassCreate(VulkanContext*     context,
   subpassDependency.dstAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
   subpassDependency.dependencyFlags = 0;
 
-  KDEBUG("-----------------------RENDER PASS CREATE INFO________");
+  KDEBUG("-----------------------RENDER PASS CREATE INFO---------");
   //render pass create
   VkRenderPassCreateInfo createInfo = {VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO};
   createInfo.attachmentCount        = attachmentDesciptionCount;
@@ -116,7 +115,7 @@ VkResult  vulkanRenderPassCreate(VulkanContext*     context,
   createInfo.pNext                  = 0;
 
   result  = vkCreateRenderPass(context->device.logicalDevice, &createInfo, context->allocator, &outRenderPass->handle);
-  VK_CHECK2(result, "failed to createRenderPass");
+  VK_CHECK_VERBOSE(result, "vkCreateRenderPass failed");
   KINFO("SUCCESFULLY CREATED RENDERPASS");
   return VK_SUCCESS;
 }

@@ -1,8 +1,7 @@
-#include  "image.h"
+#include  "vulkanimage.h"
 #include  "rendererutils.h"
+
 #include  "core/logger.h"
-#include "renderer/vulkantypes.h"
-#include <vulkan/vulkan_core.h>
 
 VkResult  vulkanImageCreate(VulkanContext*      context,
                             VkImageType         type,
@@ -37,10 +36,7 @@ VkResult  vulkanImageCreate(VulkanContext*      context,
 
   KINFO("DEPTH VIEW IMAGE CREATED");
   VkResult result = vkCreateImage(context->device.logicalDevice,&createInfo , context->allocator, &outImage->handle);
-  if(result != VK_SUCCESS){
-    vkResultToString(result);
-    return result;
-  }
+  VK_CHECK_VERBOSE(result , "failed to create Image"); 
 
   VkMemoryRequirements memoryRequirements;
   KINFO("GETTING IMAGE MEMORY REQUIREMENTS");
@@ -57,24 +53,19 @@ VkResult  vulkanImageCreate(VulkanContext*      context,
   memInfo.memoryTypeIndex = memoryType;
 
   result =  vkAllocateMemory(context->device.logicalDevice, &memInfo, context->allocator, &outImage->memory);
-  if(result != VK_SUCCESS){
-    vkResultToString(result);
-    return result;
-  }
+  VK_CHECK_VERBOSE(result, "failed to allocate memory for iamge");
 
   result  = vkBindImageMemory(context->device.logicalDevice, outImage->handle, outImage->memory, 0);
-  if(result != VK_SUCCESS){
-    vkResultToString(result);
-    return result;
-  }
+  VK_CHECK_VERBOSE(result, "failed to bind memory for image");
 
   if(createView){
     outImage->view  = 0;
     result = vulkanImageViewCreate(context, format, outImage, viewAspectFlags);
-    VK_CHECK2(result, "FAILED TO CREATE IMAGE VIEW");
+    VK_CHECK_RESULT(result,"CREATED IMAGE BUT FAILED TO CREATE ITS VIEW");
     KINFO("IMAGE VIEW CREATED SUCCESFULLY!");
     return result;
   }
+  KINFO("CREATED SWAPCHAIN IMAGE SUCCESFULLY!");
   return result;
 }
 
@@ -96,6 +87,7 @@ VkResult  vulkanImageViewCreate(VulkanContext* context,
   createInfo.subresourceRange.layerCount    = 1;
 
   VkResult result = vkCreateImageView(context->device.logicalDevice, &createInfo, context->allocator, &image->view);
+  VK_CHECK_VERBOSE(result, "vkCreateImageView failed");
   return result;
 }
 

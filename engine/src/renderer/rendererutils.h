@@ -1,21 +1,25 @@
 #pragma once
-#include  "defines.h"
-#include  "vulkantypes.h"
 
-#define VK_CHECK(result, message)                          \
-if (result != VK_SUCCESS) {                                      \
-  UFATAL("%s: %d, %s", message, result, vkResultToString(result)); \
-  return false;                                                 \
+#include  "vulkantypes.h"
+#include <vulkan/vulkan_core.h>
+
+#define VK_CHECK_VERBOSE(result, message)                           \
+  if(result != VK_SUCCESS){                                         \
+  UERROR("%s -> %s: %d, %s ",__FUNCTION__, message,result,vulkanResultToString(result)); \
+  return result;                                                    \
 }
 
-#define VK_CHECK2(result, message)\
-do{                               \
-if(result != VK_SUCCESS){         \
-  UFATAL("%s: %d, %s", message, result, vkResultToString(result)); \
-  return result;                     \
-}                                 \
-}while(0)                        \
+#define VK_CHECK_RESULT(result, message , ...)                      \
+  if(result != VK_SUCCESS){                                         \
+  UERROR(message,##__VA_ARGS__);                                    \
+  return result;                                                    \
+}
 
+#define VK_CHECK_BOOL(result, message, ...)                         \
+  if (result != VK_SUCCESS){                                        \
+  UERROR(message,##__VA_ARGS__);                                    \
+  return false;                                                     \
+}
 
 #define VK_CHECK_FENCE(result)                                      \
     switch(result) {                                                \
@@ -41,12 +45,14 @@ if(result != VK_SUCCESS){         \
     }
 
 
+bool            vulkanResultIsSuccess         (VkResult result);
+const char*     vulkanResultToString          (VkResult result);
+
 void            printAvailableLayers          ();
-void            printAvailableExtenesions     ();
+void            printAvailableExtensions      ();
 VkResult        checkAvailableLayers          (const char** requiredLayers);
 VkResult        checkAvailableExtensions      (const char** requiredExtensions); 
-const char*     vkResultToString              (VkResult result);
-u8              vulkanResultIsSuccess         (VkResult result);
+
 void            logVulkanContext              (const VulkanContext* context) ;
 void            logVulkanDevice               (const VulkanDevice* device) ;
 void            logVulkanSwapchainSupportInfo (const VulkanSwapchainSupportInfo* supportInfo) ;
@@ -54,5 +60,5 @@ void            logVulkanSwapchain            (const VulkanSwapchain* swapchain)
 void            logVulkanImage                (const VulkanImage* image) ;
 void            logVulkanRenderPass           (const VulkanRenderPass* renderPass) ;
 void            logVulkanCommandBuffer        (const VulkanCommandBuffer* commandBuffer) ;
-void            logVulkanFramebuffer          (const struct VulkanFrameBuffer* framebuffer) ;
+void            logVulkanFramebuffer          (const VulkanFrameBuffer* framebuffer) ;
 void            logVulkanFence                (const VulkanFence* fence) ;

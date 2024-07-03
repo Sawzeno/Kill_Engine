@@ -7,7 +7,7 @@
 #include  <vulkan/vulkan.h>
 #include  <vulkan/vulkan_core.h>
 
-const char* vkResultToString(VkResult result) {
+const char* vulkanResultToString(VkResult result) {
   switch (result) {
     case VK_SUCCESS: return "VK_SUCCESS";
     case VK_NOT_READY: return "VK_NOT_READY";
@@ -51,8 +51,7 @@ const char* vkResultToString(VkResult result) {
   }
 }
 
-
-u8 vulkanResultIsSuccess(VkResult result) {
+bool vulkanResultIsSuccess(VkResult result) {
   switch (result) {
     case VK_SUCCESS:
     case VK_NOT_READY:
@@ -112,6 +111,7 @@ void printAvailableExtenesions(){
   for (u32 i = 0; i < extensionCount; ++i) {
     KTRACE("%s", extensions[i].extensionName);
   }
+  free(extensions);
 }
 
 void printAvailableLayers() {
@@ -125,19 +125,19 @@ void printAvailableLayers() {
   for (u32 i = 0; i < layerCount; ++i) {
     KTRACE("%s", layers[i].layerName);
   }
+  free(layers);
 }
 
 VkResult checkAvailableExtensions(const char** requiredExtensions) {
   VkResult result = {0};
   u32 extensionCount = 0;
   result = vkEnumerateInstanceExtensionProperties(NULL, &extensionCount, NULL);
-  VK_CHECK2(result, "failed to get number of extensionProperties");
+  VK_CHECK_VERBOSE(result, "failed to get number of extensionProperties");
 
-  VkExtensionProperties* availableExtensions = _darrayCreate(extensionCount, sizeof(VkExtensionProperties));
-  MEMERR(availableExtensions);
+  VkExtensionProperties* availableExtensions  = DARRAY_RESERVE(VkExtensionProperties, extensionCount);
 
   result = vkEnumerateInstanceExtensionProperties(NULL, &extensionCount, availableExtensions);
-  VK_CHECK2(result, "failed to get the names of extension properties");
+  VK_CHECK_VERBOSE(result, "failed to get the names of extension properties");
 
   for (u32 i = 0; i < DARRAY_LENGTH(requiredExtensions) ; ++i) {
     u8 found = false;
@@ -150,7 +150,7 @@ VkResult checkAvailableExtensions(const char** requiredExtensions) {
       }
     }
     if (!found) {
-      KFATAL("Required extension is missing: %s", requiredExtension);
+      KFATAL("REQUIRED EXTENSION %s IS MISSING", requiredExtension);
       free(availableExtensions);
       return !VK_SUCCESS;
     }
@@ -166,24 +166,25 @@ VkResult checkAvailableLayers(const char** requiredLayers){
   u32 layerCount = 0;
   VkResult result = {0};
   result =  vkEnumerateInstanceLayerProperties(&layerCount, NULL);
-  VK_CHECK2(result, "failed to get numner of layers");
-  VkLayerProperties* availableLayers = _darrayCreate(layerCount, sizeof(VkLayerProperties));
-  MEMERR(availableLayers);
+
+  VK_CHECK_VERBOSE(result, "failed to get numner of layers");
+  VkLayerProperties*  availableLayers = DARRAY_RESERVE(VkLayerProperties, layerCount);
+
   result = vkEnumerateInstanceLayerProperties(&layerCount, availableLayers);
-  VK_CHECK2(result, "failed to names of layers");
+  VK_CHECK_VERBOSE(result, "failed to names of layers");
 
   for(u32 i = 0; i < DARRAY_LENGTH(requiredLayers); ++i){
     u8 found = false;
     const char* layer = requiredLayers[i];
     for( u32 j= 0; j < layerCount; ++j ){
       if(strcmp(layer, availableLayers[j].layerName) == 0){
-        KTRACE("FOUND LAYER : %s",layer);
+        KTRACE("FOUND LAYER  %s",layer);
         found = true;
         break;
       }
     }
     if(!found){
-      KFATAL("%s is missing", layer);
+      KFATAL("REQUIRED LAYER %s IS MISSING", layer);
       return !VK_SUCCESS;
     }
   }
@@ -249,8 +250,8 @@ void logVulkanSwapchain(const VulkanSwapchain* swapchain) {
         (void*)swapchain->depthAttachment.handle,
         (void*)swapchain->depthAttachment.memory,
         (void*)swapchain->depthAttachment.view,
-               swapchain->depthAttachment.width,
-               swapchain->depthAttachment.height);
+        swapchain->depthAttachment.width,
+        swapchain->depthAttachment.height);
   UINFO("  Frame Buffers: %p", (void*)swapchain->frameBuffers);
 }
 

@@ -19,7 +19,6 @@
 #include  "math/mathtypes.h"
 
 #include  "shaders/vulkanshaderobject.h"
-#include <vulkan/vulkan_core.h>
 
 static    char* applicationName;
 static    u32 cachedFrameBufferWidth    = 0;
@@ -42,7 +41,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL vkDebugCallback(VkDebugUtilsMessageSeverityFlagBi
                                                void*                                        user_data);
 
 u8  rendererBackendInitialize(){
-  TRACEFUNCTION;
+TRACEFUNCTION;
   //function pointers
   context.findMemoryIndex = findMemoryIndex;
   //TODO
@@ -107,7 +106,7 @@ u8  rendererBackendInitialize(){
   debugCreateInfo.pfnUserCallback = vkDebugCallback;
 
   PFN_vkCreateDebugUtilsMessengerEXT func =
-    (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(context.instance, "vkCreateDebugUtilsMessengerEXT");
+  (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(context.instance, "vkCreateDebugUtilsMessengerEXT");
 
   result =  func(context.instance, &debugCreateInfo, context.allocator, &context.debugMessenger);
   VK_CHECK_BOOL(result, "FAILED TO CREATE DEBUGGER : %s", vulkanResultToString(result));
@@ -178,51 +177,12 @@ u8  rendererBackendInitialize(){
   KINFO("CREATING SHADER OBJECTS");
   result  = vulkanObjectShaderCreate(&context, &context.objectShader);
   VK_CHECK_BOOL(result, "ERROR LOADING BUILTIN BASIC LIGHTING SHADER");
-
-
+  
+  
   KDEBUG("----------------------VULKAN BUFFERS----------------------");
   KINFO("CREATING BUFFERS");
   result = createBuffers(&context);
   VK_CHECK_BOOL(result, "FAILED TO CREATE BUFFERS");
-
-  KDEBUG("----------------------TEST SLAP----------------------");
-  //test slap
-  const u32 vertCount = 4;
-  Vertex3D  verts[vertCount]  = {0};
-
-  verts[0].Position.x = 0.0;
-  verts[0].Position.y =-0.5;
-
-  verts[1].Position.x = 0.5;
-  verts[1].Position.y = 0.5;
-
-  verts[2].Position.x = 0.0;
-  verts[2].Position.y = 0.5;
-
-  verts[3].Position.x = 0.5;
-  verts[3].Position.y =-0.5;
-
-  const u32 indexCount  = 6;
-  u32 indices[indexCount] = {0,1,2,0,3,1};
-
-  result = uploadDataRange(&context,
-                           context.device.graphicsCommandPool,
-                           0,
-                           context.device.graphicsQueue,
-                           &context.objectVertexBuffer,
-                           0,
-                           sizeof(Vertex3D) * vertCount, verts);
-  VK_CHECK_BOOL(result, "failed to uploadDataRange of testSlap");
-
-  result = uploadDataRange(&context,
-                           context.device.graphicsCommandPool,
-                           0,
-                           context.device.graphicsQueue,
-                           &context.objectIndexBuffer,
-                           0,
-                           sizeof(u32) * indexCount, indices);
-  VK_CHECK_BOOL(result, "failed to uploadDataRange of testSlap");
-
 
   KINFO("Vulkan RENDERER BACKEND INITIALIZED");
   UINFO("Vulkan RENDERER BACKEND INITIALIZED");
@@ -231,7 +191,7 @@ u8  rendererBackendInitialize(){
 
 //-----------------------------------------------------RENDERER BACKEND SHUTDOWN---------------------------------------------------------
 u8  rendererBackendShutdown(){
-  TRACEFUNCTION;
+TRACEFUNCTION;
   // destory in opposite order
 
   KDEBUG("DESTORYING VULKAN BUFFERS");
@@ -260,7 +220,7 @@ u8  rendererBackendShutdown(){
 
     vulkanFenceDestroy(&context, &context.inFlightFences[i]);
   }
-
+  
   DARRAY_DESTROY(context.queueCompleteSemaphores);
   context.queueCompleteSemaphores = 0;
   DARRAY_DESTROY(context.imageAvailableSemaphores);
@@ -320,7 +280,7 @@ u8  rendererBackendBeginFrame(f32 deltaTime){
   KTRACE("----------------------BEGIN FRAME-----------------");
   KDEBUG("deltatime : %f",deltaTime);
   VulkanDevice* device  = &context.device;
-
+    
   // logVulkanContext    (&context);
   // logVulkanDevice     (&context.device) ;
   // logVulkanSwapchain  (&context.swapchain) ;
@@ -363,11 +323,11 @@ u8  rendererBackendBeginFrame(f32 deltaTime){
   //acquire the next image from the swapchain. pass along the semaphore that should be signaled when it completes
   //the same semaphore will be waited on by the queue submission to ensure this image is available.
   if(VK_SUCCESS != vulkanSwapchainAcquireNextImageIndex(&context,
-                                                        &context.swapchain,
-                                                        UINT64_MAX,
-                                                        context.imageAvailableSemaphores[context.currentFrame],
-                                                        0,
-                                                        &context.imageIndex)){
+                                           &context.swapchain,
+                                           UINT64_MAX,
+                                           context.imageAvailableSemaphores[context.currentFrame],
+                                           0,
+                                           &context.imageIndex)){
     KWARN("FAILED TO ACQUIRE NEXT IMAGE INDEX FRM SWAPCHAIN");
     return false;
   }
@@ -403,19 +363,7 @@ u8  rendererBackendBeginFrame(f32 deltaTime){
                         &context.mainRenderPass,
                         context.swapchain.frameBuffers[context.imageIndex].handle);
 
-  //test slap to draw geometry
-  vulkanObjectShaderUse(&context, &context.objectShader);
-
-  VkDeviceSize offsets[1] = {0};
-  //bind vertex buffer at offset
-  vkCmdBindVertexBuffers(commandBuffer->handle, 0, 1, &context.objectVertexBuffer.handle, (VkDeviceSize*)offsets);
   
-  //bind index buffer at offset
-  vkCmdBindIndexBuffer  (commandBuffer->handle, context.objectIndexBuffer.handle, 0, VK_INDEX_TYPE_UINT32);
-
-  //issue the draw
-  vkCmdDrawIndexed(commandBuffer->handle, 6, 1, 0, 0, 0);
-
   return true;
 }
 
@@ -469,11 +417,11 @@ u8  rendererBackendEndFrame(f32 deltaTime){
 
   // give the image back to swapchain
   result = vulkanSwapchainPresent(&context,
-                                  &context.swapchain,
-                                  context.device.graphicsQueue,
-                                  context.device.presentQueue,
-                                  context.queueCompleteSemaphores[context.currentFrame],
-                                  context.imageIndex);
+                         &context.swapchain,
+                         context.device.graphicsQueue,
+                         context.device.presentQueue,
+                         context.queueCompleteSemaphores[context.currentFrame],
+                         context.imageIndex);
 
   VK_CHECK_BOOL(result, "failed to present swapchain");
   return true;
@@ -494,16 +442,16 @@ VkResult createCommandBuffers(){
   for(u32 i = 0; i < context.swapchain.imageCount; ++i){
     if(context.graphicsCommandBuffers[i].handle){
       result  = vulkanCommandBufferFree(&context,
-                                        context.device.graphicsCommandPool,
-                                        &context.graphicsCommandBuffers[i]);
+                              context.device.graphicsCommandPool,
+                              &context.graphicsCommandBuffers[i]);
       VK_CHECK_RESULT(result, "failed to free grpahics Command Buffer : %"PRIu32"",i);
     }
     kzeroMemory(&context.graphicsCommandBuffers[i], sizeof(VulkanCommandBuffer));
     result = vulkanCommandBufferAllocate(&context,
-                                         context.device.graphicsCommandPool, true,
-                                         &context.graphicsCommandBuffers[i]);
+                                context.device.graphicsCommandPool, true,
+                                &context.graphicsCommandBuffers[i]);
 
-    VK_CHECK_RESULT(result, "failed to free allocate Command Buffer : %"PRIu32"",i);
+      VK_CHECK_RESULT(result, "failed to free allocate Command Buffer : %"PRIu32"",i);
   }
   KINFO("CREATED COMMAND BUFFERS");
   return result;
@@ -520,11 +468,11 @@ VkResult  regenerateFrameBuffers(VulkanSwapchain* swapchain, VulkanRenderPass* r
     VkImageView attachments[] = {swapchain->views[i], swapchain->depthAttachment.view};
 
     result = vulkanFrameBufferCreate(&context, renderPass,
-                                     context.frameBufferWidth,
-                                     context.frameBufferHeight,
-                                     attachmentCount,
-                                     attachments, 
-                                     &context.swapchain.frameBuffers[i]);
+                            context.frameBufferWidth,
+                            context.frameBufferHeight,
+                            attachmentCount,
+                            attachments, 
+                            &context.swapchain.frameBuffers[i]);
     VK_CHECK_RESULT(result,"failed to create framebuffer for image %"PRIu32"",i);
   } 
 
@@ -569,17 +517,8 @@ VkResult  uploadDataRange       (VulkanContext* context, VkCommandPool pool, VkF
   VkResult result = !VK_SUCCESS;
   // create a host visible staging buffer to upload to . mark it as the source of the ttransfer
   VkBufferUsageFlags  flags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-  VulkanBuffer        staging;
-  result  = vulkanBufferCreate(context, size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, flags, true, &staging);
-  VK_CHECK_RESULT(result, "vulkanBufferCreate   failed in uploadDataRange");
-
-  result  = vulkanBufferLoadData(context, &staging, 0, size, 0, data);
-  VK_CHECK_RESULT(result, "vulkanBufferLoadData failed in uploadDataRange");
-
-  result  = vulkanBufferCopyTo(context, pool, fence, queue, staging.handle, 0, buffer->handle, offset, size);
-  VK_CHECK_RESULT(result, "vulkanBufferCopyTo   failed in uploadDataRange");
-
-  vulkanBufferDestroy(context, &staging);
+  vulkanBuffer        staging;
+  vulkanBufferCreate(context, pool, fence, queue, staging.handle, 0, buffer->handle, offset, size);
   return result;
 }
 
@@ -612,15 +551,15 @@ VkResult recreateSwapchain(){
 
   // requery support
   result = vulkanDeviceQuerySwapchainSupport(context.device.physicalDevice,
-                                             context.surface,
-                                             &context.device.swapchainSupport);
+                                    context.surface,
+                                    &context.device.swapchainSupport);
   VK_CHECK_RESULT(result, "failed to query swapchain while recreating swapchain");
   result = vulkanDeviceDetectDepthFormat(&context.device);
   VK_CHECK_RESULT(result, "failed to detect depth format while recreating swapchain");
   result = vulkanSwapchainRecreate(&context,
-                                   cachedFrameBufferWidth,
-                                   cachedFrameBufferHeight,
-                                   &context.swapchain);
+                          cachedFrameBufferWidth,
+                          cachedFrameBufferHeight,
+                          &context.swapchain);
   VK_CHECK_RESULT(result, "failed to recreate swapchian");
   //sync the framebuffer size with the cached sizes
   context.frameBufferWidth  = cachedFrameBufferWidth;
@@ -636,8 +575,8 @@ VkResult recreateSwapchain(){
   // ---------------------------------------------------------------------------------destroy commandBuffers
   for(u32 i = 0; i < context.swapchain.imageCount; ++i){
     vulkanCommandBufferFree(&context, 
-                            context.device.graphicsCommandPool,
-                            &context.graphicsCommandBuffers[i]);
+                                     context.device.graphicsCommandPool,
+                                     &context.graphicsCommandBuffers[i]);
   }
   // ---------------------------------------------------------------------------------destroy framebuffers
   for(u32 i = 0; i < context.swapchain.imageCount; ++i){
@@ -665,8 +604,8 @@ VkResult recreateSwapchain(){
 
 
 u8  rendererBackendResized(u16 width, u16 height){
-  TRACEFUNCTION;
-  KDEBUG("width : %"PRIu64" height : %"PRIu64"",width,height);
+TRACEFUNCTION;
+KDEBUG("width : %"PRIu64" height : %"PRIu64"",width,height);
   UWARN("------RENDERER BACKEND RESIZE INITIALTED-------");
   cachedFrameBufferWidth   = width;
   cachedFrameBufferHeight  = height;

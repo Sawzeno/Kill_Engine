@@ -1,9 +1,8 @@
-#include  "framebuffer.h"
+#include  "vulkanframebuffer.h"
+#include  "rendererutils.h"
 
 #include  "core/kmemory.h"
 #include  "core/logger.h"
-#include <vulkan/vulkan_core.h>
-#include  "rendererutils.h"
 
 
 VkResult  vulkanFrameBufferCreate(VulkanContext* context,
@@ -33,7 +32,7 @@ VkResult  vulkanFrameBufferCreate(VulkanContext* context,
   createInfo.layers  = 1;
 
   result  = vkCreateFramebuffer(context->device.logicalDevice, &createInfo, context->allocator, &outFrameBuffer->handle);
-  VK_CHECK2(result, "FAILED TO CREATE FRAMEBUFFER");
+  VK_CHECK_VERBOSE(result, "vkCreateFramebuffer failed");
   KINFO("SUCCESFULLY CREATED FRAMEBUFFER");
   return result;
 }

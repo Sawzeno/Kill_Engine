@@ -137,8 +137,8 @@ void* kzeroMemory(void* block , u64 size){
 }
 
 void* kcopyMemory(void* dest , const void* source , u64 size, const char* func){
-  void* copied = memcpy(dest , source , size);
-  return copied ;
+  MDEBUG("%s  : %p copied to %p",source,dest,func);
+  return memcpy(dest , source , size);
 }
 
 void* ksetMemory(void* dest , i32 value , u64 size){

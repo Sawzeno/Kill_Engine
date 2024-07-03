@@ -3,6 +3,8 @@
 #include  "defines.h"
 #include  <vulkan/vulkan_core.h>
 
+#define   OBJECT_SHADER_STAGE_COUNT 2
+
 typedef struct  VulkanDevice        VulkanDevice;
 typedef struct  VulkanContext       VulkanContext;
 typedef struct  VulkanSwapchainSupportInfo VulkanSwapchainSupportInfo;
@@ -15,7 +17,9 @@ typedef struct  VulkanFence         VulkanFence;
 typedef struct  VulkanObjectShader  VulkanObjectShader;
 typedef struct  VulkanShaderStage   VulkanShaderStage;
 typedef struct  VulkanPipeline      VulkanPipeline;
+typedef struct  VulkanBuffer        VulkanBuffer;
 
+//---------------------------------------------------------------------------ENUMS
 typedef enum  VulkanRenderPassState {
   READY,
   RECORDING,
@@ -34,6 +38,17 @@ typedef enum VulkanCommandBufferState{
   COMMAND_BUFFER_STATE_NOT_ALLOCATED,
 }VulkanCommandBufferState;
 
+struct VulkanBuffer{
+  u64 totalSize;
+  VkBuffer handle;
+  VkBufferUsageFlagBits usage;
+  bool isLocked;
+  VkDeviceMemory memory;
+  i32 memoryIndex;
+  u32 memoryPropertyFlags;
+};
+
+//---------------------------------------------------------------------------STRUCTS
 struct VulkanShaderStage{
   VkShaderModuleCreateInfo  createInfo;
   VkShaderModule            handle;
@@ -45,7 +60,6 @@ struct VulkanPipeline{
   VkPipelineLayout          pipelineLayout;
 };
 
-#define   OBJECT_SHADER_STAGE_COUNT 2
 struct VulkanObjectShader{
   VulkanShaderStage         stages[OBJECT_SHADER_STAGE_COUNT];
   VulkanPipeline            pipeline; 
@@ -132,9 +146,9 @@ struct VulkanContext{
   u64                           frameBufferSizeLastGeneration;
   VkInstance                    instance;            // Handle to the Vulkan instance
   VkAllocationCallbacks*        allocator;           // Custom memory allocator (optional)
-  VkSurfaceKHR                  surface;             // Handle to the window surface
   VkDebugUtilsMessengerEXT      debugMessenger;     // Handle to the debug messenger
   VulkanDevice                  device;              // Vulkan device (physical and logical)
+  VkSurfaceKHR                  surface;             // Handle to the window surface
   VulkanSwapchain               swapchain;           // Swapchain for image presentation
   VulkanRenderPass              mainRenderPass;      // mainRenderPass for creation
   u32                           imageIndex;          // Index of the current swapchain image
@@ -147,6 +161,10 @@ struct VulkanContext{
   VulkanFence*                  inFlightFences;
   VulkanFence**                 imagesInFlight;        //holds pointer to fences which exist and aew owned elsewhere
   VulkanObjectShader            objectShader;
+  VulkanBuffer                  objectVertexBuffer;
+  VulkanBuffer                  objectIndexBuffer;
+  u64                           geometryVertexOffset;
+  u64                           geometryIndexOffset;
   i32(*findMemoryIndex)(u32 typeFilter, u32 propertyFlags);
 };
 

@@ -7,6 +7,7 @@ typedef struct  Vec3  Vec3;
 typedef union   Vec4  Vec4;
 typedef         Vec4  Quat;
 typedef union   Mat4  Mat4;
+typedef struct  Vertex3D Vertex3D;
 
 union Mat4{
   f32 data[16];
@@ -66,4 +67,7 @@ union Vec4{
   };
 };
 
+struct Vertex3D{
+  Vec3 Position;
 
+};

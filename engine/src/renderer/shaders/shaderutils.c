@@ -35,11 +35,12 @@ VkResult createShaderModule(VulkanContext* context,
   u64 fileSize  = handle.size;
   KFileClose(&handle);
 
-  VK_CHECK2(vkCreateShaderModule(context->device.logicalDevice,
+  VkResult result = vkCreateShaderModule(context->device.logicalDevice,
                                  &shaderStagesArr[stageIndex].createInfo,
                                  context->allocator,
-                                 &shaderStagesArr[stageIndex].handle),
-            "failed to create Shader Module");
+                                 &shaderStagesArr[stageIndex].handle);
+  VK_CHECK_VERBOSE(result, "vkCreateShaderModule failed");
+
   kzeroMemory(&shaderStagesArr[stageIndex].shaderStageCreateInfo, sizeof(VkPipelineShaderStageCreateInfo));
   shaderStagesArr[stageIndex].shaderStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
   shaderStagesArr[stageIndex].shaderStageCreateInfo.stage = stageFlag;
