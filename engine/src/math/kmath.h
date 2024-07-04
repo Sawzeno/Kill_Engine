@@ -642,21 +642,21 @@ static inline Vec3 mat4Down(Mat4 matrix) {
 }
 
 static inline Vec3 mat4Left(Mat4 matrix) {
-  Vec3 right;
-  right.x = -matrix.data[0];
-  right.y = -matrix.data[4];
-  right.z = -matrix.data[8];
-  vec3Normalize(&right);
-  return right;
+  Vec3 left;
+  left.x = -matrix.data[0];
+  left.y = -matrix.data[4];
+  left.z = -matrix.data[8];
+  vec3Normalize(&left);
+  return left;
 }
 
 static inline Vec3 mat4Right(Mat4 matrix) {
-  Vec3 left;
-  left.x = matrix.data[0];
-  left.y = matrix.data[4];
-  left.z = matrix.data[8];
-  vec3Normalize(&left);
-  return left;
+  Vec3 right;
+  right.x = matrix.data[0];
+  right.y = matrix.data[4];
+  right.z = matrix.data[8];
+  vec3Normalize(&right);
+  return right;
 }
 
 // ------------------------------------------
@@ -778,7 +778,7 @@ static inline Mat4 quatToRotationMatrix(Quat q, Vec3 center) {
   return outmatrix;
 }
 
-static inline Quat QuatFromAxisAngle(Vec3 axis, f32 angle, u8 normalize) {
+static inline Quat quatFromAxisAngle(Vec3 axis, f32 angle, u8 normalize) {
   const f32 halfangle = 0.5f * angle;
   f32 s = ksin(halfangle);
   f32 c = kcos(halfangle);
@@ -790,7 +790,7 @@ static inline Quat QuatFromAxisAngle(Vec3 axis, f32 angle, u8 normalize) {
   return q;
 }
 
-static inline Quat QuatSlerp(Quat q0, Quat q1, f32 percentage) {
+static inline Quat quatSlerp(Quat q0, Quat q1, f32 percentage) {
   Quat outQuaternion;
   // Source: https://en.wikipedia.org/wiki/Slerp
   // Only unit Quaternions are valid rotations.

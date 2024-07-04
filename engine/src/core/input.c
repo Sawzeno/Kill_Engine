@@ -32,7 +32,7 @@ char* getKeyName(u32 xKeycode);
 // #endif
 
 bool initializeInput(u64* memoryRequirement, void* state){
-  TRACEEVENT;
+  TRACEFUNCTION;
   KDEBUG("memoryRequirement :%"PRIu64" state : %p",*memoryRequirement, state);
   *memoryRequirement  = sizeof(InputSystemState);
   if(state  ==  NULL){
@@ -46,7 +46,7 @@ bool initializeInput(u64* memoryRequirement, void* state){
 }
 
 void shutdownInput(){
-TRACEEVENT;
+TRACEFUNCTION;
   KINFO("INPUT SUBSYTEM SHUTDOWN");
   inputSystemStatePtr = NULL;
 }
@@ -64,7 +64,7 @@ TRACEEVENT;
 void inputProcessKey(keys key, u8 pressed){
 TRACEEVENT;
   //updates the current value ,if wasnt pressed and is pressed then set its to that and vice versa
-  EINFO("%s : %s",getKeyName(key), pressed == true ? "pressed" : "released");
+  EDEBUG("%s : %s",getKeyName(key), pressed == true ? "pressed" : "released");
   if(inputSystemStatePtr->keyboardCurrent.keys[key] != pressed){
     inputSystemStatePtr->keyboardCurrent.keys[key]   = pressed;
 
@@ -87,7 +87,7 @@ TRACEEVENT;
 
 void inputProcessMouseMove(i16 x, i16 y){
 TRACEEVENT;
-EDEBUG("X : %"PRIu64" Y : %"PRIu64"",x,y);
+  EDEBUG("X : %"PRIu64" Y : %"PRIu64"",x,y);
   if(inputSystemStatePtr->mouseCurrent.x != x || inputSystemStatePtr->mouseCurrent.y != y){
 
     inputSystemStatePtr->mouseCurrent.x  = x;
@@ -109,53 +109,55 @@ TRACEEVENT;
 }
 
 u8 inputIsKeyDown(keys key){
+  TRACEEVENT;
   return inputSystemStatePtr->keyboardCurrent.keys[key] = true;
 }
 
 u8 inputIsKeyUp(keys key){
-
+  TRACEEVENT;
   return inputSystemStatePtr->keyboardCurrent.keys[key] == false;
 }
 u8 inputWasKeyDown(keys key){
-
+  TRACEEVENT;
   return inputSystemStatePtr->keyboardPrevious.keys[key] == true;
 }
 
 u8 inputWasKeyUp(keys key){
+  TRACEEVENT;
   return inputSystemStatePtr->keyboardPrevious.keys[key] == false;
 }
 
 u8 inputIsMouseDown(buttons button){
-
+  TRACEEVENT;
   return inputSystemStatePtr->mouseCurrent.buttons[button] == true;
 }
 
 u8 inputIsMouseUp(buttons button){
-
+  TRACEEVENT;
   return inputSystemStatePtr->mouseCurrent.buttons[button] == false;
 }
 u8 inputWasMouseDown(buttons button){
-
+  TRACEEVENT;
   return inputSystemStatePtr->mousePrevious.buttons[button] == true;
 }
 
 u8 inputWasMouseUp(buttons button){
-
+  TRACEEVENT;
   return inputSystemStatePtr->mousePrevious.buttons[button] == false;
 }
 
 void inputGetMousePos(i32 *x, i32 *y){
-
+  TRACEEVENT;
   *x  = inputSystemStatePtr->mouseCurrent.x;
   *y  = inputSystemStatePtr->mouseCurrent.y;
 }
 void inputGetPrevMousePos(i32 *x, i32 *y){
-
+  TRACEEVENT;
   *x  = inputSystemStatePtr->mousePrevious.x;
   *y  = inputSystemStatePtr->mousePrevious.y;
 }
 
-// #ifndef LOG_DEBUG_ENABLED 
+#if LOG_DEBUG_ENABLED == 1 
 char* getKeyName(u32 key){
 switch (key) {
     
@@ -411,5 +413,5 @@ switch (key) {
       return 0;
   }
 }
-// #endif
+#endif
 

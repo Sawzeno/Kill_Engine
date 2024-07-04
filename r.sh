@@ -14,19 +14,19 @@ NC='\x1b[0m'  # No Color
 
 PREFIX="[❯]"
 
-# Function to print colored text
-color_print() {
-  local color="$1"
-  local message="$2"
-  echo -e "${PREFIX}  ${color}${message}${NC}"
-}
-
 cmake_options="-DLOG_WARN=ON
 -DLOG_INFO=ON
 -DLOG_TRACE=ON
 -DLOG_DEBUG=ON
 -DLOG_FILES=ON
 -DLOG_TEST=OFF"
+
+# Function to print colored text
+color_print() {
+  local color="$1"
+  local message="$2"
+  echo -e "${PREFIX}  ${color}${message}${NC}"
+}
 
 run_cmake() {
   pushd build || { echo "Failed to enter build directory"; exit 1; }
@@ -40,20 +40,20 @@ run_make() {
   popd
 }
 
+run_testbed() {
+  pushd build || { echo "Failed to enter build directory"; exit 1; }
+  pushd testbed || { echo "Failed to enter testbed directory";popd; exit 1; }
+  rm *.logs
+  ./testbed
+  popd
+  popd
+}
+
 run_tests() {
   pushd build || { echo "Failed to enter build directory"; exit 1; }
   for test_executable in tests/*.test; do
     color_print $BLUE "RUNNING TEST FILE ${test_executable}" && ${test_executable} || { color_print $RED "Execution of ${test_executable} failed"; popd; exit 1; }
   done
-  popd
-}
-
-run_testbed() {
-  pushd build || { echo "Failed to enter build directory"; exit 1; }
-  pushd testbed || { echo "Failed to enter testbed directory"; exit 1; }
-  rm *.logs
-  ./testbed
-  popd
   popd
 }
 

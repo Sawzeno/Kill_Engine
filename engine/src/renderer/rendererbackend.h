@@ -1,31 +1,31 @@
 #pragma once
 
 #include  "defines.h"
-#include  <vulkan/vulkan.h>
-#include  <vulkan/vulkan_core.h>
+#include  "math/mathtypes.h"
+#include  "renderer/vulkantypes.h"
+
 
 typedef struct  RendererBackend RendererBackend;
 typedef struct  RenderPacket    RenderPacket;
 
 struct RendererBackend{
   u64 frameNumber;
-  u8  (*initilaize) ();
-  u8  (*beginFrame) (f32 deltaTime);
-  u8  (*endFrame)   (f32 deltaTime);
-  u8  (*resized)    (u16 width, u16 height);
-  u8  (*shutdown)   ();
-};
+ };
 
 struct RenderPacket{
   f32 deltaTime;
 };
 
-u8  rendererBackendInitialize ();
+bool  rendererBackendInitialize ();
 
-u8  rendererBackendBeginFrame (f32 deltaTime);
+bool  rendererBackendBeginFrame (f32 deltaTime);
 
-u8  rendererBackendEndFrame   (f32 deltaTime);
+bool  rendererBackendEndFrame   (f32 deltaTime);
 
-u8  rendererBackendResized    (u16 width, u16 height);
+bool  rendererUpdateGlobalState (Mat4 projection, Mat4 view, Vec3 viewPosition, Vec4 ambientColor, i32 mode);
 
-u8  rendererBackendShutdown   ();
+bool  rendererBackendResized    (u16 width, u16 height);
+
+bool  rendererBackendShutdown   ();
+
+bool  updateObject(Mat4 model);

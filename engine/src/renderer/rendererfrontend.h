@@ -2,10 +2,10 @@
 
 #include  "rendererbackend.h"
 
-u8  initializeRenderer(u64*requiredMemory, void* state);
+bool  initializeRenderer(u64*requiredMemory, void* state);
 
-u8  rendererOnResized(u16 width , u16 height);
+bool  rendererOnResized(u16 width , u16 height);
 
-u8  rendererDrawFrame(RenderPacket* packet);
+bool  rendererDrawFrame(RenderPacket* packet);
 
-u8  shutdownRenderer();
+bool  shutdownRenderer();

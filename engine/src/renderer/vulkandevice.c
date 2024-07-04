@@ -39,16 +39,18 @@ VkResult physicalDeviceMeetsRequirements(
   VulkanPhysicalDeviceQueueFamilyInfo* outQueueFamilyInfo,
   VulkanSwapchainSupportInfo* outSwapchainSupport);
 
-VkResult vulkanDeviceQuerySwapchainSupport(VkPhysicalDevice physicalDevice,
-                                           VkSurfaceKHR surface,
-                                           VulkanSwapchainSupportInfo *outSupportInfo) {
+VkResult 
+vulkanDeviceQuerySwapchainSupport(VkPhysicalDevice            physicalDevice,
+                                  VkSurfaceKHR                surface,
+                                  VulkanSwapchainSupportInfo *outSupportInfo)
+{
 TRACEFUNCTION;
-  KDEBUG("----------------------DEVICE SURFACE CAPABILTITIES---------");
+  KTRACE("----------------------DEVICE SURFACE CAPABILTITIES---------");
   VkResult result = {0};
   result = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, surface, &outSupportInfo->capabilities);
   VK_CHECK_VERBOSE(result, "failed to get device surface capabilities");
 
-  KDEBUG("----------------------SURFACE FORMATS----------------------");
+  KTRACE("----------------------SURFACE FORMATS----------------------");
   result  = vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &outSupportInfo->formatCount, 0);
   VK_CHECK_VERBOSE(result, "failed to get device formats count");
 
@@ -58,7 +60,7 @@ TRACEFUNCTION;
     VK_CHECK_VERBOSE(result, "failed to get device formats available");
   }
 
-  KDEBUG("----------------------PRESENT MODES-----------------------");
+  KTRACE("----------------------PRESENT MODES-----------------------");
   result  = vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, &outSupportInfo->presentModesCount, 0);
   VK_CHECK_VERBOSE(result, "failed to get present modes count");
 
@@ -76,15 +78,15 @@ TRACEFUNCTION;
 }
 
 
-VkResult physicalDeviceMeetsRequirements(
-  VkPhysicalDevice device,
-  VkSurfaceKHR surface,
-  const VkPhysicalDeviceProperties* properties,
-  const VkPhysicalDeviceFeatures* features,
-  const VulkanPhysicalDeviceRequirements* requirements,
-  VulkanPhysicalDeviceQueueFamilyInfo* outQueueFamilyInfo,
-  VulkanSwapchainSupportInfo* outSwapchainSupport) {
-
+VkResult
+physicalDeviceMeetsRequirements(VkPhysicalDevice                        device,
+                                VkSurfaceKHR                            surface,
+                                const VkPhysicalDeviceProperties*       properties,
+                                const VkPhysicalDeviceFeatures*         features,
+                                const VulkanPhysicalDeviceRequirements* requirements,
+                                VulkanPhysicalDeviceQueueFamilyInfo*    outQueueFamilyInfo,
+                                VulkanSwapchainSupportInfo*             outSwapchainSupport)
+{
 TRACEFUNCTION;
   VkResult  result = {0};
   // Evaluate device properties to determine the needs of our application
@@ -101,8 +103,7 @@ TRACEFUNCTION;
     }
   }
 
-  KDEBUG("--------------------QUEUE PROPERTIES----------------------");
-  KINFO("CHECKING FOR REQUIRED QUEUES");
+  KTRACE("--------------------QUEUE PROPERTIES----------------------");
   u32 queueFamilyCount = 0;
   vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, NULL);
   VkQueueFamilyProperties queueFamilies[32]; 
@@ -162,8 +163,7 @@ TRACEFUNCTION;
     KDEBUG("COMPUTE FAMILY INDEX: %i", outQueueFamilyInfo->computeFamilyIndex);
     KDEBUG("TRANSFER FAMILY INDEX: %i", outQueueFamilyInfo->transferFamilyIndex);
 
-    KDEBUG("--------------------SWAPCHAIN SUPPORT----------------------");
-    KINFO("CHECKING FOR SWAPCHAIN SPPORT");
+    KTRACE("--------------------SWAPCHAIN SUPPORT----------------------");
     result = vulkanDeviceQuerySwapchainSupport(device, surface, outSwapchainSupport);
     VK_CHECK_VERBOSE(result, "could not query all swapchain requirements");
 
@@ -180,8 +180,7 @@ TRACEFUNCTION;
 
     KINFO("DEVICE MEETS SWAPCHAIN REQUIREMENTS");
 
-    KDEBUG("--------------------DEVICE EXTENSIONS----------------------");
-    KINFO("CHECKING FOR DEVICE EXTENSIONS");
+    KTRACE("--------------------DEVICE EXTENSIONS----------------------");
     if (requirements->deviceExtensionNames) {
       u32 availableExtensionCount = 0;
       VkExtensionProperties* availableExtensions = NULL;
@@ -213,8 +212,7 @@ TRACEFUNCTION;
     }
     KINFO("DEVICE HAS REQUIRED EXTENSIONS");
 
-    KDEBUG("--------------------SAMPLER ANISOTROPY----------------------");
-    KINFO("CHECKING FOR SMAPLER ANISOTROPY");
+    KTRACE("--------------------SAMPLER ANISOTROPY----------------------");
     if (requirements->samplerAnisotropy && !features->samplerAnisotropy) {
       KINFO("DEVICE DOES NOT SUPPORT SAMPLER ANISOTROPY");
       return !VK_SUCCESS;
@@ -228,9 +226,10 @@ TRACEFUNCTION;
   return !VK_SUCCESS;
 }
 
-
-VkResult selectPhysicalDevice(VulkanContext* context) {
-
+VkResult
+selectPhysicalDevice(VulkanContext* context)
+{
+TRACEFUNCTION;
   VkResult  result = {0};
   u32 physicalDeviceCount = 0;
   result =  vkEnumeratePhysicalDevices(context->instance, &physicalDeviceCount, NULL);
@@ -337,8 +336,9 @@ VkResult selectPhysicalDevice(VulkanContext* context) {
   return VK_SUCCESS;
 }
 
-
-VkResult vulkanDeviceCreate(VulkanContext* context) {
+VkResult
+vulkanDeviceCreate(VulkanContext* context)
+{
   TRACEFUNCTION;
   VkResult result = !VK_SUCCESS;
 
@@ -368,7 +368,7 @@ VkResult vulkanDeviceCreate(VulkanContext* context) {
     indices[index++] = context->device.transferQueueIndex;
   }
 
-  KDEBUG("----------------------QUEUE CREATE INFO---------------");
+  KTRACE("----------------------QUEUE CREATE INFO---------------");
   VkDeviceQueueCreateInfo queueCreateInfos[32] = {0};
   for(u32 i = 0; i < indexCount; ++i){
     queueCreateInfos[i].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
@@ -388,7 +388,7 @@ VkResult vulkanDeviceCreate(VulkanContext* context) {
   VkPhysicalDeviceFeatures deviceFeatures  = {0};
   deviceFeatures.samplerAnisotropy  = true;
 
-  KDEBUG("----------------------LOGICAL DEVICE CREATE INFO-------");
+  KTRACE("----------------------LOGICAL DEVICE CREATE INFO-------");
   VkDeviceCreateInfo createInfo = {VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO};
   createInfo.queueCreateInfoCount = indexCount;
   createInfo.pQueueCreateInfos    = queueCreateInfos;
@@ -407,8 +407,7 @@ VkResult vulkanDeviceCreate(VulkanContext* context) {
   VK_CHECK_VERBOSE(result,  "COULD NOT CREATE LOGICAL DEVICE");
   KINFO("LOGICAL DEVICE CREATED!");
 
-  KDEBUG("------------------DEVICE QUEUES--------------------");
-  KINFO("GETTING DEVICE QUEUES");
+  KTRACE("------------------DEVICE QUEUES--------------------");
   vkGetDeviceQueue(context->device.logicalDevice,
                    context->device.graphicsQueueIndex,
                    0,
@@ -426,8 +425,7 @@ VkResult vulkanDeviceCreate(VulkanContext* context) {
 
   KINFO("QUEUS OBTAIINED");
 
-  KDEBUG("------------------COMMAND POOLS---------------------");
-  KINFO("GETTING COMMAND POOLS");
+  KTRACE("------------------COMMAND POOLS---------------------");
   VkCommandPoolCreateInfo poolCreateInfo  = {VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO};
   poolCreateInfo.queueFamilyIndex = context->device.graphicsQueueIndex;
   //allows any command buffer allocateeed from a pool to be indivisually reset to initial state;
@@ -437,10 +435,13 @@ VkResult vulkanDeviceCreate(VulkanContext* context) {
                                 context->allocator, &context->device.graphicsCommandPool);
   VK_CHECK_VERBOSE(result, "FAILED TO CREATE COMMAND POOLS");
   KINFO("GRPAHICS COMMAND POOL HAS BEEN CREATED");
+  KINFO("VULKAN DEVICE CREATED");
   return result;
 }
 
-VkResult vulkanDeviceDestroy(VulkanContext* context) {
+VkResult
+vulkanDeviceDestroy(VulkanContext* context)
+{
 TRACEFUNCTION;
   KINFO("DESTROYING COMMAND POOLS");
   vkDestroyCommandPool(context->device.logicalDevice,
@@ -481,11 +482,13 @@ TRACEFUNCTION;
   context->device.graphicsQueueIndex = -1;
   context->device.transferQueueIndex = -1;
 
-
+  KINFO("SUCCESSFULY DESTROYED VULKAN DEVICE");
   return VK_SUCCESS;
 }
 
-VkResult  vulkanDeviceDetectDepthFormat(VulkanDevice* device){
+VkResult
+vulkanDeviceDetectDepthFormat(VulkanDevice* device)
+{
 TRACEFUNCTION;
   //format cadidates
   const u64 candidateCount  = 3;
@@ -508,6 +511,6 @@ TRACEFUNCTION;
       return VK_SUCCESS;
     }
   }
-
+  KINFO("DEPTH FORMAT NOT SPPORTED");
   return !VK_SUCCESS;
 }

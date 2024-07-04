@@ -1,9 +1,9 @@
 #include  "rendererfrontend.h"
-#include  "core/logger.h"
-
 #include  "rendererbackend.h"
-#include  "defines.h"
 
+#include  "defines.h"
+#include  "core/logger.h"
+#include  "math/kmath.h"
 
 typedef struct RendererSystemState{
   RendererBackend backend;
@@ -11,73 +11,90 @@ typedef struct RendererSystemState{
 
 static  RendererSystemState*  rendererSystemStatePtr;
 
-u8  initializeRenderer(u64* requiredMemory, void* state){
-TRACEFUNCTION;
-KDEBUG("requiredMemory : %"PRIu32" state : %p",*requiredMemory,state);
+bool
+initializeRenderer(u64* requiredMemory, void* state)
+{
+  TRACEFUNCTION;
+  KDEBUG("requiredMemory : %"PRIu32" state : %p",*requiredMemory,state);
   *requiredMemory = sizeof(requiredMemory);
   if(state  ==  NULL){
     return true;
   }
   rendererSystemStatePtr  = state;
-  
-  rendererSystemStatePtr->backend.initilaize   = rendererBackendInitialize;
-  rendererSystemStatePtr->backend.shutdown     = rendererBackendShutdown;
-  rendererSystemStatePtr->backend.endFrame     = rendererBackendEndFrame;
-  rendererSystemStatePtr->backend.beginFrame   = rendererBackendBeginFrame;
-  rendererSystemStatePtr->backend.resized      = rendererBackendResized;
 
-  if(!(rendererSystemStatePtr->backend.initilaize())){
+  if(!rendererBackendInitialize()){
     KFATAL("FAILED TO INITIALIZE RENDERER BACKEND!!");
     return false;
   }
   return true;
 }
 
-u8  shutdownRenderer(){
+bool
+shutdownRenderer()
+{
   KTRACE("RENDERER SUBSYTEM SHUTDOWN");
-  rendererSystemStatePtr->backend.shutdown();
-  rendererSystemStatePtr->backend.resized    = 0;
-  rendererSystemStatePtr->backend.endFrame   = 0;
-  rendererSystemStatePtr->backend.shutdown   = 0;
-  rendererSystemStatePtr->backend.initilaize = 0;
-  rendererSystemStatePtr->backend.beginFrame = 0;
-
+  rendererBackendShutdown();
   return true;
 }
-u8 rendererBeginFrame(f32 deltaTime){
+
+bool rendererBeginFrame(f32 deltaTime){
   UTRACE("%s called", __FUNCTION__);
-  return rendererSystemStatePtr->backend.beginFrame( deltaTime);
+  KINFO("-------------BEGIN FRAME---------------");
+  if(rendererBackendBeginFrame( deltaTime)){
+    UINFO("RENDERER BEGIN FRAME SUCCESFULL");
+    return true;
+  }else{
+    UERROR("RENDERER BEGIN FRAME FAILED");
+    return false;
+  }
 }
 
-u8 rendererEndFrame(f32 deltaTime){
+bool
+rendererEndFrame(f32 deltaTime)
+{
   UTRACE("%s called", __FUNCTION__);
-  u8 result = rendererSystemStatePtr->backend.endFrame( deltaTime);
-  return result;
+  KINFO("----------------END FRAME---------------");
+  if(rendererBackendEndFrame( deltaTime)){
+    UINFO("RENDERER END FRAME SUCCESFULL");
+    rendererSystemStatePtr->backend.frameNumber++;
+    return true;
+  }else{
+    UERROR("RENDERER END FRAME FAILED !");
+    return false;
+  }
 }
 
-u8  rendererDrawFrame(RenderPacket* packet){
+bool
+rendererDrawFrame(RenderPacket* packet)
+{
   UTRACE("%s called", __FUNCTION__);
   if(rendererBeginFrame(packet->deltaTime)){
-    UINFO("RENDERER BEGIN FRAME SUCCESFULL");
-    if(rendererEndFrame(packet->deltaTime)){
-      UINFO("RENDERER END FRAME SUCCESFULL");
-      rendererSystemStatePtr->backend.frameNumber++;
-      return true;
-    }else{
-      UERROR("rendererEndFrame Failed !");
-      return false;
-    }
+
+    static f32 z    = -10.0f;
+    z -= 0.01f;             
+    Mat4 projection = mat4Prespective(degToRad(45.0), 1440/1080.0f, 0.1f, 1000.0f);
+    Mat4 view       = mat4Translation((Vec3){0,0,z});
+    rendererUpdateGlobalState(projection, view, vec3Zero(), vec4One(), 0);
+
+    static f32 angle   = 0.1f;
+    angle      += 0.1f;
+    Quat rot    = quatFromAxisAngle(vec3Forward(), angle, false);
+    Mat4 model  = quatToRotationMatrix(rot, vec3Zero());
+    updateObject(model);
+
+    return rendererEndFrame(packet->deltaTime);
   }else{
-    UERROR("rendererBeginFrame Failed !");
     return false;
   }
 }
 
 
-u8  rendererOnResized(u16 width , u16 height){
+bool
+rendererOnResized(u16 width , u16 height)
+{
   UTRACE("RENDRER RESIZE CALLED");
   if(rendererSystemStatePtr != NULL){
-    rendererSystemStatePtr->backend.resized(width, height);
+    rendererBackendResized(width, height);
   }else{
     UFATAL("RESIZE CALLED WHEN NO BACKEND EXISTS!!, %i, %i",width,height);
   }

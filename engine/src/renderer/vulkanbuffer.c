@@ -51,6 +51,7 @@ VkResult  vulkanBufferCreate      (VulkanContext*         context,
     result = vulkanBufferBind(context, outBuffer, 0);
     VK_CHECK_RESULT(result, "failed to bind vulkan buffer on create");
   }
+  KINFO("VULKAN BUFFER CREATED");
   return result;
 }
 
@@ -112,6 +113,7 @@ VkResult  vulkanBufferResize      (VulkanContext*         context,
   buffer->memory    = newMemory;
   buffer->handle    = newBuffer;
 
+  KINFO("VULKAN BUFFER RESIZED");
   return result;
 }
 
@@ -122,6 +124,7 @@ VkResult  vulkanBufferBind        (VulkanContext*         context,
   KDEBUG("context : %p buffer : %p offset "PRIu64"",context, buffer, offset);
   VkResult result =    vkBindBufferMemory(context->device.logicalDevice, buffer->handle, buffer->memory, offset);
   VK_CHECK_VERBOSE(result, "vkBindBufferMemory failed");
+  KINFO("VULKAN BUFFER BINDED");
   return result;
 }
 
@@ -141,6 +144,7 @@ VkResult  vulkanBufferDestroy     (VulkanContext*         context,
   buffer->usage     = 0;
   buffer->isLocked  = 0;
 
+  KINFO("VULKAN BUFFER DESTROYED");
   return VK_SUCCESS;
 }
 

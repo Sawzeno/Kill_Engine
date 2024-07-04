@@ -264,7 +264,7 @@ void  platformSleep(u64 ms){
   usleep((ms%1000) * 1000);
 }
 
-VkResult  createVulkanSurface(VulkanContext* context){
+VkResult  vulkanSurfaceCreate(VulkanContext* context){
 TRACEFUNCTION;
 KDEBUG("context : %p");
   VkXcbSurfaceCreateInfoKHR createInfo  = {VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR};

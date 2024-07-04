@@ -106,16 +106,24 @@ KDEBUG("context : %p renderpass : %p attributeCount : %"PRIu32" attributes : %p 
   inputAssemblyCreateInfo.primitiveRestartEnable        = VK_FALSE;
 
   //PIPELINE LAYOUT
-  VkPipelineLayoutCreateInfo  layoutCreateInfo  = {VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO};
+  VkPipelineLayoutCreateInfo  pipelineLayoutCreateInfo  = {VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO};
+
+  //PUSH CONSTANTS
+  VkPushConstantRange pushConstants = {0};
+  pushConstants.stageFlags  = VK_SHADER_STAGE_VERTEX_BIT;
+  pushConstants.offset      = sizeof(Mat4) * 0;
+  pushConstants.size        = sizeof(Mat4) * 2;
+  pipelineLayoutCreateInfo.pushConstantRangeCount = 1;
+  pipelineLayoutCreateInfo.pPushConstantRanges    = &pushConstants;
 
   //DESCRIPTOR SET LAYOUTS
-  layoutCreateInfo.setLayoutCount = descriptorSetLayoutCount;
-  layoutCreateInfo.pSetLayouts    = descriptorSetLayouts;
+  pipelineLayoutCreateInfo.setLayoutCount = descriptorSetLayoutCount;
+  pipelineLayoutCreateInfo.pSetLayouts    = descriptorSetLayouts;
   
   //CREATE THE PIPELINE LAYOUT
-  result  = vkCreatePipelineLayout(context->device.logicalDevice, &layoutCreateInfo, context->allocator, &outPipeline->pipelineLayout);
+  result  = vkCreatePipelineLayout(context->device.logicalDevice, &pipelineLayoutCreateInfo, context->allocator, &outPipeline->pipelineLayout);
   VK_CHECK_VERBOSE(result, "vkCreatePipelineLayout failed");
-  UINFO("SUCCESFULLY CEATED PIPELINE LAYOUT");
+  KINFO("SUCCESFULLY CEATED PIPELINE LAYOUT");
   
   //CREATE PIPELINE
   VkGraphicsPipelineCreateInfo pipelineCreateInfo = {VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO};
@@ -142,7 +150,7 @@ KDEBUG("context : %p renderpass : %p attributeCount : %"PRIu32" attributes : %p 
   result  = vkCreateGraphicsPipelines(context->device.logicalDevice, VK_NULL_HANDLE, 1, &pipelineCreateInfo, context->allocator, &outPipeline->handle);
 
   VK_CHECK_VERBOSE(result, "vkCreateGraphicsPipelines failed");
-  UINFO("SUCCESSFULY CREATED GRPAHICS PIPELINE");
+  KINFO("SUCCESSFULY CREATED GRPAHICS PIPELINE");
   return result;
 }
 

@@ -1,4 +1,5 @@
 #include  "rendererbackend.h"
+#include "renderer/rendertypes.h"
 #include  "rendererutils.h"
 
 #include  "vulkanplatform.h"
@@ -18,8 +19,7 @@
 
 #include  "math/mathtypes.h"
 
-#include  "shaders/vulkanshaderobject.h"
-#include <vulkan/vulkan_core.h>
+#include  "shaders/vulkanobjectshader.h"
 
 static    char* applicationName;
 static    u32 cachedFrameBufferWidth    = 0;
@@ -35,26 +35,34 @@ VkResult  regenerateFrameBuffers(VulkanSwapchain* swapchain,VulkanRenderPass* re
 VkResult  createBuffers         (VulkanContext* context);
 VkResult  uploadDataRange       (VulkanContext* context, VkCommandPool pool, VkFence fence ,
                                  VkQueue queue, VulkanBuffer* buffer, u64 offset, u64 size, void* data);
+bool      updateObject          (Mat4 model);
 
-VKAPI_ATTR VkBool32 VKAPI_CALL vkDebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT       message_severity,
-                                               VkDebugUtilsMessageTypeFlagsEXT              message_types,
-                                               const VkDebugUtilsMessengerCallbackDataEXT*  callback_data,
-                                               void*                                        user_data);
+bool
+rendererBackendResized(u16 width, u16 height)
+{
+  TRACEFUNCTION;
+  KDEBUG("width : %"PRIu64" height : %"PRIu64"",width,height);
+  UWARN("------RENDERER BACKEND RESIZE INITIALTED-------");
+  cachedFrameBufferWidth   = width;
+  cachedFrameBufferHeight  = height;
+  context.frameBufferSizeGeneration++;
+  return true;
+}
 
-u8  rendererBackendInitialize(){
+bool
+rendererBackendInitialize()
+{
   TRACEFUNCTION;
   //function pointers
   context.findMemoryIndex = findMemoryIndex;
   //TODO
   context.allocator = NULL;
-  //get applications size
+  //get applications info
+  applicationGetName(applicationName);
   applicationGetFrameBufferSize (&cachedFrameBufferWidth, &cachedFrameBufferHeight);
-  applicationGetName            (applicationName);
   context.frameBufferWidth    = (cachedFrameBufferWidth != 0 ? cachedFrameBufferWidth : 1280);
   context.frameBufferHeight   = (cachedFrameBufferHeight!= 0 ? cachedFrameBufferHeight: 1440);
-  //check for each Vulkan function
-  VkResult result  = !VK_SUCCESS;
-  //Vulkan INSTANCE
+
   VkApplicationInfo appInfo   = {VK_STRUCTURE_TYPE_APPLICATION_INFO};
   appInfo.apiVersion          = VK_API_VERSION_1_2;
   appInfo.pApplicationName    = applicationName;
@@ -62,21 +70,22 @@ u8  rendererBackendInitialize(){
   appInfo.pEngineName         = "KILL ENGINE";
   appInfo.engineVersion       = VK_MAKE_VERSION(1, 0, 0);
 
-  KDEBUG("----------------------REQUIRED EXTENSIONS----------------------");
-  const char** requiredExtensions   = (const char**)_darrayCreate(1,sizeof(const char*));
+  VkResult result  = !VK_SUCCESS;
+  KTRACE("----------------------REQUIRED EXTENSIONS----------------------");
+  const char** requiredExtensions   = (const char**)DARRAY_CREATE(const char*);
   DARRAY_PUSH(requiredExtensions, &VK_KHR_SURFACE_EXTENSION_NAME);
   DARRAY_PUSH(requiredExtensions, &VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
   DARRAY_PUSH(requiredExtensions, &"VK_KHR_xcb_surface");
   result  =  checkAvailableExtensions(requiredExtensions);
   VK_CHECK_BOOL(result, "REQUIRED EXTENSIONS NOT AVAILABLE");
 
-  KDEBUG("----------------------REQUIRED LAYERS----------------------");
+  KTRACE("----------------------REQUIRED LAYERS----------------------");
   const char**  requiredLayers  = (const char**)DARRAY_CREATE(const char*);
   DARRAY_PUSH(requiredLayers, &"VK_LAYER_KHRONOS_validation");
-  result  = checkAvailableLayers(requiredLayers);
+  result  =  checkAvailableLayers(requiredLayers);
   VK_CHECK_BOOL(result, "REQUIRED LAYERS NOT AVAILABLE");
 
-  KDEBUG("----------------------VULKAN INSTANCE----------------------");
+  KTRACE("----------------------VULKAN INSTANCE----------------------");
   VkInstanceCreateInfo createInfo     = {VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO};
   createInfo.pApplicationInfo         = &appInfo;
   createInfo.enabledExtensionCount    = DARRAY_LENGTH(requiredExtensions);
@@ -85,51 +94,28 @@ u8  rendererBackendInitialize(){
   createInfo.ppEnabledLayerNames      = requiredLayers;
 
   context.allocator = 0;
+  KTRACE("vkCreateInstace called");
   result  = vkCreateInstance(&createInfo, context.allocator, &(context.instance));
   VK_CHECK_BOOL(result, "FAILED TO CREATE INSTANCE : %s" ,vulkanResultToString(result));
   KINFO("VULKAN ISNTANCE CREATED");
-  UINFO("VULKAN ISNTANCE CREATED");
 
-  KDEBUG("----------------------VULKAN DEBUGGER----------------------");
-  KDEBUG("CREATING VULKAN DEBUGGER");
-  u32 logSeverity =
-    VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT   |
-    VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
-    VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT    |
-    VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT;
+  KTRACE("----------------------VULKAN DEBUGGER----------------------");
+  result  = vulkanDebuggerCreate(&context);
+  VK_CHECK_BOOL(result, "FAILED TO CREATE VULKAN DEBUGGER");
 
-  VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo = {VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT};
-  debugCreateInfo.messageSeverity = logSeverity;
-  debugCreateInfo.messageType =
-    VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT     | 
-    VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT | 
-    VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT;
-  debugCreateInfo.pfnUserCallback = vkDebugCallback;
-
-  PFN_vkCreateDebugUtilsMessengerEXT func =
-    (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(context.instance, "vkCreateDebugUtilsMessengerEXT");
-
-  result =  func(context.instance, &debugCreateInfo, context.allocator, &context.debugMessenger);
-  VK_CHECK_BOOL(result, "FAILED TO CREATE DEBUGGER : %s", vulkanResultToString(result));
-  KINFO("VULKAN DEBUGGER CREATED");
-
-  KDEBUG("----------------------VULKAN SURFACE----------------------");
-  KINFO("CREATING VULKAN SURFACE");
-  result  = createVulkanSurface(&context);
+  KTRACE("----------------------VULKAN SURFACE----------------------");
+  result  = vulkanSurfaceCreate(&context);
   VK_CHECK_BOOL(result, "FAILED TO CREATE VULKAN SURFACE");
 
-  KDEBUG("----------------------VULKAN DEVICE----------------------");
-  KINFO("CREATING VULKAN DEVICE");
+  KTRACE("----------------------VULKAN DEVICE----------------------");
   result =  vulkanDeviceCreate(&context);
   VK_CHECK_BOOL(result, "FAILED TO CREATE VULKAN DEVICE !");
 
-  KDEBUG("----------------------VULKAN SWAPCHAIN----------------------");
-  KINFO("CREATING VULKAN SWAPCHAIN");
+  KTRACE("----------------------VULKAN SWAPCHAIN----------------------");
   result = vulkanSwapchainCreate(&context, context.frameBufferWidth, context.frameBufferHeight, &context.swapchain);
   VK_CHECK_BOOL(result, "FAILED TO CREATE SWAPCHAIN");
 
-  KDEBUG("----------------------VULKAN RENDERPASS----------------------");
-  KINFO("CREATING VULKAN RENDERPASS");
+  KTRACE("----------------------VULKAN RENDERPASS----------------------");
   result =  vulkanRenderPassCreate(&context,
                                    &context.mainRenderPass,
                                    0, 0, context.frameBufferWidth, context.frameBufferHeight,
@@ -137,18 +123,16 @@ u8  rendererBackendInitialize(){
                                    1.0f, 0);
   VK_CHECK_BOOL(result, "FAILED TO CREATE RENDERPASS");
 
-  KDEBUG("----------------------SWAPCHAIN FRAMEBUFFERS----------------------");
-  KINFO("CREATING VULKAN FRAMEBUFFERS");
+  KTRACE("----------------------SWAPCHAIN FRAMEBUFFERS----------------------");
   context.swapchain.frameBuffers  = DARRAY_RESERVE(VulkanFrameBuffer, context.swapchain.imageCount);
-  regenerateFrameBuffers(&context.swapchain, &context.mainRenderPass);
+  result = regenerateFrameBuffers(&context.swapchain, &context.mainRenderPass);
+  VK_CHECK_BOOL(result, "FAILED TO CREATE INITIAL FRAMEBUFFERS");
 
-  KDEBUG("----------------------COMMAND BUFFERS----------------------");
-  KINFO("CREATING COMMAND BUFFERS");
+  KTRACE("----------------------COMMAND BUFFERS----------------------");
   result = createCommandBuffers();
   VK_CHECK_BOOL(result, "FAILED TO CREATE COMMAND BUFFERS");
 
-  KDEBUG("----------------------SYNC OBJECTS----------------------");
-  KINFO("CREATING SYNC OBJCTS");
+  KTRACE("----------------------SYNC OBJECTS----------------------");
   context.imageAvailableSemaphores  = DARRAY_RESERVE(VkSemaphore, context.swapchain.maxFramesInFlight);
   context.queueCompleteSemaphores   = DARRAY_RESERVE(VkSemaphore, context.swapchain.maxFramesInFlight);
   context.inFlightFences            = DARRAY_RESERVE(VulkanFence, context.swapchain.maxFramesInFlight);
@@ -158,8 +142,8 @@ u8  rendererBackendInitialize(){
     result  = vkCreateSemaphore(context.device.logicalDevice,&semaphoreCreateInfo,context.allocator,&context.imageAvailableSemaphores[i]);
     result  = vkCreateSemaphore(context.device.logicalDevice,&semaphoreCreateInfo,context.allocator,&context.queueCompleteSemaphores[i]);
 
-    //Create the fence in a sinfaled state, indicating hat the FIRST FRAME HAS ALREADY BEED RENDERED.
-    //this will prevent the application from waiting indefinitely for the first frame to render since i t
+    //Create the fence in a signaled state, indicating that the FIRST FRAME HAS ALREADY BEED RENDERED.
+    //this will prevent the application from waiting indefinitely for the first frame to render since it
     //cannot be renderer until a frame is RENDERED BEFORE it
     result = vulkanFenceCreate(&context, true, &context.inFlightFences[i]);  
     VK_CHECK_BOOL(result, "FAILED TO CERATE SEMAPHORES");
@@ -174,33 +158,32 @@ u8  rendererBackendInitialize(){
     context.imagesInFlight[i] = 0;
   }
 
-  KDEBUG("----------------------SHADER OBJECTS----------------------");
-  KINFO("CREATING SHADER OBJECTS");
+  KTRACE("----------------------SHADER OBJECTS----------------------");
   result  = vulkanObjectShaderCreate(&context, &context.objectShader);
   VK_CHECK_BOOL(result, "ERROR LOADING BUILTIN BASIC LIGHTING SHADER");
 
 
-  KDEBUG("----------------------VULKAN BUFFERS----------------------");
-  KINFO("CREATING BUFFERS");
+  KTRACE("----------------------VULKAN BUFFERS----------------------");
   result = createBuffers(&context);
   VK_CHECK_BOOL(result, "FAILED TO CREATE BUFFERS");
 
-  KDEBUG("----------------------TEST SLAP----------------------");
+  KTRACE("----------------------TEST SLAP----------------------");
   //test slap
   const u32 vertCount = 4;
   Vertex3D  verts[vertCount]  = {0};
 
-  verts[0].Position.x = 0.0;
-  verts[0].Position.y =-0.5;
+  const f32 f = 5.0f;
+  verts[0].Position.x =-0.5 * f;
+  verts[0].Position.y =-0.5 * f;
 
-  verts[1].Position.x = 0.5;
-  verts[1].Position.y = 0.5;
+  verts[1].Position.x = 0.5 * f;
+  verts[1].Position.y = 0.5 * f;
 
-  verts[2].Position.x = 0.0;
-  verts[2].Position.y = 0.5;
+  verts[2].Position.x =-0.5 * f;
+  verts[2].Position.y = 0.5 * f;
 
-  verts[3].Position.x = 0.5;
-  verts[3].Position.y =-0.5;
+  verts[3].Position.x = 0.5 * f;
+  verts[3].Position.y =-0.5 * f;
 
   const u32 indexCount  = 6;
   u32 indices[indexCount] = {0,1,2,0,3,1};
@@ -230,15 +213,16 @@ u8  rendererBackendInitialize(){
 }
 
 //-----------------------------------------------------RENDERER BACKEND SHUTDOWN---------------------------------------------------------
-u8  rendererBackendShutdown(){
+bool
+rendererBackendShutdown()
+{
   TRACEFUNCTION;
   // destory in opposite order
+  vkDeviceWaitIdle(context.device.logicalDevice);
 
   KDEBUG("DESTORYING VULKAN BUFFERS");
   vulkanBufferDestroy(&context, &context.objectVertexBuffer);
   vulkanBufferDestroy(&context, &context.objectIndexBuffer);
-
-  vkDeviceWaitIdle(context.device.logicalDevice);
 
   KDEBUG("DESTORYING SHADER OBJECTS");
   vulkanObjectShaderDestroy(&context, &context.objectShader);
@@ -278,64 +262,56 @@ u8  rendererBackendShutdown(){
     }
   }
 
-  KINFO("DESTROYING FRAMEBUFFERS");
+  KINFO("DESTROYING VULKAN FRAMEBUFFERS");
   for(u32 i = 0; i < context.swapchain.imageCount; ++i){
     vulkanFrameBufferDestroy(&context, &context.swapchain.frameBuffers[i]);
   }
-
-
   DARRAY_DESTROY(context.graphicsCommandBuffers);
   context.graphicsCommandBuffers = 0;
 
-  KINFO("DESTROYING RENDERPASS");
+  KINFO("DESTROYING VULKAN RENDERPASS");
   vulkanRenderPassDestroy(&context, &context.mainRenderPass);
 
-  KINFO("DESTORYIIG Vulkan SWAPCHAIN");
+  KINFO("DESTROYING VULKAN SWAPCHAIN");
   vulkanSwapchainDestroy(&context, &context.swapchain);
 
-  KINFO("DESTOYING Vulkan DEVICE");
+  KINFO("DESTROYING VULKAN DEVICE");
   vulkanDeviceDestroy(&context);
 
-  KINFO("DESTROYING Vulkan SURFACE");
+  KINFO("DESTROYING VULKAN SURFACE");
   if(context.surface){
     vkDestroySurfaceKHR(context.instance,context.surface ,context.allocator);
     context.surface = NULL;
   }
 
-  KINFO("Destroying Vulkan debugger...");
+  KINFO("DESTROYING VULKAN DEBUGGER");
   if (context.debugMessenger) {
     PFN_vkDestroyDebugUtilsMessengerEXT func =
       (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(context.instance, "vkDestroyDebugUtilsMessengerEXT");
     func(context.instance, context.debugMessenger, context.allocator);
   }
 
-  KINFO("Destroying Vulkan instance...");
+  KINFO("DESTROYING VULKAN INSTANCE");
   vkDestroyInstance(context.instance, context.allocator);
   return true;
 }
 
 //-----------------------------------------------------RENDERER BEGIN FRAME---------------------------------------------------------
 
-u8  rendererBackendBeginFrame(f32 deltaTime){
-  KTRACE("----------------------BEGIN FRAME-----------------");
+bool
+rendererBackendBeginFrame(f32 deltaTime)
+{
+  TRACEFUNCTION;
+  UWARN("FRAME NUMBER : %"PRIu64"",context.currentFrame);
   KDEBUG("deltatime : %f",deltaTime);
   VulkanDevice* device  = &context.device;
 
-  // logVulkanContext    (&context);
-  // logVulkanDevice     (&context.device) ;
-  // logVulkanSwapchain  (&context.swapchain) ;
-  // logVulkanImage      (&context.swapchain.depthAttachment) ;
-  // logVulkanRenderPass (&context.mainRenderPass) ;
-  // logVulkanCommandBuffer(context.graphicsCommandBuffers) ;
   //check if recreating swap chain and boot out 
   if(context.recreatingSwapchain){
     KWARN("MIDST OF RECREATING SWAPCHAIN");
     VkResult result =  vkDeviceWaitIdle(device->logicalDevice);
-    if(!vulkanResultIsSuccess(result)){
-      UERROR("rendererBackendBeginFrame vkDeviceWaitIdle (1) failed : %s", vulkanResultToString(result));
-      return false;
-    }
-    KINFO("RECREATED SWAPCHAIN, BOOTED!");
+    VK_CHECK_BOOL(result, "vkDeviceWaitIdle  failed while recreatingSwapchain");
+
     return false;
   }
 
@@ -349,15 +325,14 @@ u8  rendererBackendBeginFrame(f32 deltaTime){
     KTRACE("-------------------RECREATING SWAPCHAIN-----------");
     VK_CHECK_BOOL(recreateSwapchain(),"SWAPCHAIN RECREATION FAILED");
 
-    KWARN("RECREATING SWAPCHAIN BOOTING!!");
     return false;
   }
 
   //wait for execution of the current frame to complete, the fence being free will allow this one to move on
   if(!vulkanFenceWait(&context,
                       &context.inFlightFences[context.currentFrame],
-                      UINT64_MAX)){
-    KWARN("IN FLIGHT FENCE WAIT FAILURE !");
+                      1)){
+    KWARN("IN FLIGHT FENCE WAIT FAILURE WHILE BEGIN FRAME !");
   }
 
   //acquire the next image from the swapchain. pass along the semaphore that should be signaled when it completes
@@ -403,26 +378,15 @@ u8  rendererBackendBeginFrame(f32 deltaTime){
                         &context.mainRenderPass,
                         context.swapchain.frameBuffers[context.imageIndex].handle);
 
-  //test slap to draw geometry
-  vulkanObjectShaderUse(&context, &context.objectShader);
-
-  VkDeviceSize offsets[1] = {0};
-  //bind vertex buffer at offset
-  vkCmdBindVertexBuffers(commandBuffer->handle, 0, 1, &context.objectVertexBuffer.handle, (VkDeviceSize*)offsets);
-  
-  //bind index buffer at offset
-  vkCmdBindIndexBuffer  (commandBuffer->handle, context.objectIndexBuffer.handle, 0, VK_INDEX_TYPE_UINT32);
-
-  //issue the draw
-  vkCmdDrawIndexed(commandBuffer->handle, 6, 1, 0, 0, 0);
-
   return true;
 }
 
 //-----------------------------------------------------RENDERER END FRAME---------------------------------------------------------
 
-u8  rendererBackendEndFrame(f32 deltaTime){
-  KTRACE("----------------------END FRAME-------------------");
+bool
+rendererBackendEndFrame(f32 deltaTime)
+{
+  TRACEFUNCTION;
   KDEBUG("deltatime : %f",deltaTime);
   VulkanCommandBuffer* commandBuffer  = &context.graphicsCommandBuffers[context.imageIndex];
   //end renderpass
@@ -479,112 +443,56 @@ u8  rendererBackendEndFrame(f32 deltaTime){
   return true;
 }
 
-//-----------------------------------------------------CREATE COMMAND BUFFERS---------------------------------------------------------
-VkResult createCommandBuffers(){
-  KTRACE("-------------------CREATING COMMAND BUFFERS-------");
-  VkResult  result = {0};
-  if(!context.graphicsCommandBuffers){
-    context.graphicsCommandBuffers  = DARRAY_RESERVE(VulkanCommandBuffer, context.swapchain.imageCount);
-    for(u32 i = 0; i < context.swapchain.imageCount; ++i){
-      kzeroMemory(&context.graphicsCommandBuffers[i],
-                  sizeof(VulkanCommandBuffer));
-    }
-  }
-
-  for(u32 i = 0; i < context.swapchain.imageCount; ++i){
-    if(context.graphicsCommandBuffers[i].handle){
-      result  = vulkanCommandBufferFree(&context,
-                                        context.device.graphicsCommandPool,
-                                        &context.graphicsCommandBuffers[i]);
-      VK_CHECK_RESULT(result, "failed to free grpahics Command Buffer : %"PRIu32"",i);
-    }
-    kzeroMemory(&context.graphicsCommandBuffers[i], sizeof(VulkanCommandBuffer));
-    result = vulkanCommandBufferAllocate(&context,
-                                         context.device.graphicsCommandPool, true,
-                                         &context.graphicsCommandBuffers[i]);
-
-    VK_CHECK_RESULT(result, "failed to free allocate Command Buffer : %"PRIu32"",i);
-  }
-  KINFO("CREATED COMMAND BUFFERS");
-  return result;
-}
-
-//-----------------------------------------------------REGENERATE FRAME BUFFERS---------------------------------------------------------
-VkResult  regenerateFrameBuffers(VulkanSwapchain* swapchain, VulkanRenderPass* renderPass){
-  KTRACE("-------------------REGENERATE SWAPCHAIN-----------");
-  KDEBUG("swapchain : %p renderpass : %p", swapchain, renderPass);
-  VkResult result = {0};
-
-  for(u32 i = 0; i < swapchain->imageCount; ++i){
-    u32 attachmentCount = 2;
-    VkImageView attachments[] = {swapchain->views[i], swapchain->depthAttachment.view};
-
-    result = vulkanFrameBufferCreate(&context, renderPass,
-                                     context.frameBufferWidth,
-                                     context.frameBufferHeight,
-                                     attachmentCount,
-                                     attachments, 
-                                     &context.swapchain.frameBuffers[i]);
-    VK_CHECK_RESULT(result,"failed to create framebuffer for image %"PRIu32"",i);
-  } 
-
-  return result;
-}
-
-//-----------------------------------------------------CREATE BUFFERS---------------------------------------------------------
-
-VkResult createBuffers(VulkanContext* context){
-  VkResult result = !VK_SUCCESS;
-
-  VkMemoryPropertyFlagBits memoryPropertyFlags  = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-  const u64 vertexBufferSize  = sizeof(Vertex3D) * 1024 * 1024;
-
-  result  = vulkanBufferCreate(context,
-                               vertexBufferSize,
-                               VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-                               memoryPropertyFlags,
-                               true,
-                               &context->objectVertexBuffer);
-  VK_CHECK_RESULT(result, "failed to create vertex buffers");
-  context->geometryVertexOffset = 0;
-
-  const u64 indexBufferSize      = sizeof(u32) * 1024 * 1024;
-  result  = vulkanBufferCreate(context,
-                               indexBufferSize,
-                               VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-                               memoryPropertyFlags,
-                               true,
-                               &context->objectIndexBuffer);
-  VK_CHECK_RESULT(result, "failed to index buffers");
-  context->geometryIndexOffset  = 0;
-  KINFO("SUCCESSFULY CREATED VULKAN BUFFERS");
-  return result;
-}
-
-//-----------------------------------------------------UPLAOAD DATA RANGE-----------------------------------------------------
-
-VkResult  uploadDataRange       (VulkanContext* context, VkCommandPool pool, VkFence fence ,
-                                 VkQueue queue, VulkanBuffer* buffer, u64 offset, u64 size, void* data){
+//-----------------------------------------------------RENDERER UPDATE GLOBAL STATE-----------------------------------------------
+bool
+rendererUpdateGlobalState (Mat4 projection, Mat4 view, Vec3 viewPosition, Vec4 ambientColor, i32 mode)
+{
   TRACEFUNCTION;
   VkResult result = !VK_SUCCESS;
-  // create a host visible staging buffer to upload to . mark it as the source of the ttransfer
-  VkBufferUsageFlags  flags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-  VulkanBuffer        staging;
-  result  = vulkanBufferCreate(context, size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, flags, true, &staging);
-  VK_CHECK_RESULT(result, "vulkanBufferCreate   failed in uploadDataRange");
+  VulkanCommandBuffer* commandBuffer = &context.graphicsCommandBuffers[context.imageIndex];
 
-  result  = vulkanBufferLoadData(context, &staging, 0, size, 0, data);
-  VK_CHECK_RESULT(result, "vulkanBufferLoadData failed in uploadDataRange");
+  result  = vulkanObjectShaderUse(&context, &context.objectShader);
+  VK_CHECK_BOOL(result, "vulkanObjectShaderUse failed in renderUpdateGlobalState");
 
-  result  = vulkanBufferCopyTo(context, pool, fence, queue, staging.handle, 0, buffer->handle, offset, size);
-  VK_CHECK_RESULT(result, "vulkanBufferCopyTo   failed in uploadDataRange");
+  context.objectShader.globalUBO.projection = projection;
+  context.objectShader.globalUBO.view       = view;
+  //todo : other globalUBO properties
+  result  = vulkanObjectShaderUpdateGlobalState(&context, &context.objectShader);
+  VK_CHECK_BOOL(result, "vulkanObjectShaderUpdateGlobalState failed in rendererUpdateGlobalState");
 
-  vulkanBufferDestroy(context, &staging);
-  return result;
+
+  return true;
+}
+
+//-----------------------------------------------------VULKAN OBJECT UPDATE--------------------------------------------------------
+
+bool
+updateObject( Mat4 model){
+  VkResult result = vulkanObjectShaderUpdateObject(&context, &context.objectShader, model);
+  VK_CHECK_BOOL(result, "vulkanObjectShaderUpdateObject failed");
+
+  //test slap to draw geometry
+  vulkanObjectShaderUse(&context, &context.objectShader);
+
+  VulkanCommandBuffer* commandBuffer = &context.graphicsCommandBuffers[context.imageIndex];
+  VkDeviceSize offsets[1] = {0};
+  //bind vertex buffer at offset
+  vkCmdBindVertexBuffers(commandBuffer->handle, 0, 1, &context.objectVertexBuffer.handle, (VkDeviceSize*)offsets);
+  
+  //bind index buffer at offset
+  vkCmdBindIndexBuffer  (commandBuffer->handle, context.objectIndexBuffer.handle, 0, VK_INDEX_TYPE_UINT32);
+
+  //issue the draw
+  vkCmdDrawIndexed(commandBuffer->handle, 6, 1, 0, 0, 0);
+
+  return true;
 }
 
 //-----------------------------------------------------RECREATE SWAPCHAIN------------------------------------------------------
-VkResult recreateSwapchain(){
+VkResult
+recreateSwapchain()
+{
+  TRACEFUNCTION;
   // if already created do not try again
   VkResult result = {0};
   if(context.recreatingSwapchain){
@@ -657,25 +565,128 @@ VkResult recreateSwapchain(){
 
   //clear the recreating flag
   context.recreatingSwapchain = false;
-
+  KINFO("SWAPCHAIN RECREATED");
   return result;
 }
 
-//-----------------------------------------------------RENDERER RESIZED---------------------------------------------------------
+//-----------------------------------------------------REGENERATE FRAME BUFFERS---------------------------------------------------------
 
-
-u8  rendererBackendResized(u16 width, u16 height){
+VkResult  regenerateFrameBuffers(VulkanSwapchain* swapchain, VulkanRenderPass* renderPass){
   TRACEFUNCTION;
-  KDEBUG("width : %"PRIu64" height : %"PRIu64"",width,height);
-  UWARN("------RENDERER BACKEND RESIZE INITIALTED-------");
-  cachedFrameBufferWidth   = width;
-  cachedFrameBufferHeight  = height;
-  context.frameBufferSizeGeneration++;
-  return true;
+  KDEBUG("swapchain : %p renderpass : %p", swapchain, renderPass);
+  VkResult result = {0};
+
+  for(u32 i = 0; i < swapchain->imageCount; ++i){
+    u32 attachmentCount = 2;
+    VkImageView attachments[] = {swapchain->views[i], swapchain->depthAttachment.view};
+
+    result = vulkanFrameBufferCreate(&context, renderPass,
+                                     context.frameBufferWidth,
+                                     context.frameBufferHeight,
+                                     attachmentCount,
+                                     attachments, 
+                                     &context.swapchain.frameBuffers[i]);
+    VK_CHECK_RESULT(result,"failed to create framebuffer for image %"PRIu32"",i);
+  } 
+  KINFO("SUCCESFULLY REGENRATED FRAMEBUFFERS");
+  return result;
+}
+
+//-----------------------------------------------------CREATE COMMAND BUFFERS---------------------------------------------------------
+
+VkResult
+createCommandBuffers()
+{
+  TRACEFUNCTION;
+  VkResult  result = {0};
+  if(!context.graphicsCommandBuffers){
+    context.graphicsCommandBuffers  = DARRAY_RESERVE(VulkanCommandBuffer, context.swapchain.imageCount);
+    for(u32 i = 0; i < context.swapchain.imageCount; ++i){
+      kzeroMemory(&context.graphicsCommandBuffers[i],
+                  sizeof(VulkanCommandBuffer));
+    }
+  }
+
+  for(u32 i = 0; i < context.swapchain.imageCount; ++i){
+    if(context.graphicsCommandBuffers[i].handle){
+      result  = vulkanCommandBufferFree(&context,
+                                        context.device.graphicsCommandPool,
+                                        &context.graphicsCommandBuffers[i]);
+      VK_CHECK_RESULT(result, "failed to free grpahics Command Buffer : %"PRIu32"",i);
+    }
+    kzeroMemory(&context.graphicsCommandBuffers[i], sizeof(VulkanCommandBuffer));
+    result = vulkanCommandBufferAllocate(&context,
+                                         context.device.graphicsCommandPool, true,
+                                         &context.graphicsCommandBuffers[i]);
+
+    VK_CHECK_RESULT(result, "failed to free allocate Command Buffer : %"PRIu32"",i);
+  }
+  KINFO("CREATED COMMAND BUFFERS");
+  return result;
+}
+
+//-----------------------------------------------------CREATE BUFFERS---------------------------------------------------------
+
+VkResult
+createBuffers(VulkanContext* context)
+{
+  TRACEFUNCTION;
+  VkResult result = !VK_SUCCESS;
+
+  VkMemoryPropertyFlagBits memoryPropertyFlags  = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+  const u64 vertexBufferSize  = sizeof(Vertex3D) * 1024 * 1024;
+
+  result  = vulkanBufferCreate(context,
+                               vertexBufferSize,
+                               VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+                               memoryPropertyFlags,
+                               true,
+                               &context->objectVertexBuffer);
+  VK_CHECK_RESULT(result, "failed to create vertex buffers");
+  context->geometryVertexOffset = 0;
+
+  const u64 indexBufferSize      = sizeof(u32) * 1024 * 1024;
+  result  = vulkanBufferCreate(context,
+                               indexBufferSize,
+                               VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+                               memoryPropertyFlags,
+                               true,
+                               &context->objectIndexBuffer);
+  VK_CHECK_RESULT(result, "failed to index buffers");
+  context->geometryIndexOffset  = 0;
+  KINFO("SUCCESSFULY CREATED VULKAN BUFFERS");
+  return result;
+}
+
+//-----------------------------------------------------UPLAOAD DATA RANGE-----------------------------------------------------
+
+VkResult
+uploadDataRange(VulkanContext* context, VkCommandPool pool, VkFence fence ,
+                VkQueue queue, VulkanBuffer* buffer, u64 offset, u64 size, void* data)
+{
+  TRACEFUNCTION;
+  VkResult result = !VK_SUCCESS;
+  // create a host visible staging buffer to upload to . mark it as the source of the ttransfer
+  VkBufferUsageFlags  flags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+  VulkanBuffer        staging;
+  result  = vulkanBufferCreate(context, size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, flags, true, &staging);
+  VK_CHECK_RESULT(result, "vulkanBufferCreate   failed in uploadDataRange");
+
+  result  = vulkanBufferLoadData(context, &staging, 0, size, 0, data);
+  VK_CHECK_RESULT(result, "vulkanBufferLoadData failed in uploadDataRange");
+
+  result  = vulkanBufferCopyTo(context, pool, fence, queue, staging.handle, 0, buffer->handle, offset, size);
+  VK_CHECK_RESULT(result, "vulkanBufferCopyTo   failed in uploadDataRange");
+
+  vulkanBufferDestroy(context, &staging);
+  return result;
 }
 
 //-----------------------------------------------------FIND MEMORY IDEX---------------------------------------------------------
-i32 findMemoryIndex(u32 typeFilter, u32 propertyFlags){
+
+i32
+findMemoryIndex(u32 typeFilter, u32 propertyFlags)
+{
   TRACEFUNCTION;
   VkPhysicalDeviceMemoryProperties  memoryProperties;
   vkGetPhysicalDeviceMemoryProperties(context.device.physicalDevice, &memoryProperties);
@@ -689,28 +700,3 @@ i32 findMemoryIndex(u32 typeFilter, u32 propertyFlags){
   return -1;
 }
 
-//-----------------------------------------------------VULKAN DEBUGGER--------------------------------------------------------
-VKAPI_ATTR VkBool32 VKAPI_CALL vkDebugCallback(
-  VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
-  VkDebugUtilsMessageTypeFlagsEXT message_types,
-  const VkDebugUtilsMessengerCallbackDataEXT* callback_data,
-  void* user_data) {
-  switch (message_severity) {
-    default:
-    case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
-      UERROR(callback_data->pMessage);
-      KERROR(callback_data->pMessage);
-      break;
-    case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
-      UWARN(callback_data->pMessage);
-      KWARN(callback_data->pMessage);
-      break;
-    case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
-      KINFO(callback_data->pMessage);
-      break;
-    case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
-      KTRACE(callback_data->pMessage);
-      break;
-  }
-  return VK_FALSE;
-}

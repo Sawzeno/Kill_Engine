@@ -79,11 +79,11 @@ fileLog(LOG_TYPE type, LOG_LEVEL level, const char* message, ...){
 
   u16   prefixlen = 0;
   if(level == LOG_INFO || level == LOG_TRACE || level == LOG_DEBUG){
-  clock_gettime(CLOCK_MONOTONIC, &end);
-  f64 elapsed = (end.tv_sec - loggingSystemStatePtr->clockStart.tv_sec) + (end.tv_nsec - loggingSystemStatePtr->clockStart.tv_nsec)/1e9;
-  prefixlen = snprintf  (outmsg,PREFIX_LEN,"[%.9f]%2s",elapsed,"");
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    f64 elapsed = (end.tv_sec - loggingSystemStatePtr->clockStart.tv_sec) + (end.tv_nsec - loggingSystemStatePtr->clockStart.tv_nsec)/1e9;
+    prefixlen = snprintf  (outmsg,PREFIX_LEN,"[%.9f]%2s",elapsed,"");
   }else{
-  prefixlen = snprintf  (outmsg,PREFIX_LEN,"%s%2s",logLevels[level],"");
+    prefixlen = snprintf  (outmsg,PREFIX_LEN,"%s%2s",logLevels[level],"");
   }
 
   UBUFF_CHECK(prefixlen, PREFIX_LEN);
@@ -93,8 +93,8 @@ fileLog(LOG_TYPE type, LOG_LEVEL level, const char* message, ...){
   va_end(args);
 
   u64 totallen  = bufferlen + prefixlen;
-    outmsg[totallen] = '\n';
-    outmsg[totallen + 1] = '\0';
+  outmsg[totallen] = '\n';
+  outmsg[totallen + 1] = '\0';
   FILE* targetfile  = {0};
   if(type == LOG_ENGINE){
     targetfile  = loggingSystemStatePtr->engineLogFile;
@@ -113,6 +113,7 @@ fileLog(LOG_TYPE type, LOG_LEVEL level, const char* message, ...){
 
 u16   Uwrite(u16 limit, const char *message, ...) {
   va_list args;
+
   va_start(args, message);
   char buffer[limit];
   u64 size  = vsnprintf(buffer,limit, message, args);
@@ -232,29 +233,30 @@ bool  initializeLogging (u64* memoryRequirement, void* state){
   }
 
   loggingSystemStatePtr  = state;
-if(LOG_FILES_ENABLED == 1){
-  if(!createLogFiles()){
-    UERROR("COULD NOT CREATE LOG FILES!");
-    return false;
-  }
+  if(LOG_FILES_ENABLED == 1){
+    if(!createLogFiles()){
+      UERROR("COULD NOT CREATE LOG FILES!");
+      return false;
+    }
 
-  struct timespec start;
-  clock_gettime(CLOCK_MONOTONIC, &loggingSystemStatePtr->clockStart);
-  
-  KFATAL("TEST MESSAGE!");
-  KERROR("TEST MESSAGE!"); 
-  KWARN ("TEST MESSAGE!"); 
-  KINFO ("TEST MESSAGE!"); 
-  KTRACE("TEST MESSAGE!"); 
-  KDEBUG("TEST MESSAGE!"); 
+    struct timespec start;
+    clock_gettime(CLOCK_MONOTONIC, &loggingSystemStatePtr->clockStart);
 
-  MINFO ("TEST MESSAGE!"); 
-  MDEBUG("TEST MESSAGE!"); 
-  MTRACE("TEST MESSAGE!"); 
+    KFATAL("TEST MESSAGE!");
+    KERROR("TEST MESSAGE!"); 
+    KWARN ("TEST MESSAGE!"); 
+    KINFO ("TEST MESSAGE!"); 
+    KTRACE("TEST MESSAGE!"); 
+    KDEBUG("TEST MESSAGE!"); 
 
-  EINFO ("TEST MESSAGE!"); 
-  EDEBUG("TEST MESSAGE!"); 
-  ETRACE("TEST MESSAGE!"); 
+    MINFO ("TEST MESSAGE!"); 
+    MDEBUG("TEST MESSAGE!"); 
+    MTRACE("TEST MESSAGE!"); 
+
+    EINFO ("TEST MESSAGE!"); 
+    EDEBUG("TEST MESSAGE!"); 
+    ETRACE("TEST MESSAGE!"); 
+
   }else{
     UWARN("LOG_FILES_DISBALED");
   }
@@ -293,6 +295,7 @@ if(LOG_FILES_ENABLED == 1){
     UERROR("COULD NOT SET UP SIGNAL HANDLERS");
     exit(EXIT_FAILURE);
   }
+
   UINFO("LOGGIG SUBSYSTEM INITITALIZED!");
   KINFO("LOGGIG SUBSYSTEM INITITALIZED!");
   return true;
@@ -301,10 +304,9 @@ if(LOG_FILES_ENABLED == 1){
 void shutdownLogging(){
   KINFO("LOGGING SYSTEM SHUTDOWN");
   if(LOG_FILES_ENABLED == 1){
-
-  fclose(loggingSystemStatePtr->engineLogFile);
-  fclose(loggingSystemStatePtr->memoryLogFile);
-  fclose(loggingSystemStatePtr->eventsLogFile);
+    fclose(loggingSystemStatePtr->engineLogFile);
+    fclose(loggingSystemStatePtr->memoryLogFile);
+    fclose(loggingSystemStatePtr->eventsLogFile);
   }
   loggingSystemStatePtr  = NULL;
 }

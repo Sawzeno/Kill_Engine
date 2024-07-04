@@ -26,7 +26,7 @@ struct EventSystemState{
 static EventSystemState* eventSystemStatePtr;
 
 bool  initializeEvents(u64* memoryRequirement, void* state ){
-TRACEEVENT;
+TRACEFUNCTION;
 EDEBUG("memoryRequirement :%"PRIu64" state : %p",*memoryRequirement, state);
 
   *memoryRequirement = sizeof(EventSystemState);
@@ -41,6 +41,7 @@ EDEBUG("memoryRequirement :%"PRIu64" state : %p",*memoryRequirement, state);
 }
 
 void  shutdownEvents(){
+  TRACEFUNCTION;
   KINFO("EVENT SUBSYSTEM SHUTDOWN !");
   for(u16 i = 0 ; i < MAX_MESSAGE_CODES ; ++i){
     if(eventSystemStatePtr->registered[i].events != 0){
@@ -52,7 +53,7 @@ void  shutdownEvents(){
 }
 
 u8 eventRegister(u16 code, void* listener, pfnOnEvent onEvent) {
-  TRACEMEMORY;
+  TRACEEVENT;
   EDEBUG("code : %"PRIu16" listener : %p onEvent : %p",code,listener,onEvent);
   if(eventSystemStatePtr  ==  NULL){
     return false;

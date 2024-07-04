@@ -1,6 +1,8 @@
 #pragma once
 
 #include  "defines.h"
+
+#include  "rendertypes.h"
 #include  <vulkan/vulkan_core.h>
 
 #define   OBJECT_SHADER_STAGE_COUNT 2
@@ -39,13 +41,13 @@ typedef enum VulkanCommandBufferState{
 }VulkanCommandBufferState;
 
 struct VulkanBuffer{
-  u64 totalSize;
-  VkBuffer handle;
+  u64                   totalSize;
+  VkBuffer              handle;
   VkBufferUsageFlagBits usage;
-  bool isLocked;
-  VkDeviceMemory memory;
-  i32 memoryIndex;
-  u32 memoryPropertyFlags;
+  bool                  isLocked;
+  VkDeviceMemory        memory;
+  i32                   memoryIndex;
+  u32                   memoryPropertyFlags;
 };
 
 //---------------------------------------------------------------------------STRUCTS
@@ -61,7 +63,15 @@ struct VulkanPipeline{
 };
 
 struct VulkanObjectShader{
-  VulkanShaderStage         stages[OBJECT_SHADER_STAGE_COUNT];
+  VulkanShaderStage         stages[OBJECT_SHADER_STAGE_COUNT];    //vertex , fragment shader stages
+
+  VkDescriptorPool          globalDescriptorPool;
+  VkDescriptorSetLayout     globalDescriptorSetLayout;
+  VkDescriptorSet           globalDescriptorSets[3];              //One Descriptor Set per Frame, max 3 for triple buffering
+
+  VulkanBuffer              globalUniformBuffer;                  //Glboal Uniform Buffer
+  GlobalUniformObject       globalUBO;                  //Global Uniform Object
+
   VulkanPipeline            pipeline; 
 };
 

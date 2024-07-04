@@ -15,9 +15,11 @@ VkResult createSwapchain          (VulkanContext*   context,
 VkResult destroySwapchain         (VulkanContext*   context,
                                    VulkanSwapchain* swapchain);
 
-VkResult vulkanSwapchainCreate    (VulkanContext*   context,
-                                   u32 width, u32   height,
-                                   VulkanSwapchain* outSwapchain){
+VkResult
+vulkanSwapchainCreate(VulkanContext*   context,
+                      u32 width, u32   height,
+                      VulkanSwapchain* outSwapchain)
+{
   TRACEFUNCTION;
   KDEBUG("context : %p width : %"PRIu32" height : %"PRIu32" outSwapchain : %p");
   VkResult result = createSwapchain(context,  width, height, outSwapchain);
@@ -25,9 +27,10 @@ VkResult vulkanSwapchainCreate    (VulkanContext*   context,
   return VK_SUCCESS;
 }
 
-VkResult vulkanSwapchainRecreate  (VulkanContext*   context,
-                                   u32 width, u32   height,
-                                   VulkanSwapchain* outSwapchain)
+VkResult
+vulkanSwapchainRecreate(VulkanContext*   context,
+                        u32 width, u32   height,
+                        VulkanSwapchain* outSwapchain)
 {
   TRACEFUNCTION;
   KDEBUG("context : %p width : %"PRIu32" height : %"PRIu32" outSwapchain : %p");
@@ -37,19 +40,21 @@ VkResult vulkanSwapchainRecreate  (VulkanContext*   context,
   return VK_SUCCESS;
 }
 
-VkResult vulkanSwapchainDestroy   (VulkanContext*   context,
-                                   VulkanSwapchain* swapchain)
+VkResult
+vulkanSwapchainDestroy(VulkanContext*   context,
+                       VulkanSwapchain* swapchain)
 {
   TRACEFUNCTION;
   return destroySwapchain(context, swapchain);
 }
 
-VkResult  vulkanSwapchainAcquireNextImageIndex (VulkanContext*   context,
-                                                VulkanSwapchain* swapchain,
-                                                u64              timeoutNS, 
-                                                VkSemaphore      imageAvailableSemaphore, 
-                                                VkFence          fence, 
-                                                u32*             outImageIndex)
+VkResult
+vulkanSwapchainAcquireNextImageIndex(VulkanContext*   context,
+                                     VulkanSwapchain* swapchain,
+                                     u64              timeoutNS, 
+                                     VkSemaphore      imageAvailableSemaphore, 
+                                     VkFence          fence, 
+                                     u32*             outImageIndex)
 {
   TRACEFUNCTION;
   VkResult result = vkAcquireNextImageKHR(context->device.logicalDevice, swapchain->handle, timeoutNS, imageAvailableSemaphore, fence, outImageIndex);
@@ -64,16 +69,17 @@ VkResult  vulkanSwapchainAcquireNextImageIndex (VulkanContext*   context,
   else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
     VK_CHECK_VERBOSE(result, "FAILED TO ACQUIRE SWAPCHAIN IMAGE");
   }
-  KDEBUG("SUCCESFULLY ACQUIRED IMAGE ");
+  KINFO("SUCCESFULLY ACQUIRED NEXT IMAGE ");
   return VK_SUCCESS;
 }
 
-VkResult vulkanSwapchainPresent   (VulkanContext*   context,
-                                   VulkanSwapchain* swapchain, 
-                                   VkQueue          graphicsQueue,
-                                   VkQueue          presentQueue,
-                                   VkSemaphore      renderCompleteSemaphore,
-                                   u32              presentImageIndex)
+VkResult
+vulkanSwapchainPresent   (VulkanContext*   context,
+                          VulkanSwapchain* swapchain, 
+                          VkQueue          graphicsQueue,
+                          VkQueue          presentQueue,
+                          VkSemaphore      renderCompleteSemaphore,
+                          u32              presentImageIndex)
 {
   TRACEFUNCTION;
   VkPresentInfoKHR  presentInfo = {VK_STRUCTURE_TYPE_PRESENT_INFO_KHR};
@@ -89,7 +95,7 @@ VkResult vulkanSwapchainPresent   (VulkanContext*   context,
     result = vulkanSwapchainRecreate(context, context->frameBufferWidth, context->frameBufferWidth, swapchain);
     VK_CHECK_RESULT(result, "failed to recreate swapchain after failed to presentQueue");
   }else if(result != VK_SUCCESS){
-    UFATAL("FIALED TO PRESENT SWAPCHAIN IMAGE");
+    UFATAL("FAILED TO PRESENT SWAPCHAIN IMAGE");
   }
   context->currentFrame = (context->currentFrame + 1) % swapchain->maxFramesInFlight;
   KINFO("SUCCESFULLY PRESENTED A FRAME");
@@ -105,8 +111,7 @@ VkResult createSwapchain  (VulkanContext*   context,
   VkResult result = {0};
   VkExtent2D swapchainExtent  = {width, height};
 
-  KTRACE("GETTING IMAGE FORMATS");
-  KDEBUG("----------------------FORMATS----------------------");
+  KTRACE("-----------------IMAGE FORMATS------------------");
   //choose a swap surface format
   u8 found = false;
   for(u32 i = 0; i < context->device.swapchainSupport.formatCount; ++i){
@@ -121,11 +126,12 @@ VkResult createSwapchain  (VulkanContext*   context,
     }
   }
   if(!found){
-    KFATAL("COUD NOT GET IMAGE FORMATS!");
+    KFATAL("FAILED TO GET IMAGE FORMATS!");
     return !VK_SUCCESS;
   }
   KINFO("IMAGE FORMATS CHOSEN !");
-  KDEBUG("----------------------PRESENT MODE-------------------");
+
+  KTRACE("----------------------PRESENT MODE-------------------");
   VkPresentModeKHR presentMode  = VK_PRESENT_MODE_FIFO_KHR;
   for(u32 i = 0;i < context->device.swapchainSupport.presentModesCount; ++i){
     VkPresentModeKHR mode = context->device.swapchainSupport.presentModes[i];
@@ -135,15 +141,15 @@ VkResult createSwapchain  (VulkanContext*   context,
     }
   }
   // requery swapchain
-  KDEBUG("--------------------SWAPCHAIN SUPPORT----------------------");
-  KTRACE("RECHECKING FOR SWAPCHAIN SPPORT");
+  KTRACE("--------------------SWAPCHAIN SUPPORT----------------------");
+  KINFO("RECHECKING FOR SWAPCHAIN SPPORT");
   result = vulkanDeviceQuerySwapchainSupport(context->device.physicalDevice,
                                     context->surface,
                                     &context->device.swapchainSupport);
   VK_CHECK_VERBOSE(result, "could not query all swapchain requirements");
 
-  KDEBUG("--------------------SWAPCHAIN EXTENT----------------------");
-  KTRACE("SETTING SWAPCHAIN EXTENT BOUNDS");
+  KTRACE("--------------------SWAPCHAIN EXTENT----------------------");
+  KINFO("SETTING SWAPCHAIN EXTENT BOUNDS");
 
   //swapchain extent  if whatever was passed to it is not valid then override it 
   if(context->device.swapchainSupport.capabilities.currentExtent.width != swapchainExtent.width || 
@@ -162,14 +168,14 @@ VkResult createSwapchain  (VulkanContext*   context,
 
   KINFO("swapchain extent : width, height : %i, %i",swapchainExtent.width, swapchainExtent.height);
   //clamp the value of image count to max allowed by device
-  u32 imageCount  = context->device.swapchainSupport.capabilities.minImageCount ;
+  u32 imageCount  = context->device.swapchainSupport.capabilities.minImageCount + 1 ;
   if(context->device.swapchainSupport.capabilities.maxImageCount > 0 && imageCount > context->device.swapchainSupport.capabilities.maxImageCount){
     imageCount  = context->device.swapchainSupport.capabilities.maxImageCount;
     KERROR("value passed as maxImageCount exceeds that maximagecount allowed, resetting !");
   }
   swapchain->maxFramesInFlight = imageCount;
 
-  KDEBUG("--------------------SWAPCHAIN CREATE INFO----------");
+  KTRACE("--------------------SWAPCHAIN CREATE INFO----------");
   //SWAPCHAIN CREATE INFO
   VkSwapchainCreateInfoKHR createInfo = {VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR};
   createInfo.surface        = context->surface;
@@ -201,17 +207,15 @@ VkResult createSwapchain  (VulkanContext*   context,
   createInfo.oldSwapchain = NULL;
 
   result = vkCreateSwapchainKHR(context->device.logicalDevice, &createInfo, context->allocator, &swapchain->handle);
-  KINFO("INITIALIZED SWAPCHAIN");
   VK_CHECK_VERBOSE(result, "vkCreateSwapchainKHR failed");
+  KINFO("INITIALIZED SWAPCHAIN");
   //ONLY IN CASE OF SWAPCHAIN when created creates the images that it is going ti use as well 
   //all we have to do is to get the images from the swapchain, we DO NOT NEED TO CREATE THEM
 
-  KDEBUG("--------------------SWAPCHAIN IMAGES----------");
-  KTRACE("GETTING SWAPCHAIN IMAGES");
+  KTRACE("--------------------SWAPCHAIN IMAGES----------");
   //start with zero frame index
   context->currentFrame = 0;
 
-  //Images
   swapchain->imageCount = 0;
   result =  vkGetSwapchainImagesKHR(context->device.logicalDevice, swapchain->handle, &swapchain->imageCount, NULL );
   VK_CHECK_VERBOSE(result, "FAILED TO GET NUMBER OF SWAPCHAIN IMAGES"); 
@@ -225,9 +229,9 @@ VkResult createSwapchain  (VulkanContext*   context,
 
   result = vkGetSwapchainImagesKHR(context->device.logicalDevice, swapchain->handle, &swapchain->imageCount, swapchain->images);
   VK_CHECK_VERBOSE(result, "FAILED TO GET SWAPCHAIN IMAGES"); 
+  KINFO("GOT SWAPCHAIM IMAGES");
 
-  KTRACE("CREATING IMAGE VIEWS");
-  //views
+  KTRACE("--------------------SWAPCHAIN IMAGES VIEWS----------");
   for(u32 i = 0; i < swapchain->imageCount; ++i){
     VkImageViewCreateInfo viewInfo          = {VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO};
     viewInfo.image                          = swapchain->images[i];
@@ -244,14 +248,13 @@ VkResult createSwapchain  (VulkanContext*   context,
     KINFO("CREATED IMAGE VIEW : %"PRIu32"",i);
   }
 
-  KINFO("CHECKING FOR DEPTH FORMAT SUPPORT");
+  KTRACE("--------------------DEPTH FORMAT----------");
   //Depth resources
   if(vulkanDeviceDetectDepthFormat(&context->device) != VK_SUCCESS){
     context->device.depthFormat = VK_FORMAT_UNDEFINED;
     KFATAL("FAILED TO FIND A SUPPORTED DEPTH FORMAT ");
   }
 
-  KINFO("CREATING DEPTH IMAGE");
   //CREATE THE DEPTH IMAGE
    result = vulkanImageCreate(context,
                     VK_IMAGE_TYPE_2D,
@@ -268,7 +271,9 @@ VkResult createSwapchain  (VulkanContext*   context,
   return result;
 }
 
-VkResult destroySwapchain(VulkanContext* context,VulkanSwapchain* swapchain){
+VkResult
+destroySwapchain(VulkanContext* context,VulkanSwapchain* swapchain)
+{
   TRACEFUNCTION;
   vkDeviceWaitIdle(context->device.logicalDevice);
   vulkanImageDestroy(context, &swapchain->depthAttachment);
@@ -278,6 +283,7 @@ VkResult destroySwapchain(VulkanContext* context,VulkanSwapchain* swapchain){
   }
 
   vkDestroySwapchainKHR(context->device.logicalDevice, swapchain->handle, context->allocator);
+  KINFO("SUCCESFULLY DESTROYED SWAPCHAIN");
   return VK_SUCCESS;
 }
 

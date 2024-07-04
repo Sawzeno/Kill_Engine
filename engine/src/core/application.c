@@ -14,7 +14,7 @@
 #include  "core/clock.h"
 
 #define   LIMITFRAMES true
-#define   TARGETFPS  2
+#define   TARGETFPS  60
 typedef struct  ApplicationState  ApplicationState;
 
 u8  applicationOnEvent    (u16 code , void* sender , void* listener , EventContext context);
@@ -146,7 +146,6 @@ i8  applicationCreate(Game* game){
   return true;
 }
 
-
 i8  applicationRun(){
   TRACEFUNCTION;
   KINFO("APPLICATION STARTED SUCCESSFULY");
@@ -240,6 +239,8 @@ i8  applicationRun(){
   eventUnregister (EVENT_CODE_APPLICATION_QUIT , NULL ,  applicationOnEvent);
   eventUnregister (EVENT_CODE_KEY_PRESSED      , NULL ,  applicationOnKey  );
   eventUnregister (EVENT_CODE_KEY_RELEASED     , NULL ,  applicationOnKey  );
+  eventUnregister (EVENT_CODE_RESIZED          , NULL ,  applicationOnResized);
+
   UINFO("SHUTING DOWN SUBSYSTEMS");
   shutdownInput   ();
   shutdownEvents  ();
