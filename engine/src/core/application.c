@@ -12,15 +12,14 @@
 #include  "core/events.h"
 #include  "core/input.h"
 #include  "core/clock.h"
-#include <signal.h>
 
-#define   LIMITFRAMES true
+#define   LIMITFRAMES false
 #define   TARGETFPS  60
 typedef struct  ApplicationState  ApplicationState;
 
-u8  applicationOnEvent    (u16 code , void* sender , void* listener , EventContext context);
-u8  applicationOnKey      (u16 code , void* sender , void* lsitener , EventContext context);
-u8  applicationOnResized  (u16 code , void* sender , void* listener , EventContext context);
+u8  applicationOnEvent  (u16 code , void* sender , void* listener , EventContext context);
+u8  applicationOnKey    (u16 code , void* sender , void* lsitener , EventContext context);
+u8  applicationOnResize (u16 code , void* sender , void* listener , EventContext context);
 
 struct ApplicationState{
   Game* game;
@@ -121,7 +120,7 @@ bool  applicationCreate(Game* game){
   eventRegister(EVENT_CODE_APPLICATION_QUIT , NULL  , applicationOnEvent);
   eventRegister(EVENT_CODE_KEY_PRESSED      , NULL  , applicationOnKey  );
   eventRegister(EVENT_CODE_KEY_RELEASED     , NULL  , applicationOnKey  );
-  eventRegister(EVENT_CODE_RESIZED          , NULL  , applicationOnResized);
+  eventRegister(EVENT_CODE_RESIZED          , NULL  , applicationOnResize);
 
   KINFO("INITIALZING ENGINE PLATFORM");
   initializePlatform(&appState->platformSystemMenoryRequirement, NULL);
@@ -154,6 +153,7 @@ bool  applicationCreate(Game* game){
   }
     
   initErrors();
+  UINFO("GAME ENGINE INITIALIZED");
   initalized  = true;
   return true;
 }
@@ -251,7 +251,7 @@ bool  applicationRun(){
   eventUnregister (EVENT_CODE_APPLICATION_QUIT , NULL ,  applicationOnEvent);
   eventUnregister (EVENT_CODE_KEY_PRESSED      , NULL ,  applicationOnKey  );
   eventUnregister (EVENT_CODE_KEY_RELEASED     , NULL ,  applicationOnKey  );
-  eventUnregister (EVENT_CODE_RESIZED          , NULL ,  applicationOnResized);
+  eventUnregister (EVENT_CODE_RESIZED          , NULL ,  applicationOnResize);
 
   applicationShutdown();
   return true;
@@ -297,7 +297,7 @@ u8 applicationOnKey(u16 code , void* sender, void* listener , EventContext conte
 }
 
 
-u8  applicationOnResized  (u16 code , void* sender , void* listener , EventContext context){
+u8  applicationOnResize  (u16 code , void* sender , void* listener , EventContext context){
   TRACEEVENT;
   KDEBUG("code  : %"PRIu16" sender : %p listener : %p context : %p");
   u16 width = context.data.u16[0];
@@ -325,8 +325,8 @@ u8  applicationOnResized  (u16 code , void* sender , void* listener , EventConte
           UWARN("Window restored, resuming application.");
           appState->isSuspended = false;
         }
+        rendererResize(width, height);
         appState->game->onResize(appState->game, width, height);
-        rendererOnResized(width, height);
       }
     }
 

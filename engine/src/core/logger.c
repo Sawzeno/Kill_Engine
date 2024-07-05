@@ -54,6 +54,7 @@ static const char* logLevelColors[LOG_LEVELS + 1] =
 static LoggerSystemState* loggingSystemStatePtr;
 
 bool createLogFiles(void);
+FILE* createLogFile(const char* filename);
 
 bool  initializeLogging (u64* memoryRequirement, void* state){
   *memoryRequirement = sizeof(LoggerSystemState);
@@ -186,36 +187,39 @@ Uwrite(u16 limit, const char *message, ...)
   return size;
 }
 
-#define RETURN_DEFER(value) do { result = (value); goto defer; } while(0)
 
 bool createLogFiles(void){
-  const char*  memoryLogFile = "memory.logs";
-  const char*  engineLogFile = "engine.logs";
-  const char*  eventsLogFile = "events.logs";
-
-  bool result = false; 
-  FILE* file  = NULL;
-
-  file  = fopen(engineLogFile, "w");
-  if(file == NULL)  RETURN_DEFER(false);
+  FILE* file;
+  file = createLogFile("engine.logs");
+  ISNULL(file, false);
   loggingSystemStatePtr->engineLogFile  = file;
-  file  = fopen(memoryLogFile, "w");
-  if(file == NULL) RETURN_DEFER(false);
+
+  file = createLogFile("memory.logs");
+  ISNULL(file, false);
   loggingSystemStatePtr->memoryLogFile  = file;
-  file  = fopen(eventsLogFile, "w");
-  if(file == NULL) RETURN_DEFER(false);
+
+  file = createLogFile("events.logs");
+  ISNULL(file, false);
   loggingSystemStatePtr->eventsLogFile  = file;
 
+  return true;
+}
+
+#define RETURN_DEFER(value) do { result = (value); goto defer; } while(0)
+FILE* createLogFile(const char* filename){
+  bool result = false; 
+  FILE* file  = NULL;
+  file  = fopen(filename, "w");
+  if(file == NULL)  RETURN_DEFER(false);
   result= true;
 
-  UDEBUG("SUCCESFULLY CREATED LOG FILES !");
-  return true;
+  UDEBUG("SUCCESFULLY CREATED LOG FILE : %s", filename);
 defer:
   if(!result){
-    UERROR("FAILED TO LOG FILES : %s", strerror(errno));
+    UERROR("FAILED TO CREATE LOG FILE %s : %s", filename, strerror(errno));
     if(file) fclose(file);
-    return false;
+    return NULL;
   }
-  return true;
+  return file;
 }
 

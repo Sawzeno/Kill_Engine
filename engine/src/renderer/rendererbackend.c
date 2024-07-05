@@ -39,8 +39,8 @@ bool
 rendererBackendResized(u16 width, u16 height)
 {
   TRACEFUNCTION;
-  KDEBUG("width : %"PRIu64" height : %"PRIu64"",width,height);
-  UWARN("------RENDERER BACKEND RESIZE INITIALTED-------");
+  UDEBUG("width : %"PRIu64" height : %"PRIu64"",width,height);
+  UWARN("------RENDERER BACKEND RESIZE INITIATED-------");
   cachedFrameBufferWidth   = width;
   cachedFrameBufferHeight  = height;
   context.frameBufferSizeGeneration++;
@@ -48,7 +48,7 @@ rendererBackendResized(u16 width, u16 height)
 }
 
 bool
-rendererBackendInitialize(u32 width, u32 height, const char* applicationName)
+rendererBackendInitialize(RendererBackend* backend)
 {
   TRACEFUNCTION;
   //function pointers
@@ -56,15 +56,15 @@ rendererBackendInitialize(u32 width, u32 height, const char* applicationName)
   //TODO
   context.allocator = NULL;
   //get applications info
-  cachedFrameBufferWidth  = width;
-  cachedFrameBufferHeight = height;
+  cachedFrameBufferWidth  = backend->applicationWidth;
+  cachedFrameBufferHeight = backend->applicationHeight;
 
   context.frameBufferWidth    = (cachedFrameBufferWidth != 0 ? cachedFrameBufferWidth : 1280);
   context.frameBufferHeight   = (cachedFrameBufferHeight!= 0 ? cachedFrameBufferHeight: 1440);
 
   VkApplicationInfo appInfo   = {VK_STRUCTURE_TYPE_APPLICATION_INFO};
   appInfo.apiVersion          = VK_API_VERSION_1_2;
-  appInfo.pApplicationName    = applicationName;
+  appInfo.pApplicationName    = backend->applicationName;
   appInfo.applicationVersion  = VK_MAKE_VERSION(1, 0, 0);
   appInfo.pEngineName         = "KILL ENGINE";
   appInfo.engineVersion       = VK_MAKE_VERSION(1, 0, 0);
@@ -171,7 +171,7 @@ rendererBackendInitialize(u32 width, u32 height, const char* applicationName)
   const u32 vertCount = 4;
   Vertex3D  verts[vertCount]  = {0};
 
-  const f32 f = 5.0f;
+  const f32 f = 10.0f;
   verts[0].Position.x =-0.5 * f;
   verts[0].Position.y =-0.5 * f;
 
@@ -301,7 +301,7 @@ bool
 rendererBackendBeginFrame(f32 deltaTime)
 {
   TRACEFUNCTION;
-  UWARN("FRAME NUMBER : %"PRIu64"",context.currentFrame);
+  // UWARN("FRAME NUMBER : %"PRIu64"",context.currentFrame);
   KDEBUG("deltatime : %f",deltaTime);
   VulkanDevice* device  = &context.device;
 

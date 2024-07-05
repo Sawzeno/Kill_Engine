@@ -8,14 +8,17 @@ typedef struct  RendererBackend RendererBackend;
 typedef struct  RenderPacket    RenderPacket;
 
 struct RendererBackend{
-  u64 frameNumber;
+  u32   applicationWidth;
+  u32   applicationHeight;
+  char* applicationName;
+  u64   frameNumber;
  };
 
 struct RenderPacket{
   f32 deltaTime;
 };
 
-bool  rendererBackendInitialize (u32 width, u32 height, const char* applicationName);
+bool  rendererBackendInitialize (RendererBackend* backend);
 
 bool  rendererBackendBeginFrame (f32 deltaTime);
 

@@ -22,9 +22,11 @@ vkDebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT      message_severity,
       KWARN(callback_data->pMessage);
       break;
     case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
+      UINFO(callback_data->pMessage);
       KINFO(callback_data->pMessage);
       break;
     case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
+      UTRACE(callback_data->pMessage);
       KTRACE(callback_data->pMessage);
       break;
   }

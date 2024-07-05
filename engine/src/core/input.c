@@ -110,7 +110,7 @@ TRACEEVENT;
 
 u8 inputIsKeyDown(keys key){
   TRACEEVENT;
-  return inputSystemStatePtr->keyboardCurrent.keys[key] = true;
+  return inputSystemStatePtr->keyboardCurrent.keys[key] == true;
 }
 
 u8 inputIsKeyUp(keys key){
