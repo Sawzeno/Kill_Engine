@@ -8,4 +8,4 @@ bool  rendererOnResized(u16 width , u16 height);
 
 bool  rendererDrawFrame(RenderPacket* packet);
 
-bool  shutdownRenderer();
+void  shutdownRenderer();

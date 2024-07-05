@@ -1,8 +1,8 @@
 #pragma once
 
 #include  "defines.h"
+#include  "renderertypes.h"
 
-#include  "rendertypes.h"
 #include  <vulkan/vulkan_core.h>
 
 #define   OBJECT_SHADER_STAGE_COUNT 2

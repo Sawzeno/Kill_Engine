@@ -1,9 +1,9 @@
 #include  "application.h"
 #include  "core/kmemory.h"
 #include  "core/logger.h"
+#include  "core/errors.h"
 #include  "memory/linearallocator.h"
 #include  "gametypes.h"
-#include  "defines.h"
 
 #include  "platform/platform.h"
 #include  "renderer/rendererfrontend.h"
@@ -12,6 +12,7 @@
 #include  "core/events.h"
 #include  "core/input.h"
 #include  "core/clock.h"
+#include <signal.h>
 
 #define   LIMITFRAMES true
 #define   TARGETFPS  60
@@ -23,8 +24,8 @@ u8  applicationOnResized  (u16 code , void* sender , void* listener , EventConte
 
 struct ApplicationState{
   Game* game;
-  i8    isRunning;
-  i8    isSuspended;
+  bool  isRunning;
+  bool  isSuspended;
   i16   width;
   i16   height;
   Clock clock;
@@ -51,10 +52,10 @@ struct ApplicationState{
   void* rendererSystemState;
 };
 
-static i8 initalized  = false;
+static bool initalized  = false;
 static ApplicationState* appState;
 
-i8  applicationCreate(Game* game){
+bool  applicationCreate(Game* game){
   UINFO("CREATING APPLICATION");
   if(game->applicationState){
     UERROR("application create called more than once");
@@ -62,7 +63,10 @@ i8  applicationCreate(Game* game){
   }
 
   game->applicationState= calloc(1, sizeof(ApplicationState));
-  MEMERR(game->applicationState);
+  if(game->applicationState ==  NULL){
+    UFATAL("COULD NOT ALLOCATE MEMORY FOR game.applicationState in applicationCreate");
+    return false;
+  }
   appState  = game->applicationState;
   appState->game = game;
   appState->isSuspended  = false;
@@ -71,21 +75,27 @@ i8  applicationCreate(Game* game){
 
   //---------------------------------STARTUP CODE---------------------------------
   //requires calloc as other memory functions use the logging subsytem
-  //so need to only initialize the memory and logging system with calloc
+  //so initialize the memory and logging system with calloc
   UINFO("INITIALZING APPLICATION MEMORY");
   initializeMemory(&appState->memorySystemMemoryRequirement, NULL);
+
   appState->memorySystemState = calloc(1, appState->memorySystemMemoryRequirement);
-  MEMERR(appState->memorySystemState);
-  initializeMemory(&appState->memorySystemMemoryRequirement, appState->memorySystemState);
+  ISNULL(appState->memorySystemState, false);
+  if(!initializeMemory(&appState->memorySystemMemoryRequirement, appState->memorySystemState)){
+    UFATAL("failed to initialize memory subsytem, shutting down");
+  }
 
   UINFO("INITIALZING ENGINE LOGGER");
   initializeLogging(&appState->loggingSystemMemoryRequirement, NULL);
-  appState->loggingSystemState  = calloc(1, appState->loggingSystemMemoryRequirement);
-  MEMERR(appState->loggingSystemState);
+  appState->loggingSystemState= calloc(1, appState->loggingSystemMemoryRequirement);
+
+  ISNULL(appState->loggingSystemState, false);
   if(!initializeLogging(&appState->loggingSystemMemoryRequirement, appState->loggingSystemState)){
     UFATAL("failed to initialze logging system, shutting down");
     return false;
   }
+
+  
   //-------------------------------------------------------------------------------
 
   KINFO("ALLOCATING MEMMORY FOR SUBSYSTEMS");
@@ -135,18 +145,20 @@ i8  applicationCreate(Game* game){
     KFATAL("failed to initialize renderer subsystem, shutting down!");
     return false;
   }
+
   //initialize the game 
   KINFO("INITIALZING GAME VARIABLES");
   if(appState->game->initialize(appState->game) == false){
     KFATAL("FAILED TO INITIALIZE GAME !");
     return false;
   }
-
+    
+  initErrors();
   initalized  = true;
   return true;
 }
 
-i8  applicationRun(){
+bool  applicationRun(){
   TRACEFUNCTION;
   KINFO("APPLICATION STARTED SUCCESSFULY");
   appState->isRunning    = true;
@@ -241,16 +253,19 @@ i8  applicationRun(){
   eventUnregister (EVENT_CODE_KEY_RELEASED     , NULL ,  applicationOnKey  );
   eventUnregister (EVENT_CODE_RESIZED          , NULL ,  applicationOnResized);
 
-  UINFO("SHUTING DOWN SUBSYSTEMS");
-  shutdownInput   ();
-  shutdownEvents  ();
-  shutdownRenderer();
-  shutdownPlatform();
-  shutdownLogging ();
-  shutdownMemory  ();
+  applicationShutdown();
   return true;
 }
 
+void applicationShutdown(){
+  UINFO("SHUTING DOWN SUBSYSTEMS");
+  shutdownRenderer();
+  shutdownInput   ();
+  shutdownEvents  ();
+  shutdownPlatform();
+  shutdownMemory  ();
+  shutdownLogging ();
+}
 
 u8  applicationOnEvent(u16 code , void* sender, void* listener , EventContext context){
   switch (code) {
@@ -266,7 +281,7 @@ u8  applicationOnEvent(u16 code , void* sender, void* listener , EventContext co
 }
 
 u8 applicationOnKey(u16 code , void* sender, void* listener , EventContext context){
-TRACEEVENT;
+  TRACEEVENT;
   if(code == EVENT_CODE_KEY_PRESSED){
     u16 keyCode = context.data.u16[0];
     if(keyCode  == KEY_ESCAPE){
@@ -283,7 +298,7 @@ TRACEEVENT;
 
 
 u8  applicationOnResized  (u16 code , void* sender , void* listener , EventContext context){
-TRACEEVENT;
+  TRACEEVENT;
   KDEBUG("code  : %"PRIu16" sender : %p listener : %p context : %p");
   u16 width = context.data.u16[0];
   u16 height = context.data.u16[1];
@@ -320,16 +335,12 @@ TRACEEVENT;
   return false;
 }
 
-i8  applicationGetFrameBufferSize(u32* width, u32* height){
+void  applicationGetFrameBufferSize(u32* width, u32* height){
   *width  = appState->width;
   *height = appState->height;
-  return true;
 }
 
-i8  applicationGetName            (char* name){
-  if(appState->game != NULL){
-    name  = appState->game->appConfig.name;
-    return true;
-  }
-  return false;
+void  applicationGetName            (char* name){
+  name  = appState->game->appConfig.name;
 }
+

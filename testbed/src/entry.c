@@ -3,7 +3,7 @@
 #include  "game.h"
 #include  "core/logger.h"
 
-i8 createGame(Game* outGame){
+bool createGame(Game* outGame){
 
   UINFO("INITIALIZING GAME APPLICATION ...");
   //Config
@@ -20,7 +20,7 @@ i8 createGame(Game* outGame){
   outGame->onResize   = gameOnResize;
 
   outGame->state      = calloc(1, sizeof(GameState));
-  MEMERR(outGame->state);
+  ISNULL(outGame->state, false);
   outGame->applicationState = NULL;
   return true;
 }

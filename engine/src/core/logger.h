@@ -1,11 +1,6 @@
 #pragma once
 
-#include "defines.h"
-#include  <time.h>
-#include  <error.h>
-#include  <time.h>
-#include  <string.h>
-#include  <stdlib.h>
+#include  "defines.h"
 
 typedef enum LOG_LEVEL{
   LOG_FATAL = 0,
@@ -119,26 +114,18 @@ typedef enum LOG_TYPE{
 
 #define UASSERTIONS_ENABLED
 
-#ifdef UASSERTIONS_ENABLED // expression has to be true otherwise it returns
+#ifdef  UASSERTIONS_ENABLED // expression has to be true otherwise it returns
 #define UASSERT(expr, ret, info) if (!(expr)) { UREPORT(expr); UERROR(info);return ret; }
 #else
 #define UASSERT(expr)
 #endif
 
-#define MEMERR(X) if (X == NULL) { UFATAL("%s allocation failed due to %s at  %s", #X,strerror(errno), __FUNCTION__); exit(EXIT_FAILURE); }
-#define ISNULL(X, Y) if (X == NULL) { UWARN("%s is NULL", #X); return Y; }
 #define UWRITE(fmt, ...) Uwrite(1024, fmt, ##__VA_ARGS__)
 
+#define ISNULL(X, Y) if (X == NULL) { UERROR("%s is NULL", #X); return Y; }
 #define TRACEFUNCTION KTRACE("%s called",__FUNCTION__)
 #define TRACEMEMORY   MTRACE("%s called",__FUNCTION__)
 #define TRACEEVENT    ETRACE("%s called",__FUNCTION__)
-
-typedef struct Uinfo Uinfo;
-
-struct  Uinfo{
-  const char* str;
-  bool        e;
-};
 
 // Initializes logging system , call twice once with state = 0 , to get memory size , and then to pass allocated memory to the state;
 
@@ -147,4 +134,3 @@ void    shutdownLogging   ();
 u16     consoleLog        (               LOG_LEVEL level , const char* message , ...);
 u16     fileLog           (LOG_TYPE type, LOG_LEVEL level , const char* message , ...);
 u16     Uwrite            (u16 limit, const char *format , ...); 
-void    sendSignal        (int sig, const char* str, bool e);

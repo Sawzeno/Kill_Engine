@@ -1,0 +1,81 @@
+[0.000017984]  TEST MESSAGE!
+[0.000021290]  TEST MESSAGE!
+[0.000021751]  TEST MESSAGE!
+[0.000029655]  linearAllocatorCreate called
+[0.000030206]  totalSize : 1048576 memory : (nil) outAllocator : 0x555555559378
+[0.000042950]  linearAllocatorAllocate called
+[0.000043341]  allocator : 0x555555559378 size :lu
+[0.000047339]  linearAllocatorAllocate called
+[0.000047689]  allocator : 0x555555559378 size :lu
+[0.000052128]  _darrayCreate called
+[0.000052559]  cap  : 4942640300119561472 stride : 115
+[0.000054272]  CREATED: 0x55555555cab0 --> 0x55555555cac8 len  :0 cap : 1 stride : 16
+[0.000054943]  func : eventRegister
+[0.000055744]  _darrayPush called
+[0.000056306]  darray : 0x55555555cac8 valueptr : 0x7fffffffe558
+[0.000057087]    : 0x55555555cac8 copied to 0x7ffff7fb60fe
+[0.000060243]  PUSHED len  :1 cap : 1 stride : 16
+[0.000060794]  func : eventRegister
+[0.000062056]  _darrayCreate called
+[0.000062427]  cap  : 4942640300119561472 stride : 115
+[0.000062958]  CREATED: 0x55555555cae0 --> 0x55555555caf8 len  :0 cap : 1 stride : 16
+[0.000063519]  func : eventRegister
+[0.000063950]  _darrayPush called
+[0.000064351]  darray : 0x55555555caf8 valueptr : 0x7fffffffe558
+[0.000064781]    : 0x55555555caf8 copied to 0x7ffff7fb60fe
+[0.000065252]  PUSHED len  :1 cap : 1 stride : 16
+[0.000065703]  func : eventRegister
+[0.000066946]  _darrayCreate called
+[0.000067316]  cap  : 4942640300119561472 stride : 115
+[0.000067777]  CREATED: 0x55555555cb10 --> 0x55555555cb28 len  :0 cap : 1 stride : 16
+[0.000068328]  func : eventRegister
+[0.000068679]  _darrayPush called
+[0.000069039]  darray : 0x55555555cb28 valueptr : 0x7fffffffe558
+[0.000069500]    : 0x55555555cb28 copied to 0x7ffff7fb60fe
+[0.000069971]  PUSHED len  :1 cap : 1 stride : 16
+[0.000070422]  func : eventRegister
+[0.000071604]  _darrayCreate called
+[0.000071955]  cap  : 4942640300119561472 stride : 115
+[0.000072436]  CREATED: 0x55555555cb40 --> 0x55555555cb58 len  :0 cap : 1 stride : 16
+[0.000072967]  func : eventRegister
+[0.000073328]  _darrayPush called
+[0.000073708]  darray : 0x55555555cb58 valueptr : 0x7fffffffe558
+[0.000074139]    : 0x55555555cb58 copied to 0x7ffff7fb60fe
+[0.000074580]  PUSHED len  :1 cap : 1 stride : 16
+[0.000075051]  func : eventRegister
+[0.000077836]  linearAllocatorAllocate called
+[0.000078197]  allocator : 0x555555559378 size :lu
+[0.000541217]  linearAllocatorAllocate called
+[0.000541708]  allocator : 0x555555559378 size :lu
+[0.000549322]  _darrayCreate called
+[0.000549853]  cap  : 4942640300119561472 stride : 115
+[0.000550665]  CREATED: 0x55555555ec20 --> 0x55555555ec38 len  :0 cap : 1 stride : 8
+[0.000551527]  func : rendererBackendInitialize
+[0.000552098]  _darrayPush called
+[0.000552639]  darray : 0x55555555ec38 valueptr : 0x7fffffffe498
+[0.000553270]  3{ыч€  : 0x55555555ec38 copied to 0x7ffff7fb60fe
+[0.000553971]  PUSHED len  :1 cap : 1 stride : 8
+[0.000554592]  func : rendererBackendInitialize
+[0.000555103]  _darrayPush called
+[0.000555554]  darray : 0x55555555ec38 valueptr : 0x7fffffffe490
+[0.000556436]  _darrayResize called
+[0.000556877]  darray  : 0x55555555ec38
+[0.000557448]  oldhead contains [0]: 1 [1] :1 [2] :8
+[0.000558079]    : 0x55555555ec50 copied to 0x7ffff7fb6064
+[0.000558720]  newhead contains [0]: 2 [1] :1 [2] :8
+[0.000559281]  3{ыч€  : 0x55555555ec68 copied to 0x7ffff7fb6064
+[0.000559872]  RESIZE RETURNED : 0x55555555ec38
+[0.000560383]  B{ыч€  : 0x55555555ec70 copied to 0x7ffff7fb60fe
+[0.000561014]  PUSHED len  :2 cap : 2 stride : 8
+[0.000561636]  func : rendererBackendInitialize
+[0.000562126]  _darrayPush called
+[0.000562557]  darray : 0x55555555ec68 valueptr : 0x7fffffffe488
+[0.000563098]  _darrayResize called
+[0.000563569]  darray  : 0x55555555ec68
+[0.000564100]  oldhead contains [0]: 2 [1] :2 [2] :8
+[0.000564701]    : 0x55555555ec80 copied to 0x7ffff7fb6064
+[0.000565272]  newhead contains [0]: 4 [1] :2 [2] :8
+[0.000565843]  3{ыч€  : 0x55555555ec98 copied to 0x7ffff7fb6064
+[0.000566374]  RESIZE RETURNED : 0x55555555ec68
+[0.000566855]  U{ыч€  : 0x55555555eca8 copied to 0x7ffff7fb60fe
+[0.000567426]  PUSHED len  :3 cap : 4 stride : 8

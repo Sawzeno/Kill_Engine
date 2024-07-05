@@ -4,6 +4,7 @@
 #include  "defines.h"
 #include  "core/logger.h"
 #include  "math/kmath.h"
+#include  "core/application.h"
 
 typedef struct RendererSystemState{
   RendererBackend backend;
@@ -21,20 +22,23 @@ initializeRenderer(u64* requiredMemory, void* state)
     return true;
   }
   rendererSystemStatePtr  = state;
+  u32 width, height;
+  char* applicationName;
+  applicationGetName(applicationName);
+  applicationGetFrameBufferSize (&width, &height);
 
-  if(!rendererBackendInitialize()){
+  if(!rendererBackendInitialize(width, height, applicationName)){
     KFATAL("FAILED TO INITIALIZE RENDERER BACKEND!!");
     return false;
   }
   return true;
 }
 
-bool
+void
 shutdownRenderer()
 {
   KTRACE("RENDERER SUBSYTEM SHUTDOWN");
   rendererBackendShutdown();
-  return true;
 }
 
 bool rendererBeginFrame(f32 deltaTime){

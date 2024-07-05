@@ -15,14 +15,16 @@ VkResult  vulkanFrameBufferCreate(VulkanContext* context,
   VkResult  result  = {0};
   // take a copy of attachments , renderpass , attachment count
   outFrameBuffer->attachments = kallocate(sizeof(VkImageView) * attachmentCount, MEMORY_TAG_RENDERER);
-  MEMERR(outFrameBuffer->attachments);
+
   for(u32 i =0; i <attachmentCount; ++i){
     outFrameBuffer->attachments[i]  = attachments[i];
   }
   outFrameBuffer->renderPass  = renderPass;
   outFrameBuffer->attachmentCount = attachmentCount;
+
   u32 swapchainExtentWidth = context->device.swapchainSupport.capabilities.currentExtent.width;
   u32 swapchainExtentHeight = context->device.swapchainSupport.capabilities.currentExtent.height;
+
   VkFramebufferCreateInfo createInfo  = {VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO};
   createInfo.renderPass  = renderPass->handle;
   createInfo.attachmentCount  = attachmentCount;

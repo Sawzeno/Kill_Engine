@@ -3,7 +3,7 @@
 #include  "defines.h"
 
 typedef struct Game Game;
-typedef struct  ApplicationConfig ApplicationConfig;
+typedef struct ApplicationConfig ApplicationConfig;
 
 struct ApplicationConfig{
   i16   posX;
@@ -14,7 +14,9 @@ struct ApplicationConfig{
 };
 
 
-i8  applicationRun                ();
-i8  applicationCreate             (Game* game);
-i8  applicationGetFrameBufferSize (u32* width, u32* height);
-i8  applicationGetName            (char* name);
+bool  applicationRun                ();
+bool  applicationCreate             (Game* game);
+void  applicationShutdown           ();
+void  applicationGetFrameBufferSize (u32* width, u32* height);
+void  applicationGetName            (char* name);
+

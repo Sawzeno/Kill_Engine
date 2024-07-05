@@ -1,11 +1,8 @@
-#include  "defines.h"
 #include  "gametypes.h"
 
 #include  "core/logger.h"
-#include  "core/application.h"
 
-
-extern i8 createGame(Game* game);
+extern bool createGame(Game* game);
 
 int main(void){
 

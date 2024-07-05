@@ -1,7 +1,6 @@
 #pragma once
 
 #include  "vulkantypes.h"
-#include <vulkan/vulkan_core.h>
 
 VkResult  vulkanDeviceCreate  (VulkanContext* context);
 VkResult  vulkanDeviceDestroy (VulkanContext* context);

@@ -6,6 +6,8 @@
 #include  "core/logger.h"
 #include  "containers/darray.h"
 
+#include  <string.h>
+
 typedef struct VulkanPhysicalDeviceRequirements     VulkanPhysicalDeviceRequirements;
 typedef struct VulkanPhysicalDeviceQueueFamilyInfo  VulkanPhysicalDeviceQueueFamilyInfo;
 

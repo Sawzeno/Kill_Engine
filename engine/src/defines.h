@@ -1,12 +1,7 @@
 #pragma once
 
-#include  <stdio.h>
-#include  <errno.h>
-#include  <stdint.h>
-#include  <stdarg.h>
+#include  "stdlib.h"
 #include  <stdbool.h>
-
-#include  <unistd.h>
 #include  <inttypes.h>
 
 #define UCLAMP(value, min, max) (value <= min) ? min : (value >= max) ? max : value

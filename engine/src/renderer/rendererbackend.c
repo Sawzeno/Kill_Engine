@@ -1,5 +1,5 @@
 #include  "rendererbackend.h"
-#include "renderer/rendertypes.h"
+#include  "renderertypes.h"
 #include  "rendererutils.h"
 
 #include  "vulkanplatform.h"
@@ -12,7 +12,6 @@
 #include  "vulkanfence.h"
 
 #include  "core/logger.h"
-#include  "core/application.h"
 #include  "core/kmemory.h"
 
 #include  "containers/darray.h"
@@ -21,7 +20,6 @@
 
 #include  "shaders/vulkanobjectshader.h"
 
-static    char* applicationName;
 static    u32 cachedFrameBufferWidth    = 0;
 static    u32 cachedFrameBufferHeight   = 0;
 
@@ -50,7 +48,7 @@ rendererBackendResized(u16 width, u16 height)
 }
 
 bool
-rendererBackendInitialize()
+rendererBackendInitialize(u32 width, u32 height, const char* applicationName)
 {
   TRACEFUNCTION;
   //function pointers
@@ -58,8 +56,9 @@ rendererBackendInitialize()
   //TODO
   context.allocator = NULL;
   //get applications info
-  applicationGetName(applicationName);
-  applicationGetFrameBufferSize (&cachedFrameBufferWidth, &cachedFrameBufferHeight);
+  cachedFrameBufferWidth  = width;
+  cachedFrameBufferHeight = height;
+
   context.frameBufferWidth    = (cachedFrameBufferWidth != 0 ? cachedFrameBufferWidth : 1280);
   context.frameBufferHeight   = (cachedFrameBufferHeight!= 0 ? cachedFrameBufferHeight: 1440);
 

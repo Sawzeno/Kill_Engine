@@ -2,7 +2,6 @@
 
 #include  "defines.h"
 #include  "math/mathtypes.h"
-#include  "renderer/vulkantypes.h"
 
 
 typedef struct  RendererBackend RendererBackend;
@@ -16,7 +15,7 @@ struct RenderPacket{
   f32 deltaTime;
 };
 
-bool  rendererBackendInitialize ();
+bool  rendererBackendInitialize (u32 width, u32 height, const char* applicationName);
 
 bool  rendererBackendBeginFrame (f32 deltaTime);
 

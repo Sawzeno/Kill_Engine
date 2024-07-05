@@ -1,11 +1,11 @@
-#include "kmemory.h"
-#include "defines.h"
+#include  "kmemory.h"
+#include  "defines.h"
 
 #include  "logger.h"
-#include <stdio.h>
-#include  <stdlib.h>
-#include  <unistd.h>
 #include  <string.h>
+#include  <stdio.h>
+#include  <errno.h>
+#include  "errors.h"
 
 typedef struct MemoryStats MemoryStats;
 
@@ -35,9 +35,7 @@ static const char* memory_tag_strings[MEMORY_TAG_MAX_TAGS] = {
   "LINEAR_ALLOCATOR"
 };
 
-
 #define MEM_STATS_LEN 1024
-
 
 typedef struct MemorySystemStats{
   MemoryStats stats;
@@ -46,20 +44,21 @@ typedef struct MemorySystemStats{
 
 static MemorySystemStats* memorySystemStatePtr = NULL;
 
-void initializeMemory(u64*  memoryRequirement, void* state){
+bool initializeMemory(u64*  memoryRequirement, void* state){
   *memoryRequirement = sizeof(MemorySystemStats);
   if(state == NULL){
     UDEBUG("MEMORY SUBSYSTEM : STATE PASSED AS NULL");
-    return ;
+    return true ;
   }
   memorySystemStatePtr  = state;
   memset(state, 0, sizeof(memorySystemStatePtr->stats));
   memorySystemStatePtr->allocCount  = 0;
   UINFO("MEMORY SUSBSYSTEM INITIALIZED");
+  return true;
 }
 
 void shutdownMemory(){
-  UINFO("MEMORY SYSTEM SHUTDOWN");
+  KINFO("MEMORY SYSTEM SHUTDOWN");
   memorySystemStatePtr  = NULL;
 }
 
@@ -107,11 +106,15 @@ char* getMemoryUsage(){
 
 void* kallocate(u64 size , Memory_tag tag){
   if(tag ==  MEMORY_TAG_UNKNOWN){
-    UWARN("kallocate called on MEMORY_TAG_UNKNOWN , reclass this allocation !");
+    MINFO("kallocate called on MEMORY_TAG_UNKNOWN , reclass this allocation !");
   }
   void* block = calloc(1, size);
   if(block == NULL){
-    exit(1);
+    MINFO("COULD NOT ALLOCATE A BLOCK %"PRIu64" MEMORY, EXITING!");
+    KINFO("COULD NOT ALLOCATE A BLOCK %"PRIu64" MEMORY, EXITING!");
+    EINFO("COULD NOT ALLOCATE A BLOCK %"PRIu64" MEMORY, EXITING!");
+    UFATAL("COULD NOT ALLOCATE A BLOCK %"PRIu64" MEMORY, EXITING!");
+    sendSignal(SIGILL, "Kallocate failed", true);
   }
   if(memorySystemStatePtr != NULL){
     memorySystemStatePtr->stats.totalAllocated  +=  size;
@@ -124,10 +127,11 @@ void* kallocate(u64 size , Memory_tag tag){
 void  kfree(void* block , u64 size , Memory_tag tag){
   if(tag  == MEMORY_TAG_UNKNOWN){
     UWARN("kfree called on MEMORY_TAG_UNKOWN");
+    exit(errno);
   }
   if(memorySystemStatePtr != NULL){
-  memorySystemStatePtr->stats.totalAllocated  -=  size;
-  memorySystemStatePtr->stats.taggedAllocations[tag]  -=  size;
+    memorySystemStatePtr->stats.totalAllocated  -=  size;
+    memorySystemStatePtr->stats.taggedAllocations[tag]  -=  size;
   }
   free(block);
 }

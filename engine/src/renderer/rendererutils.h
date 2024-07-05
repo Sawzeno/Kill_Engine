@@ -1,7 +1,6 @@
 #pragma once
 
 #include  "vulkantypes.h"
-#include <vulkan/vulkan_core.h>
 
 #define VK_CHECK_VERBOSE(result, message)                           \
   if(result != VK_SUCCESS){                                         \

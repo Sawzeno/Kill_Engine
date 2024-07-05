@@ -1,11 +1,9 @@
 #include  "rendererutils.h"
+
 #include  "containers/darray.h"
 #include  "core/logger.h"
-#include  "defines.h"
 
 #include  <string.h>
-#include  <vulkan/vulkan.h>
-#include  <vulkan/vulkan_core.h>
 
 VKAPI_ATTR VkBool32 VKAPI_CALL 
 vkDebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT      message_severity,
@@ -131,38 +129,6 @@ vulkanResultIsSuccess(VkResult result)
   }
 }
 
-
-void
-printAvailableExtenesions()
-{
-  u32 extensionCount = 0;
-  vkEnumerateInstanceExtensionProperties(NULL, &extensionCount, NULL);
-  VkExtensionProperties* extensions = (VkExtensionProperties*)malloc(extensionCount * sizeof(VkExtensionProperties));
-  vkEnumerateInstanceExtensionProperties(NULL, &extensionCount, extensions);
-
-  KINFO("Available Vulkan extensions:");
-  for (u32 i = 0; i < extensionCount; ++i) {
-    KINFO("%s", extensions[i].extensionName);
-  }
-  free(extensions);
-}
-
-void
-printAvailableLayers()
-{
-  u32 layerCount = 0;
-  vkEnumerateInstanceLayerProperties(&layerCount, NULL);
-
-  VkLayerProperties* layers = (VkLayerProperties*)malloc(layerCount * sizeof(VkLayerProperties));
-  vkEnumerateInstanceLayerProperties(&layerCount, layers);
-
-  KINFO("Available Vulkan instance layers:");
-  for (u32 i = 0; i < layerCount; ++i) {
-    KINFO("%s", layers[i].layerName);
-  }
-  free(layers);
-}
-
 VkResult
 checkAvailableExtensions(const char** requiredExtensions)
 {
@@ -188,7 +154,7 @@ checkAvailableExtensions(const char** requiredExtensions)
     }
     if (!found) {
       KFATAL("REQUIRED EXTENSION %s IS MISSING", requiredExtension);
-      free(availableExtensions);
+      DARRAY_DESTROY(availableExtensions);
       return !VK_SUCCESS;
     }
   }
@@ -235,18 +201,18 @@ checkAvailableLayers(const char** requiredLayers)
 VkResult
 vulkanDebuggerCreate (VulkanContext* context)
 {
-TRACEFUNCTION;
-u32 logSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT   |
-                  VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
-                  VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT    |
-                  VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT;
+  TRACEFUNCTION;
+  u32 logSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT   |
+    VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+    VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT    |
+    VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT;
 
   VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo = {VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT};
   debugCreateInfo.messageSeverity = logSeverity;
   debugCreateInfo.pfnUserCallback = vkDebugCallback;
   debugCreateInfo.messageType     = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT     | 
-                                    VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT | 
-                                    VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT  ;
+    VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT | 
+    VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT  ;
 
   PFN_vkCreateDebugUtilsMessengerEXT func =
     (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(context->instance, "vkCreateDebugUtilsMessengerEXT");

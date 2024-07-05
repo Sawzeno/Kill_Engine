@@ -1,9 +1,11 @@
 #include  "darray.h"
+
 #include  "core/kmemory.h"
-#include  "defines.h"
 #include  "core/logger.h"
 
-void* _darrayCreate(u64 cap , u64 stride){
+void*
+_darrayCreate(u64 cap , u64 stride)
+{
   TRACEMEMORY;
   MDEBUG("cap  : %"PRIu64" stride : %"PRIu64"");
   u64 headersize  = DARRAY_FILED_FIELD_LENGTH * sizeof(u64);
@@ -20,7 +22,9 @@ void* _darrayCreate(u64 cap , u64 stride){
   return (void*)(arr);
 }
 
-void* _darrayResize(void* darray){
+void*
+_darrayResize(void* darray)
+{
   TRACEMEMORY;
   MDEBUG("darray  : %p",darray);
   ISNULL(darray ,NULL);
@@ -51,7 +55,9 @@ void* _darrayResize(void* darray){
   return (void*)newbody;
 }
 
-void* _darrayPush(void* darray , const void* valueptr){
+void*
+_darrayPush(void* darray , const void* valueptr)
+{
   TRACEMEMORY;
   MDEBUG("darray : %p valueptr : %p",darray,valueptr);
   ISNULL(darray , NULL);
@@ -74,7 +80,9 @@ void* _darrayPush(void* darray , const void* valueptr){
   return darray;
 }
 
-u8 _darrayPop(void* darray, void* dest) {
+bool  
+_darrayPop(void* darray, void* dest)
+{
   TRACEMEMORY;
   MDEBUG("darray : %p  dest  : %p",darray,dest);
   ISNULL(darray, false);
@@ -94,7 +102,9 @@ u8 _darrayPop(void* darray, void* dest) {
   return true;
 }
 
-void* _darrayPopAt(void* darray, u64 index, void* dest) {
+void*
+_darrayPopAt(void* darray, u64 index, void* dest)
+{
   TRACEMEMORY;
   MDEBUG("darray : %p  index : %"PRIu64" dest  : %p",darray,index,dest);
   ISNULL(darray, NULL);
@@ -124,7 +134,9 @@ void* _darrayPopAt(void* darray, u64 index, void* dest) {
 }
 
 
-void* _darrayInsertAt(void* darray, u64 index, void* valueptr) {
+void*
+_darrayInsertAt(void* darray, u64 index, void* valueptr)
+{
   TRACEMEMORY;
   MDEBUG("darray : %p  index : %"PRIu64" valueptr  : %p",darray,index,valueptr);
   ISNULL(darray , NULL);
@@ -156,7 +168,9 @@ void* _darrayInsertAt(void* darray, u64 index, void* valueptr) {
   return darray;
 }
 
-u8    _darrayDestroy(void* darray){
+bool
+_darrayDestroy(void* darray)
+{
   ISNULL(darray , false);
   u64*  header  = (u64*)darray - DARRAY_FILED_FIELD_LENGTH; 
   free(header);
@@ -164,13 +178,17 @@ u8    _darrayDestroy(void* darray){
   return true;
 }
 
-u64   _darrayFieldGet(void* darray, u64 field) {
+u64
+_darrayFieldGet(void* darray, u64 field)
+{
   ISNULL(darray , 0);
   u64* header = (u64*)darray - DARRAY_FILED_FIELD_LENGTH;
   return header[field];
 }
 
-u8    _darrayFieldSet(void* darray, u64 field, u64 value) {
+bool
+_darrayFieldSet(void* darray, u64 field, u64 value)
+{
   ISNULL(darray , false);
   u64* header = (u64*)darray - DARRAY_FILED_FIELD_LENGTH;
   header[field] = value;

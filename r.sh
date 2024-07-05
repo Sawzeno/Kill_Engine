@@ -43,7 +43,6 @@ run_make() {
 run_testbed() {
   pushd build || { echo "Failed to enter build directory"; exit 1; }
   pushd testbed || { echo "Failed to enter testbed directory";popd; exit 1; }
-  rm *.logs
   ./testbed
   popd
   popd

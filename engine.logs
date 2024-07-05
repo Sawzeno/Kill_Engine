@@ -1,0 +1,297 @@
+[FATAL]  TEST MESSAGE!
+[ERROR]  TEST MESSAGE!
+[WARN]   TEST MESSAGE!
+[0.000008997]  TEST MESSAGE!
+[0.000016821]  TEST MESSAGE!
+[0.000017513]  TEST MESSAGE!
+[0.000027832]  LOGGING SUBSYSTEM INITITALIZED!
+[0.000028353]  ALLOCATING MEMMORY FOR SUBSYSTEMS
+[0.000039404]  INITIALIZING ENGINE INPUT
+[0.000040576]  initializeInput called
+[0.000041207]  memoryRequirement :0 state : (nil)
+[0.000041818]  INPUT SUBSYTEM  : STATE PASSED AS NULL
+[0.000043832]  initializeInput called
+[0.000044213]  memoryRequirement :402 state : 0x7ffff794b010
+[0.000044744]  INPUT SUBSYSTEM INITIALIZED
+[0.000045135]  INITIALIZING ENGINE EVENTS
+[0.000046146]  initializeEvents called
+[0.000048090]  initializeEvents called
+[0.000048922]  EVENT SUBSYSTEM INITIALIZED !
+[0.000075432]  INITIALZING ENGINE PLATFORM
+[0.000076463]  initializePlatform called
+[0.000077024]  memoryRequirement :0 state : (nil)
+[0.000077465]  PLATFORM SUSBYSTEM : STATE PASSED AS NULL
+[0.000078638]  initializePlatform called
+[0.000078998]  memoryRequirement :48 state : 0x7ffff794b5a2
+[0.000079449]  PLATFORM SUBSYTEM INITIALIZED
+[0.000080381]  startPlatform called
+[0.000080762]  applicationName : KILL ENGINE x : 100 y : 100 width : 1280 height : 1440
+[0.000536438]  PLATFORM HAS BEEN STARTED !
+[0.000537901]  INITIALIZING ENGINE RENDERER
+[0.000539514]  initializeRenderer called
+[0.000540135]  requiredMemory : 0 state : (nil)
+[0.000542349]  initializeRenderer called
+[0.000542850]  requiredMemory : 8 state : 0x7ffff794b5d2
+[0.000548010]  rendererBackendInitialize called
+[0.000548621]  ----------------------REQUIRED EXTENSIONS----------------------
+[0.837527267]  FOUND EXTENSION: VK_KHR_surface
+[0.837528409]  FOUND EXTENSION: VK_EXT_debug_utils
+[0.837528880]  FOUND EXTENSION: VK_KHR_xcb_surface
+[0.837529271]  ALL REQUIRED EXTENSIONS ARE PRESENT
+[0.837532717]  ----------------------REQUIRED LAYERS----------------------
+[0.838336007]  FOUND LAYER  VK_LAYER_KHRONOS_validation
+[0.838349172]  ALL REQUIRED LAYERS ARE PRESENT
+[0.838352969]  ----------------------VULKAN INSTANCE----------------------
+[0.838353700]  vkCreateInstace called
+[1.570694089]  VULKAN ISNTANCE CREATED
+[1.570698167]  ----------------------VULKAN DEBUGGER----------------------
+[1.570700731]  vulkanDebuggerCreate called
+[1.570748131]  VULKAN DEBUGGER CREATED
+[1.570749002]  ----------------------VULKAN SURFACE----------------------
+[1.570750535]  vulkanSurfaceCreate called
+[1.570751096]  context : 0x4497c92a6d281500
+[1.570767557]  VULKAN SURFACE INITIALIZED
+[1.570768339]  ----------------------VULKAN DEVICE----------------------
+[1.570772797]  vulkanDeviceCreate called
+[1.570773648]  SETTING UP PHYSICAL DEVICE
+[1.570775332]  selectPhysicalDevice called
+[1.570784198]  linux_read_sorted_physical_devices:
+[1.570785350]       Original order:
+[1.570792794]             [0] NVIDIA GeForce RTX 3070 Laptop GPU
+[1.570793756]       Sorted order:
+[1.570794478]             [0] NVIDIA GeForce RTX 3070 Laptop GPU  
+[1.570795349]  Copying old device 0 into new device 0
+[1.570797313]  linux_read_sorted_physical_devices:
+[1.570797954]       Original order:
+[1.570803394]             [0] NVIDIA GeForce RTX 3070 Laptop GPU
+[1.570804146]       Sorted order:
+[1.570804817]             [0] NVIDIA GeForce RTX 3070 Laptop GPU  
+[1.570805488]  Copying old device 0 into new device 0
+[1.570868086]  ----------------------FEATURES----------------------
+[1.570870621]  ----------------------MEMMORY----------------------
+[1.570872625]  ----------------------REQUIREMENTS----------------------
+[1.570880720]  CHECKING IF NVIDIA GeForce RTX 3070 Laptop GPU MEETS REQUIREMENTS
+[1.570882142]  physicalDeviceMeetsRequirements called
+[1.570882844]  --------------------QUEUE PROPERTIES----------------------
+[1.570885679]  GRAPHICS | PRESENT | COMPUTE | TRANSFER | NAME
+[1.573982130]         1 |       1 |       1 |        1 | NVIDIA GeForce RTX 3070 Laptop GPU
+[1.573985115]  DEVICE MEETS QUEUE REQUIREMENTS
+[1.573985987]  GRAPHICS FAMILY INDEX: 0
+[1.573986729]  PRESENT FAMILY INDEX: 2
+[1.573987320]  COMPUTE FAMILY INDEX: 2
+[1.573987841]  TRANSFER FAMILY INDEX: 5
+[1.573988372]  --------------------SWAPCHAIN SUPPORT----------------------
+[1.574009942]  vulkanDeviceQuerySwapchainSupport called
+[1.574010924]  ----------------------DEVICE SURFACE CAPABILTITIES---------
+[1.574313863]  ----------------------SURFACE FORMATS----------------------
+[1.574478393]  ----------------------PRESENT MODES-----------------------
+[1.574620640]  QUERIED SWAPCHAIN SUPPORT SUCCESFULLY
+[1.574621622]  DEVICE MEETS SWAPCHAIN REQUIREMENTS
+[1.574622173]  --------------------DEVICE EXTENSIONS----------------------
+[1.574639506]  DEVICE HAS REQUIRED EXTENSIONS
+[1.574640267]  --------------------SAMPLER ANISOTROPY----------------------
+[1.574640808]  DEVICE MEETS ALL REQUIREMENTS!
+[1.574641369]  SELECTED DEVICE: 'NVIDIA GeForce RTX 3070 Laptop GPU'
+[1.574642070]  GPU IS DISCRETE
+[1.574642682]  GPU DRIVER VERSION: 555.232.128
+[1.574643583]  Vulkan API VERSION: 1.3.278
+[1.574644305]  LOCAL GPU MEM: 8.00 GIB
+[1.574645487]  SHARED SYSTEM MEM: 11.23 GIB
+[1.574647000]  PHYSICAL DEVICE HAS BEEN SELECTED!
+[1.574647621]  SETTING UP LOGICAL DEVICE
+[1.574648192]  ----------------------QUEUE CREATE INFO---------------
+[1.574648803]  ----------------------LOGICAL DEVICE CREATE INFO-------
+[1.574753370]  Inserted device layer "VK_LAYER_KHRONOS_validation" (libVkLayer_khronos_validation.so)
+[1.574754772]  vkCreateDevice layer callstack setup to:
+[1.574755544]     <Application>
+[1.574756135]       ||
+[1.574756746]     <Loader>
+[1.574757307]       ||
+[1.574757998]     VK_LAYER_KHRONOS_validation
+[1.574758640]             Type: Explicit
+[1.574759381]             Manifest: /usr/share/vulkan/explicit_layer.d/VkLayer_khronos_validation.json
+[1.574760012]             Library:  libVkLayer_khronos_validation.so
+[1.574760683]       ||
+[1.574761285]     <Device>
+[1.574887592]         Using "NVIDIA GeForce RTX 3070 Laptop GPU" with driver: "libGLX_nvidia.so.0"
+[1.853129723]  LOGICAL DEVICE CREATED!
+[1.853138660]  ------------------DEVICE QUEUES--------------------
+[1.853162805]  QUEUS OBTAIINED
+[1.853163717]  ------------------COMMAND POOLS---------------------
+[1.853180959]  GRPAHICS COMMAND POOL HAS BEEN CREATED
+[1.853181530]  VULKAN DEVICE CREATED
+[1.853182302]  ----------------------VULKAN SWAPCHAIN----------------------
+[1.853184536]  vulkanSwapchainCreate called
+[1.853185898]  context : 0x4497c92a6d281500 width : 115 height : 0 outSwapchain : (nil)
+[1.853189435]  createSwapchain called
+[1.853190417]  context : 0x7ffff7fbf9f0 width : 1280height 1440swapchain : 0x7ffff7fc00e0
+[1.853191489]  -----------------IMAGE FORMATS------------------
+[1.853192471]  IMAGE FORMATS CHOSEN !
+[1.853192942]  ----------------------PRESENT MODE-------------------
+[1.853193493]  --------------------SWAPCHAIN SUPPORT----------------------
+[1.853194194]  RECHECKING FOR SWAPCHAIN SPPORT
+[1.853195026]  vulkanDeviceQuerySwapchainSupport called
+[1.853195777]  ----------------------DEVICE SURFACE CAPABILTITIES---------
+[1.853482907]  ----------------------SURFACE FORMATS----------------------
+[1.853649009]  ----------------------PRESENT MODES-----------------------
+[1.853754067]  QUERIED SWAPCHAIN SUPPORT SUCCESFULLY
+[1.853754668]  --------------------SWAPCHAIN EXTENT----------------------
+[1.853755018]  SETTING SWAPCHAIN EXTENT BOUNDS
+[ERROR]  value pased as swapchain extent in createSwapchain is unambiguious , if this is during initilaization, then the window resized even before the swapchain could be initialized 
+[1.853755960]  swapchain extent : width, height : 825, 1390
+[1.853756621]  --------------------SWAPCHAIN CREATE INFO----------
+[1.924717810]  INITIALIZED SWAPCHAIN
+[1.924722208]  --------------------SWAPCHAIN IMAGES----------
+[1.924754068]  GOT SWAPCHAIM IMAGES
+[1.924754659]  --------------------SWAPCHAIN IMAGES VIEWS----------
+[1.924783243]  CREATED IMAGE VIEW : 0
+[1.924791158]  CREATED IMAGE VIEW : 1
+[1.924797770]  CREATED IMAGE VIEW : 2
+[1.924798311]  --------------------DEPTH FORMAT----------
+[1.924799533]  vulkanDeviceDetectDepthFormat called
+[1.924805905]  DEPTH FORMAT SPPORTED
+[1.924807338]  vulkanImageCreate called
+[1.924807889]  DEPTH VIEW IMAGE CREATED
+[1.924860358]  GETTING IMAGE MEMORY REQUIREMENTS
+[1.924869365]  findMemoryIndex called
+[1.924871609]  MEMORY TYPE FOUND
+[1.925290096]  vulkanImageViewCreate called
+[1.925301617]  IMAGE VIEW CREATED SUCCESFULLY!
+[1.925302739]  ----------------------VULKAN RENDERPASS----------------------
+[1.925303921]  vulkanRenderPassCreate called
+[1.925304493]  -----------------------COLOR ATTACHMENT________
+[1.925304923]  -----------------------DEPTH ATTACHMENT-------------
+[1.925305514]  -----------------------RENDER PASS DEPENDENCY----------
+[1.925305905]  -----------------------RENDER PASS CREATE INFO---------
+[1.925361329]  SUCCESFULLY CREATED RENDERPASS
+[1.925362031]  ----------------------SWAPCHAIN FRAMEBUFFERS----------------------
+[1.925366138]  regenerateFrameBuffers called
+[1.925366619]  swapchain : 0x7ffff7fc00e0 renderpass : 0x7ffff7fc0130
+[1.925367691]  vulkanFrameBufferCreate called
+[1.925382960]  SUCCESFULLY CREATED FRAMEBUFFER
+[1.925383511]  vulkanFrameBufferCreate called
+[1.925387789]  SUCCESFULLY CREATED FRAMEBUFFER
+[1.925388250]  vulkanFrameBufferCreate called
+[1.925390665]  SUCCESFULLY CREATED FRAMEBUFFER
+[1.925391115]  SUCCESFULLY REGENRATED FRAMEBUFFERS
+[1.925391566]  ----------------------COMMAND BUFFERS----------------------
+[1.925392558]  createCommandBuffers called
+[1.925396065]  vulkanCommandBufferAllocate called
+[1.925425841]  SUCCESFULLY ALLOCATED A COMANND BUFFER
+[1.925426432]  vulkanCommandBufferAllocate called
+[1.925436140]  SUCCESFULLY ALLOCATED A COMANND BUFFER
+[1.925436651]  vulkanCommandBufferAllocate called
+[1.925447181]  SUCCESFULLY ALLOCATED A COMANND BUFFER
+[1.925447692]  CREATED COMMAND BUFFERS
+[1.925448052]  ----------------------SYNC OBJECTS----------------------
+[1.925461808]  vulkanFenceCreate called
+[1.925900343]  SCCESFULLY CREATED FENCE
+[1.925907556]  vulkanFenceCreate called
+[1.926257754]  SCCESFULLY CREATED FENCE
+[1.926262684]  vulkanFenceCreate called
+[1.926610117]  SCCESFULLY CREATED FENCE
+[1.926613042]  ----------------------SHADER OBJECTS----------------------
+[1.926614235]  vulkanObjectShaderCreate called
+[1.926614746]  context : 0x7ffff7fbf9f0 outShader : 0x7ffff7fc01a8
+[1.926623542]  KFileOpen called
+[1.926624263]  path : /home/gon/Developer/Kill_Engine/bin/Builtin.ObjectShader.vert.spv, mode : 1, binary : 1, FileHandle* : 0x7fffffffe020
+[1.926648719]  KFileReadAllBytes called
+[1.926649290]  handle : 0x7fffffffe020 outBytes : 0x7fffffffe018
+[1.926651695]  KFileClose called
+[1.926652156]  0x0.07ffff7fc10bp-1022ndle : 0x7fffffffe020
+[1.926713822]  CREATED SHADER MODULE vert FOR Builtin.ObjectShader
+[1.926717669]  KFileOpen called
+[1.926718120]  path : /home/gon/Developer/Kill_Engine/bin/Builtin.ObjectShader.frag.spv, mode : 1, binary : 1, FileHandle* : 0x7fffffffe020
+[1.926727057]  KFileReadAllBytes called
+[1.926727528]  handle : 0x7fffffffe020 outBytes : 0x7fffffffe018
+[1.926728179]  KFileClose called
+[1.926728539]  0x0.07fffffffdbap-1022ndle : 0x7fffffffe020
+[1.926739941]  CREATED SHADER MODULE frag FOR Builtin.ObjectShader
+[1.926740582]  ----------------------UNIFORM BUFFER OBJECT----------------------
+[1.926767673]  ----------------------GRAPHICS PIPELINE----------------------
+[1.926768475]  CREATING VULKAN GRAPHICS PIPELINE
+[1.926769296]  vulkanGraphicsPipelineCreate called
+[1.926769697]  context : 0x7ffff7fbf9f0 renderpass : 0x7ffff7fc0130 attributeCount : 1 attributes : 0x7fffffffe370 descriptorSetLayoutCount : 1 descriptorSetLayouts : 0x7fffffffe360 stageCount : 2 stages : 0x7fffffffe300 viewport : (nil) scissor : 0x44b4000044a00000 isWireframe 0x3f80000000000000 outPipeline (nil)
+[1.926922534]  SUCCESFULLY CEATED PIPELINE LAYOUT
+[1.927690448]  SUCCESSFULY CREATED GRPAHICS PIPELINE
+[1.927693343]  vulkanBufferCreate called
+[1.927694145]  context : 0x7ffff7fbf9f0 size : 256usage : 0x12  memoryProprtyFlags : 7 bindOnCreate : 1 outBuffer : 0x7ffff7fc0290
+[1.927705336]  findMemoryIndex called
+[1.927706818]  MEMORY TYPE FOUND
+[1.927858734]  vulkanBufferBind called
+[1.927860337]  context : 0x7ffff7fbf9f0 buffer : 0x7ffff7fc0290 offset lu
+[1.927868462]  VULKAN BUFFER BINDED
+[1.927868963]  VULKAN BUFFER CREATED
+[1.928031098]  SUCCESFULLY CRAEATED SHADER OBJECT
+[1.928032571]  ----------------------VULKAN BUFFERS----------------------
+[1.928033963]  createBuffers called
+[1.928034554]  vulkanBufferCreate called
+[1.928034985]  context : 0x7ffff7fbf9f0 size : 12582912usage : 0x83  memoryProprtyFlags : 1 bindOnCreate : 1 outBuffer : 0x7ffff7fc03c8
+[1.928039834]  findMemoryIndex called
+[1.928041007]  MEMORY TYPE FOUND
+[1.928388039]  vulkanBufferBind called
+[1.928389371]  context : 0x7ffff7fbf9f0 buffer : 0x7ffff7fc03c8 offset lu
+[1.928393098]  VULKAN BUFFER BINDED
+[1.928393589]  VULKAN BUFFER CREATED
+[1.928394040]  vulkanBufferCreate called
+[1.928394411]  context : 0x7ffff7fbf9f0 size : 4194304usage : 0x43  memoryProprtyFlags : 1 bindOnCreate : 1 outBuffer : 0x7ffff7fc03f0
+[1.928399390]  findMemoryIndex called
+[1.928400412]  MEMORY TYPE FOUND
+[1.928616819]  vulkanBufferBind called
+[1.928618021]  context : 0x7ffff7fbf9f0 buffer : 0x7ffff7fc03f0 offset lu
+[1.928621137]  VULKAN BUFFER BINDED
+[1.928621588]  VULKAN BUFFER CREATED
+[1.928621979]  SUCCESSFULY CREATED VULKAN BUFFERS
+[1.928622780]  ----------------------TEST SLAP----------------------
+[1.928624023]  uploadDataRange called
+[1.928624473]  vulkanBufferCreate called
+[1.928624844]  context : 0x7ffff7fbf9f0 size : 48usage : 0x1  memoryProprtyFlags : 6 bindOnCreate : 1 outBuffer : 0x7fffffffe380
+[1.928632268]  findMemoryIndex called
+[1.928633340]  MEMORY TYPE FOUND
+[1.929077024]  vulkanBufferBind called
+[1.929078517]  context : 0x7ffff7fbf9f0 buffer : 0x7fffffffe380 offset lu
+[1.929085520]  VULKAN BUFFER BINDED
+[1.929086061]  VULKAN BUFFER CREATED
+[1.929087574]  vulkanBufferLoadData called
+[1.929088095]  context : 0x7ffff7fbf9f0 buffer : 0x7fffffffe380 offset : 0 size : 48 flags : 0 data : 0x7fffffffe4f0
+[1.929094968]  vkUnmapMemory called
+[1.929098525]  vulkanBufferCopyTo called
+[1.929099156]  context : 0x7ffff7fbf9f0 pool : 0x7fffffffe2e8 fence : 0x7fffffffe2e0 queue : 0x7fffffffe2d8 source : 0x7fffffffe2d0 sourceOffset : 0 dest : 0x7fffffffe320 destOffset : u size : u
+[1.929100589]  vulkanCommandBufferStartSingleUse called
+[1.929101330]  vulkanCommandBufferAllocate called
+[1.929123071]  SUCCESFULLY ALLOCATED A COMANND BUFFER
+[1.929124313]  vulkanCommandBufferBegin called
+[1.929276379]  SUCCESFULLY BEGIN COMMAND BUFFER
+[1.929277120]  SUCCESFULLY STARTED SINGLE USE BUFFER
+[1.929277621]  vkCmdCopyBuffer called
+[1.929292219]  vulkanCommandBufferStopSingleUse called
+[1.929293391]  vulkanCommandBufferEnd called
+[1.929298050]  SUCCESFULLY END COMMAND BUFFER
+[1.929735462]  vulkanCommandBufferFree called
+[1.929737526]  vkFreeCommandBuffers called
+[1.929748647]  COMMAND BUFFER HAS BEEN FREED !
+[1.929754277]  vulkanBufferDestroy called
+[1.929754909]  context : 0x7ffff7fbf9f0 buffer : 0x7fffffffe380
+[1.930262733]  VULKAN BUFFER DESTROYED
+[1.930264587]  uploadDataRange called
+[1.930265499]  vulkanBufferCreate called
+[1.930266380]  context : 0x7ffff7fbf9f0 size : 24usage : 0x1  memoryProprtyFlags : 6 bindOnCreate : 1 outBuffer : 0x7fffffffe380
+[1.930274245]  findMemoryIndex called
+[1.930275828]  MEMORY TYPE FOUND
+[1.930674057]  vulkanBufferBind called
+[1.930675840]  context : 0x7ffff7fbf9f0 buffer : 0x7fffffffe380 offset lu
+[1.930680228]  VULKAN BUFFER BINDED
+[1.930680729]  VULKAN BUFFER CREATED
+[1.930681220]  vulkanBufferLoadData called
+[1.930681741]  context : 0x7ffff7fbf9f0 buffer : 0x7fffffffe380 offset : 0 size : 24 flags : 0 data : 0x7fffffffe4d0
+[1.930684817]  vkUnmapMemory called
+[1.930686620]  vulkanBufferCopyTo called
+[1.930687161]  context : 0x7ffff7fbf9f0 pool : 0x7fffffffe2e8 fence : 0x7fffffffe2e0 queue : 0x7fffffffe2d8 source : 0x7fffffffe2d0 sourceOffset : 0 dest : 0x7fffffffe320 destOffset : u size : u
+[1.930688113]  vulkanCommandBufferStartSingleUse called
+[1.930688694]  vulkanCommandBufferAllocate called
+[1.930692702]  SUCCESFULLY ALLOCATED A COMANND BUFFER
+[1.930693263]  vulkanCommandBufferBegin called
+[1.930697380]  SUCCESFULLY BEGIN COMMAND BUFFER
+[1.930697911]  SUCCESFULLY STARTED SINGLE USE BUFFER
+[1.930698352]  vkCmdCopyBuffer called
+[1.930

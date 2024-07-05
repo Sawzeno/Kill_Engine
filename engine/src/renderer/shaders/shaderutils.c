@@ -1,8 +1,10 @@
 #include  "shaderutils.h"
-#include  "renderer/rendererutils.h"
+
 #include  "core/logger.h"
-#include "core/kmemory.h"
-#include "platform/filesystem.h"
+#include  "core/kmemory.h"
+#include  "platform/filesystem.h"
+#include  "renderer/rendererutils.h"
+#include  "stdio.h"
 
 VkResult createShaderModule(VulkanContext* context,
                        const char* shaderName,
