@@ -4,6 +4,7 @@
 #include  <stdbool.h>
 #include  <inttypes.h>
 
+#define INVALID_ID 4294967295U
 #define UCLAMP(value, min, max) (value <= min) ? min : (value >= max) ? max : value
 
 typedef uint64_t  u64;

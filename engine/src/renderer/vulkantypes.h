@@ -6,6 +6,9 @@
 #include  <vulkan/vulkan_core.h>
 
 #define   OBJECT_SHADER_STAGE_COUNT 2
+// descriptors per object
+#define   VULKAN_OBJECT_SHADER_DESCRIPTOR_COUNT 2
+#define   VULKAN_OBJECT_MAX_OBJECT_COUNT 1024
 
 typedef struct  VulkanDevice        VulkanDevice;
 typedef struct  VulkanContext       VulkanContext;
@@ -18,9 +21,11 @@ typedef struct  VulkanFrameBuffer   VulkanFrameBuffer;
 typedef struct  VulkanFence         VulkanFence;
 typedef struct  VulkanObjectShader  VulkanObjectShader;
 typedef struct  VulkanShaderStage   VulkanShaderStage;
+typedef struct  VulkanObjectShaderLocalObjectState VulkanObjectShaderLocalObjectState;
+typedef struct  VulkanDescriptorState VulkanDescriptorState;
 typedef struct  VulkanPipeline      VulkanPipeline;
 typedef struct  VulkanBuffer        VulkanBuffer;
-
+typedef struct  VulkanTextureData   VulkanTextureData;
 //---------------------------------------------------------------------------ENUMS
 typedef enum  VulkanRenderPassState {
   READY,
@@ -39,52 +44,68 @@ typedef enum VulkanCommandBufferState{
   COMMAND_BUFFER_STATE_SUBMITTED,
   COMMAND_BUFFER_STATE_NOT_ALLOCATED,
 }VulkanCommandBufferState;
-
+//---------------------------------------------------------------------------STRUCTS
 struct VulkanBuffer{
-  u64                   totalSize;
-  VkBuffer              handle;
-  VkBufferUsageFlagBits usage;
-  bool                  isLocked;
-  VkDeviceMemory        memory;
-  i32                   memoryIndex;
-  u32                   memoryPropertyFlags;
+  u64                           totalSize;
+  VkBuffer                      handle;
+  VkBufferUsageFlagBits         usage;
+  bool                          isLocked;
+  VkDeviceMemory                memory;
+  i32                           memoryIndex;
+  u32                           memoryPropertyFlags;
 };
 
-//---------------------------------------------------------------------------STRUCTS
 struct VulkanShaderStage{
-  VkShaderModuleCreateInfo  createInfo;
-  VkShaderModule            handle;
+  VkShaderModuleCreateInfo      createInfo;
+  VkShaderModule                handle;
   VkPipelineShaderStageCreateInfo  shaderStageCreateInfo;
 };
 
 struct VulkanPipeline{
-  VkPipeline                handle;
-  VkPipelineLayout          pipelineLayout;
+  VkPipeline                    handle;
+  VkPipelineLayout              pipelineLayout;
+};
+
+struct VulkanDescriptorState{
+  u32 generations[3];                                                 // One per frame, has the descriptor been updated or not 
+};
+
+// all isntances will be one per object
+struct VulkanObjectShaderLocalObjectState{
+  VkDescriptorSet descriptorSets[3];                                        // per frame
+  VulkanDescriptorState descriptorStates[VULKAN_OBJECT_MAX_OBJECT_COUNT];   // per descriptor
 };
 
 struct VulkanObjectShader{
-  VulkanShaderStage         stages[OBJECT_SHADER_STAGE_COUNT];    //vertex , fragment shader stages
+  VulkanShaderStage             stages[OBJECT_SHADER_STAGE_COUNT];    //vertex , fragment shader stages
 
-  VkDescriptorPool          globalDescriptorPool;
-  VkDescriptorSetLayout     globalDescriptorSetLayout;
-  VkDescriptorSet           globalDescriptorSets[3];              //One Descriptor Set per Frame, max 3 for triple buffering
+  VkDescriptorPool              globalDescriptorPool;
+  VkDescriptorSetLayout         globalDescriptorSetLayout;
+  VkDescriptorSet               globalDescriptorSets[3];              //One Descriptor Set per Frame, max 3 for triple buffering
 
-  VulkanBuffer              globalUniformBuffer;                  //Glboal Uniform Buffer
-  GlobalUniformObject       globalUBO;                  //Global Uniform Object
+  VulkanBuffer                  globalUniformBuffer;                  //Glboal Uniform Buffer
+  GlobalUniformObject           globalUBO;                            //Global Uniform Object
 
-  VulkanPipeline            pipeline; 
+  VkDescriptorPool              localDescriptorPool;
+  VkDescriptorSetLayout         localDescriptorSetLayout;
+  VulkanBuffer                  localUniformBuffer;                  // one large buffer thats gonna handle all the object buffers
+  // TODO manage some kind of free list instead
+  u32                           localUniformBufferIndex;
+  // TODO make dynamic
+  VulkanObjectShaderLocalObjectState localObjectStates[VULKAN_OBJECT_MAX_OBJECT_COUNT];
+  VulkanPipeline                pipeline; 
 };
 
 struct VulkanFence{
-  VkFence                   handle;
-  u8                        isSignaled;
+  VkFence                       handle;
+  u8                            isSignaled;
 };
 
 struct  VulkanFrameBuffer{
-  VkFramebuffer     handle;
-  u32               attachmentCount;
-  VkImageView*      attachments;
-  VulkanRenderPass* renderPass;
+  VkFramebuffer                 handle;
+  u32                           attachmentCount;
+  VkImageView*                  attachments;
+  VulkanRenderPass*             renderPass;
 };
 
 struct VulkanCommandBuffer{
@@ -107,6 +128,11 @@ struct VulkanImage{
   VkImageView                   view;               //image  view
   u32                           width;              //width  of image
   u32                           height;             //height of image
+};
+
+struct VulkanTextureData{
+  VulkanImage image;
+  VkSampler   sampler;
 };
 
 struct VulkanSwapchain{
@@ -150,6 +176,7 @@ struct VulkanDevice{
 };
 
 struct VulkanContext{
+  f32                           frameDeltaTime;
   u32                           frameBufferWidth;    // Framebuffer width
   u32                           frameBufferHeight;   // Framebuffer height
   u64                           frameBufferSizeGeneration;

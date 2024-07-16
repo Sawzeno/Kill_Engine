@@ -1,7 +1,6 @@
 #include  "rendererfrontend.h"
 #include  "rendererbackend.h"
 
-#include  "defines.h"
 #include  "core/logger.h"
 #include  "math/kmath.h"
 #include  "core/application.h"
@@ -12,6 +11,7 @@ typedef struct RendererSystemState{
   Mat4            view;
   f32             nearClip;
   f32             farClip;
+  Texture         defaultTexture;
 }RendererSystemState;;
 
 bool    rendererBeginFrame(f32 deltaTime);
@@ -45,6 +45,41 @@ initializeRenderer(u64* requiredMemory, void* state)
                                                       rendererSystemStatePtr->farClip);
   rendererSystemStatePtr->view      = mat4Translation((Vec3){0,0,-30});
   rendererSystemStatePtr->view      = mat4Inverse(rendererSystemStatePtr->view);
+
+  // create default texrure , a 256 X 256 white black chess board pattern 
+  KTRACE("CREATING DEFEAULT TEXTURE");
+  const u32 texDimension  = 256;
+  const u32 channels      = 4;
+  const u32 pixelCount    = texDimension * texDimension;
+  u8  pixels[pixelCount * channels] = {0};
+  u8  s = 2;
+  for(u64  y = 0; y < texDimension; ++y){
+    for(u64 x = 0; x < texDimension; ++x){
+      u64 index = x + (y * texDimension);
+      u64 channelIndex = index * channels;
+      if(y%s){
+        if(x%s){
+          pixels[channelIndex + 0]  = 0;
+          pixels[channelIndex + 1]  = 0;
+        }
+      }else{
+        if(!(x%s)){
+          pixels[channelIndex + 0]  = 0;
+          pixels[channelIndex + 1]  = 0;
+        }
+
+      }
+    }
+  }
+
+  rendererCreateTexture("default",
+                        false,
+                        texDimension,
+                        texDimension,
+                        4,
+                        pixels,
+                        false,
+                        &rendererSystemStatePtr->defaultTexture);
   return true;
 }
 
@@ -60,7 +95,11 @@ rendererDrawFrame(RenderPacket* packet)
     angle      += 0.1f;
     Quat rot    = quatFromAxisAngle(vec3Forward(), angle, false);
     Mat4 model  = quatToRotationMatrix(rot, vec3Zero());
-    updateObject(model);
+    GeometryRenderData data = {};
+    data.objectId = 0;
+    data.model  = model;
+    data.textures[0]  = &rendererSystemStatePtr->defaultTexture;
+    updateObject(data);
 
     return rendererEndFrame(packet->deltaTime);
   }else{
@@ -73,6 +112,23 @@ rendererSetView(Mat4 view){
   rendererSystemStatePtr->view  = view;
 }
 
+
+bool  rendererCreateTexture(const char* name,bool autoRelease,i32 width,i32 height,i32 channelCount,const u8* pixels,bool hasTransparency,Texture* outTexture)
+{
+  bool result = createTexture(name,autoRelease,width,height,channelCount,pixels,hasTransparency,outTexture);
+  if(result){
+    KINFO("SUCCESFULLY CREATED TEXUTRE");
+    return true;
+  }else{
+    UINFO("FAILED TO CREATE TETURE");
+    return false;
+  }
+}
+
+void  rendererDestroyTexture(Texture* texture){
+  destroyTexture(texture);
+}
+
 bool
 rendererResize(u16 width , u16 height)
 {
@@ -81,9 +137,9 @@ rendererResize(u16 width , u16 height)
     rendererSystemStatePtr->backend.applicationWidth  = width;
     rendererSystemStatePtr->backend.applicationHeight = height;
     rendererSystemStatePtr->pojection = mat4Prespective(degToRad(45.0),
-                                                      1440/1080.0f,
-                                                      rendererSystemStatePtr->nearClip,
-                                                      rendererSystemStatePtr->farClip);
+                                                        1440/1080.0f,
+                                                        rendererSystemStatePtr->nearClip,
+                                                        rendererSystemStatePtr->farClip);
     rendererBackendResized(width, height);
   }else{
     UFATAL("RESIZE CALLED WHEN NO BACKEND EXISTS!!, %i, %i",width,height);
@@ -124,6 +180,7 @@ void
 shutdownRenderer()
 {
   KTRACE("RENDERER SUBSYTEM SHUTDOWN");
+    rendererDestroyTexture(&rendererSystemStatePtr->defaultTexture);
   rendererBackendShutdown();
 }
 

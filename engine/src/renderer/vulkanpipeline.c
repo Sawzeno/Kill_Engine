@@ -19,6 +19,8 @@ VkResult  vulkanGraphicsPipelineCreate(VulkanContext* context,
   TRACEFUNCTION;
   VkResult result = !VK_SUCCESS;
 KDEBUG("context : %p renderpass : %p attributeCount : %"PRIu32" attributes : %p descriptorSetLayoutCount : %"PRIu32" descriptorSetLayouts : %p stageCount : %"PRIu32" stages : %p viewport : %p scissor : %p isWireframe %p outPipeline %p",context, renderpass, attributeCount, attributes, descriptorSetLayoutCount, descriptorSetLayouts, stageCount, stages, viewport, scissor, isWireframe, outPipeline);
+
+
   //VIEWPORT STATE
   VkPipelineViewportStateCreateInfo viewportStateCreateInfo = {VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO}; 
   viewportStateCreateInfo.viewportCount = 1;
@@ -57,7 +59,7 @@ KDEBUG("context : %p renderpass : %p attributeCount : %"PRIu32" attributes : %p 
   depthStencilStateCreateInfo.depthTestEnable       = VK_FALSE;
 
   //COLORBLEND
-  VkPipelineColorBlendAttachmentState colorBlendAttachmentState = {VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO};
+  VkPipelineColorBlendAttachmentState colorBlendAttachmentState = {0};
   colorBlendAttachmentState.blendEnable             = VK_TRUE;
   colorBlendAttachmentState.srcColorBlendFactor     = VK_BLEND_FACTOR_SRC_ALPHA;
   colorBlendAttachmentState.dstColorBlendFactor     = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
@@ -84,7 +86,7 @@ KDEBUG("context : %p renderpass : %p attributeCount : %"PRIu32" attributes : %p 
   };
 
   VkPipelineDynamicStateCreateInfo dynamicStateCreateInfo = {VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO};
-  dynamicStateCreateInfo.dynamicStateCount  = 3;
+  dynamicStateCreateInfo.dynamicStateCount  = dynamicStateCount;
   dynamicStateCreateInfo.pDynamicStates     = dynamicStates;
 
   //VERTEX INPUT

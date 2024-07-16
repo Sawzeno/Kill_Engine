@@ -64,3 +64,8 @@ Abstract Syntax Tree Interpreters
 
 
 Tue Jul  2 12:35:24 PM IST 2024
+Cleanup
+
+Fri Jul 12 12:04:02 PM IST 2024
+Textures
+texture transform -> repeat, Mirrored Repeat, clamp to edge, clamp to border

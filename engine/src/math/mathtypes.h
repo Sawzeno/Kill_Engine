@@ -69,5 +69,5 @@ union Vec4{
 
 struct Vertex3D{
   Vec3 Position;
-
+  Vec2 TextureCoordinates;
 };

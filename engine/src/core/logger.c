@@ -110,17 +110,17 @@ void shutdownLogging(){
 u16   
 consoleLog(LOG_LEVEL level , const char* message , ...){
   char outmsg[PREFIX_LEN + BUFFER_LEN + SUFFIX_LEN];
-  u16   prefixlen = snprintf  (outmsg,
-                               PREFIX_LEN,"%s%s%2s",logLevelColors[level], logLevels[level],"");
+  u16   prefixlen   = snprintf  (outmsg,
+                                 PREFIX_LEN,"%s%s%2s",logLevelColors[level], logLevels[level],"");
   UBUFF_CHECK(prefixlen, PREFIX_LEN);
   va_list args;
   va_start(args , message);
-  u16   bufferlen    = vsnprintf (outmsg + prefixlen,
-                                  BUFFER_LEN, message , args);
+  u16   bufferlen   = vsnprintf (outmsg + prefixlen,
+                                 BUFFER_LEN, message , args);
   va_end(args);
   UBUFF_CHECK(bufferlen, BUFFER_LEN);
-  u16   suffixlen    = snprintf  (outmsg + prefixlen + bufferlen,
-                                  SUFFIX_LEN, "%s", logLevelColors[LOG_LEVELS]);
+  u16   suffixlen   = snprintf  (outmsg + prefixlen + bufferlen,
+                                 SUFFIX_LEN, "%s", logLevelColors[LOG_LEVELS]);
   UBUFF_CHECK(suffixlen, SUFFIX_LEN);
   u16 totallen = prefixlen + bufferlen + suffixlen;
   if(write(STDOUT_FILENO, outmsg,totallen ) < 0){

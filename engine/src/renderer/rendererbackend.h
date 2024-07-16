@@ -1,7 +1,7 @@
 #pragma once
 
 #include  "defines.h"
-#include  "math/mathtypes.h"
+#include  "renderertypes.h"
 
 
 typedef struct  RendererBackend RendererBackend;
@@ -30,4 +30,15 @@ bool  rendererBackendResized    (u16 width, u16 height);
 
 bool  rendererBackendShutdown   ();
 
-bool  updateObject(Mat4 model);
+bool  updateObject(GeometryRenderData data);
+
+bool  createTexture(const char* name,
+                    bool autoRelease,
+                    i32 width,
+                    i32 height,
+                    i32 channelCount,
+                    const u8* pixels,
+                    bool hasTransparency,
+                    Texture* outTexture);
+
+void  destroyTexture(Texture* texture);

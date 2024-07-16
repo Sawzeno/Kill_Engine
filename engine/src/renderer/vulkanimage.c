@@ -1,20 +1,23 @@
 #include  "vulkanimage.h"
+#include "core/kmemory.h"
 #include  "rendererutils.h"
 
 #include  "core/logger.h"
+#include <vulkan/vulkan_core.h>
 
-VkResult  vulkanImageCreate(VulkanContext*      context,
-                            VkImageType         type,
-                            u32                 width,
-                            u32                 height,
-                            VkFormat            format,
-                            VkImageTiling       tiling,
-                            VkImageUsageFlags   usage,
-                            VkMemoryPropertyFlags memoryFlags,
-                            u32                 createView,
-                            VkImageAspectFlags  viewAspectFlags,
-                            VulkanImage*        outImage)
-{ //copy params
+VkResult
+vulkanImageCreate(VulkanContext*      context,
+                  VkImageType         type,
+                  u32                 width,
+                  u32                 height,
+                  VkFormat            format,
+                  VkImageTiling       tiling,
+                  VkImageUsageFlags   usage,
+                  VkMemoryPropertyFlags memoryFlags,
+                  u32                 createView,
+                  VkImageAspectFlags  viewAspectFlags,
+                  VulkanImage*        outImage)
+{
   TRACEFUNCTION;
   outImage->width = width;
   outImage->height=height;
@@ -69,10 +72,11 @@ VkResult  vulkanImageCreate(VulkanContext*      context,
   return result;
 }
 
-VkResult  vulkanImageViewCreate(VulkanContext* context,
-                                VkFormat format,
-                                VulkanImage* image,
-                                VkImageAspectFlags aspectFlags)
+VkResult
+vulkanImageViewCreate(VulkanContext* context,
+                      VkFormat format,
+                      VulkanImage* image,
+                      VkImageAspectFlags aspectFlags)
 {
   TRACEFUNCTION;
   VkImageViewCreateInfo createInfo  = {VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO};
@@ -91,7 +95,9 @@ VkResult  vulkanImageViewCreate(VulkanContext* context,
   return result;
 }
 
-void vulkanImageDestroy(VulkanContext* context, VulkanImage* image){
+void
+vulkanImageDestroy(VulkanContext* context, VulkanImage* image)
+{
   if(image->view){
     vkDestroyImageView(context->device.logicalDevice, image->view, context->allocator);
     image->view = 0;
@@ -104,4 +110,92 @@ void vulkanImageDestroy(VulkanContext* context, VulkanImage* image){
     vkDestroyImage(context->device.logicalDevice, image->handle, context->allocator);
     image->handle = 0;
   }
+}
+
+//transitions the provided image from old layout to new layout
+VkResult
+vulkanImageTransitionLayout(VulkanContext*  context,
+                            VulkanCommandBuffer* commandBuffer,
+                            VulkanImage*    image,
+                            VkFormat        format,
+                            VkImageLayout   oldLayout,
+                            VkImageLayout   newLayout)
+{
+  TRACEFUNCTION;
+  // any command that uses the allocated memory that is fed to the barrier beforehand uses the old version of that 
+  // any comamnd that comes after this use the new version after this [BASICALLY A SYNCHRONIZATION POINT]
+  // TO MAKE SURE THAT OPERATIONS THAT ARE USING THIS BARRIER ARE COMPLETE BEFORE WE EXECUTE THE NEXT SET OF COMMANDS
+  VkImageMemoryBarrier  barrier = {VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER};
+  barrier.oldLayout                       = oldLayout;
+  barrier.newLayout                       = newLayout;
+  barrier.srcQueueFamilyIndex             = context->device.graphicsQueueIndex;
+  barrier.dstQueueFamilyIndex             = context->device.graphicsQueueIndex;
+  barrier.image                           = image->handle;
+  barrier.subresourceRange.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+  barrier.subresourceRange.baseMipLevel   = 0;
+  barrier.subresourceRange.levelCount     = 1;
+  barrier.subresourceRange.baseArrayLayer = 0;
+  barrier.subresourceRange.layerCount     = 1;
+
+  VkPipelineStageFlags srcStage;
+  VkPipelineStageFlags dstStage;
+  // Don't care about the old layout - transition to optimal layout (for the underlying implimnetation)
+  if(oldLayout  ==  VK_IMAGE_LAYOUT_UNDEFINED && newLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL){
+    barrier.srcAccessMask = 0;
+    barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+    // Don't care what stage the pipeline is in at the start
+    srcStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+    // used for copying;
+    dstStage  = VK_PIPELINE_STAGE_TRANSFER_BIT;
+  }else if(oldLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL && newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL){
+    // transition from a transfer destination layout to a sgaader-readonly layout
+    barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+    barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+    // from a copying stage to...
+    srcStage  = VK_PIPELINE_STAGE_TRANSFER_BIT;
+    // the fragment stage
+    dstStage  = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+  }else{
+    KFATAL("UNSUPPORTED LAYOUT TRANSITION");
+    return !VK_SUCCESS;
+  }
+  vkCmdPipelineBarrier(commandBuffer->handle,
+                       srcStage,
+                       dstStage,
+                       0,
+                       0, 0,
+                       0, 0,
+                       1, &barrier);
+  return VK_SUCCESS;
+}
+
+// this function is designed to be used in the middle of a command or a series of commands thats fed to command buffer
+void
+vulkanImageCopyFromBuffer(VulkanContext* context,
+                          VulkanImage*   image,
+                          VkBuffer       buffer,
+                          VulkanCommandBuffer* commandBuffer)
+{
+  TRACEFUNCTION;
+
+  VkBufferImageCopy region = {0};
+  region.bufferOffset = 0;
+  region.bufferRowLength  = 0;
+  region.bufferImageHeight = 0;
+
+  region.imageSubresource.aspectMask  = VK_IMAGE_ASPECT_COLOR_BIT;  // means that this is an color image
+  region.imageSubresource.mipLevel    = 0;                          // we are not unsing mipmapping
+  region.imageSubresource.baseArrayLayer  = 0;                      // we are not using multiple layers of images
+  region.imageSubresource.layerCount  = 1;
+
+  region.imageExtent.width  = image->width;
+  region.imageExtent.height = image->height;
+  region.imageExtent.depth  = 1;                                    // 1 beacause we are not using three dimensional iamges 
+
+  vkCmdCopyBufferToImage(commandBuffer->handle,
+                         buffer,
+                         image->handle,
+                         VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                         1,
+                         &region);
 }

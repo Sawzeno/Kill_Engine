@@ -64,7 +64,7 @@ KDEBUG("applicationName : %s x : %"PRIi32" y : %"PRIi32" width : %"PRIi32" heigh
   platformSystemStatePtr->display  = XOpenDisplay(NULL);
 
   //Turn off keyrepeats
-  XAutoRepeatOn(platformSystemStatePtr->display);
+  //XAutoRepeatOn(platformSystemStatePtr->display);
   //XAutoRepeatOff(platformSystemStatePtr->display);
 
   //Retrieve the connection from display

@@ -10,6 +10,7 @@
 #include  "vulkanframebuffer.h"
 #include  "vulkanbuffer.h"
 #include  "vulkanfence.h"
+#include  "vulkanimage.h"
 
 #include  "core/logger.h"
 #include  "core/kmemory.h"
@@ -19,6 +20,8 @@
 #include  "math/mathtypes.h"
 
 #include  "shaders/vulkanobjectshader.h"
+#include <vulkan/vulkan_core.h>
+
 
 static    u32 cachedFrameBufferWidth    = 0;
 static    u32 cachedFrameBufferHeight   = 0;
@@ -33,7 +36,7 @@ VkResult  regenerateFrameBuffers(VulkanSwapchain* swapchain,VulkanRenderPass* re
 VkResult  createBuffers         (VulkanContext* context);
 VkResult  uploadDataRange       (VulkanContext* context, VkCommandPool pool, VkFence fence ,
                                  VkQueue queue, VulkanBuffer* buffer, u64 offset, u64 size, void* data);
-bool      updateObject          (Mat4 model);
+bool      updateObject          (GeometryRenderData data);
 
 bool
 rendererBackendResized(u16 width, u16 height)
@@ -174,19 +177,28 @@ rendererBackendInitialize(RendererBackend* backend)
   const f32 f = 10.0f;
   verts[0].Position.x =-0.5 * f;
   verts[0].Position.y =-0.5 * f;
+  verts[0].TextureCoordinates.x = 1.0f;
+  verts[0].TextureCoordinates.y = 1.0f;
 
   verts[1].Position.x = 0.5 * f;
   verts[1].Position.y = 0.5 * f;
+  verts[1].TextureCoordinates.x = 0.0f;
+  verts[1].TextureCoordinates.y = 0.0f;
 
   verts[2].Position.x =-0.5 * f;
   verts[2].Position.y = 0.5 * f;
+  verts[2].TextureCoordinates.x = 1.0f;
+  verts[2].TextureCoordinates.y = 0.0f;
 
   verts[3].Position.x = 0.5 * f;
   verts[3].Position.y =-0.5 * f;
+  verts[3].TextureCoordinates.x = 0.0f;
+  verts[3].TextureCoordinates.y = 1.0f;
 
   const u32 indexCount  = 6;
   u32 indices[indexCount] = {0,1,2,0,3,1};
 
+  // uploadDataRange uploads data to the GPU
   result = uploadDataRange(&context,
                            context.device.graphicsCommandPool,
                            0,
@@ -205,6 +217,10 @@ rendererBackendInitialize(RendererBackend* backend)
                            sizeof(u32) * indexCount, indices);
   VK_CHECK_BOOL(result, "failed to uploadDataRange of testSlap");
 
+  //need to acquire resources to get a handle on the descriptors that we're gonna need for our texture
+  u32 objectId  = 0;
+  result  = vulkanObjectShaderAcquireResources(&context, &context.objectShader, &objectId);
+  VK_CHECK_BOOL(result, "failed to acquire shader resources");
 
   KINFO("Vulkan RENDERER BACKEND INITIALIZED");
   UINFO("Vulkan RENDERER BACKEND INITIALIZED");
@@ -303,6 +319,7 @@ rendererBackendBeginFrame(f32 deltaTime)
   TRACEFUNCTION;
   // UWARN("FRAME NUMBER : %"PRIu64"",context.currentFrame);
   KDEBUG("deltatime : %f",deltaTime);
+  context.frameDeltaTime  = deltaTime;
   VulkanDevice* device  = &context.device;
 
   //check if recreating swap chain and boot out 
@@ -456,7 +473,7 @@ rendererUpdateGlobalState (Mat4 projection, Mat4 view, Vec3 viewPosition, Vec4 a
   context.objectShader.globalUBO.projection = projection;
   context.objectShader.globalUBO.view       = view;
   //todo : other globalUBO properties
-  result  = vulkanObjectShaderUpdateGlobalState(&context, &context.objectShader);
+  result  = vulkanObjectShaderUpdateGlobalState(&context, &context.objectShader, context.frameDeltaTime);
   VK_CHECK_BOOL(result, "vulkanObjectShaderUpdateGlobalState failed in rendererUpdateGlobalState");
 
 
@@ -466,8 +483,8 @@ rendererUpdateGlobalState (Mat4 projection, Mat4 view, Vec3 viewPosition, Vec4 a
 //-----------------------------------------------------VULKAN OBJECT UPDATE--------------------------------------------------------
 
 bool
-updateObject( Mat4 model){
-  VkResult result = vulkanObjectShaderUpdateObject(&context, &context.objectShader, model);
+updateObject( GeometryRenderData data){
+  VkResult result = vulkanObjectShaderUpdateObject(&context, &context.objectShader, data);
   VK_CHECK_BOOL(result, "vulkanObjectShaderUpdateObject failed");
 
   //test slap to draw geometry
@@ -699,3 +716,122 @@ findMemoryIndex(u32 typeFilter, u32 propertyFlags)
   return -1;
 }
 
+//-----------------------------------------------------TEXTURES-------------------------------------------------------------------
+bool  createTexture(const char* name,
+                    bool autoRelease,
+                    i32 width,
+                    i32 height,
+                    i32 channelCount,
+                    const u8* pixels,
+                    bool hasTransparency,
+                    Texture* outTexture)
+{
+  KTRACE("------------------------CREATING TEXTURE---------------------");
+  TRACEFUNCTION;
+  outTexture->width       = width;
+  outTexture->height      = height;
+  outTexture->channelCount= channelCount;
+  outTexture->generation  = INVALID_ID;
+
+  outTexture->internalData  = (VulkanTextureData*)kallocate(sizeof(VulkanTextureData), MEMORY_TAG_TEXTURE);
+  VulkanTextureData* data   = (VulkanTextureData*)outTexture->internalData;
+  VkDeviceSize  imageSize   = width * height * channelCount;
+
+  // assuem 8 bits per channel
+  VkFormat  imageFormat     = VK_FORMAT_R8G8B8A8_UNORM;
+
+  //create a staging buffer and load data into it
+  VkBufferUsageFlags usage  = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+  VkMemoryPropertyFlags memoryPropertyFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+  VulkanBuffer staging;
+  vulkanBufferCreate(&context, imageSize, usage, memoryPropertyFlags, true, & staging);
+  vulkanBufferLoadData(&context, &staging, 0, imageSize, 0, pixels);
+
+  // create an image
+  VkResult result = vulkanImageCreate(&context,
+                                      VK_IMAGE_TYPE_2D,
+                                      width,
+                                      height,
+                                      imageFormat,
+                                      VK_IMAGE_TILING_OPTIMAL,
+                                      VK_IMAGE_USAGE_TRANSFER_SRC_BIT | 
+                                      VK_IMAGE_USAGE_TRANSFER_DST_BIT | 
+                                      VK_IMAGE_USAGE_SAMPLED_BIT      | 
+                                      VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+                                      VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+                                      true,
+                                      VK_IMAGE_ASPECT_COLOR_BIT,
+                                      &data->image); 
+  VK_CHECK_BOOL(result, "failed to create texture image");
+  // now we have a buffer and image , whose contents we have loaded into the buffer 
+  // now we need to take the data that is in this buffer and load it in a seperate image
+
+  VulkanCommandBuffer tempBuffer;
+  VkCommandPool pool  = context.device.graphicsCommandPool;
+  VkQueue queue = context.device.graphicsQueue;
+  vulkanCommandBufferStartSingleUse(&context, pool, &tempBuffer);
+
+  // transition the image from whatever layout it is currently in to optimal for recieving data;
+  result = vulkanImageTransitionLayout(&context,
+                                       &tempBuffer,
+                                       &data->image,
+                                       imageFormat,
+                                       VK_IMAGE_LAYOUT_UNDEFINED,
+                                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+
+  VK_CHECK_BOOL(result, "vulkanImageTransitionLayout failed in createTexture");
+  vulkanImageCopyFromBuffer(&context, &data->image, staging.handle, &tempBuffer);
+
+  // now transition from optimal to shader read only optimal layout
+  vulkanImageTransitionLayout(&context,
+                              &tempBuffer,
+                              &data->image,
+                              imageFormat,
+                              VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                              VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+  result = vulkanCommandBufferStopSingleUse(&context, pool, &tempBuffer, queue);
+  VK_CHECK_BOOL(result , "vulkanCommandBufferStipSingleUSe failed in createTexture");
+
+  VkSamplerCreateInfo samplerInfo = {VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO};
+  samplerInfo.magFilter     = VK_FILTER_LINEAR;
+  samplerInfo.minFilter     = VK_FILTER_LINEAR;
+  samplerInfo.addressModeU  = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+  samplerInfo.addressModeV  = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+  samplerInfo.addressModeW  = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+  samplerInfo.anisotropyEnable  = VK_TRUE;
+  samplerInfo.maxAnisotropy = 16;
+  samplerInfo.borderColor   = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+  samplerInfo.unnormalizedCoordinates = VK_FALSE;
+  samplerInfo.compareEnable = VK_FALSE;
+  samplerInfo.compareOp     = VK_COMPARE_OP_ALWAYS;
+  samplerInfo.mipmapMode    = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+  samplerInfo.mipLodBias    = 0.0f;
+  samplerInfo.minLod        = 0.0f;
+  samplerInfo.maxLod        = 0.0f;
+
+  result  = vkCreateSampler(context.device.logicalDevice, &samplerInfo, context.allocator, &data->sampler);
+  VK_CHECK_BOOL(result, "vkCreateSampler failed");
+
+  outTexture->hasTransparency = true;
+  outTexture->generation++; // how many this texture been laoded or rereshed
+  
+  vulkanBufferDestroy(&context, &staging);
+  KTRACE("TEXTURE CREATED SUCCESFULLY");
+  return true;
+}
+
+void  destroyTexture(Texture* texture){
+  vkDeviceWaitIdle(context.device.logicalDevice);
+
+  VulkanTextureData* data  = (VulkanTextureData*)texture->internalData;
+  //destroy image
+  vulkanImageDestroy(&context, &data->image);
+  kzeroMemory(&data->image, sizeof(VulkanImage));
+  // destroy sampler
+  vkDestroySampler(context.device.logicalDevice, data->sampler, context.allocator);
+  data->sampler = 0;
+  // destroy texture
+  kfree(texture->internalData, sizeof(VulkanTextureData), MEMORY_TAG_TEXTURE);
+  kzeroMemory(texture, sizeof(Texture));
+}

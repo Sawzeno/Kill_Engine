@@ -13,8 +13,8 @@
 #include  "core/input.h"
 #include  "core/clock.h"
 
-#define   LIMITFRAMES false
-#define   TARGETFPS  60
+#define   LIMITFRAMES true
+#define   TARGETFPS 10
 typedef struct  ApplicationState  ApplicationState;
 
 u8  applicationOnEvent  (u16 code , void* sender , void* listener , EventContext context);
@@ -93,8 +93,6 @@ bool  applicationCreate(Game* game){
     UFATAL("failed to initialze logging system, shutting down");
     return false;
   }
-
-  
   //-------------------------------------------------------------------------------
 
   KINFO("ALLOCATING MEMMORY FOR SUBSYSTEMS");
@@ -116,7 +114,6 @@ bool  applicationCreate(Game* game){
     KFATAL("failed to initialize input subsystem, shutting down");
     return false;
   }
-
   eventRegister(EVENT_CODE_APPLICATION_QUIT , NULL  , applicationOnEvent);
   eventRegister(EVENT_CODE_KEY_PRESSED      , NULL  , applicationOnKey  );
   eventRegister(EVENT_CODE_KEY_RELEASED     , NULL  , applicationOnKey  );
