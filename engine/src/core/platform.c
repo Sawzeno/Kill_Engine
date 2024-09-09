@@ -1,7 +1,7 @@
 #include  "platform.h"
-#include  "core/input.h"
-#include  "core/events.h"
-#include  "core/logger.h"
+#include  "input.h"
+#include  "events.h"
+#include  "logger.h"
 
 #include  <X11/X.h>
 #include  <xcb/xcb.h>
@@ -194,7 +194,6 @@ TRACEFUNCTION;
     switch (event->response_type & ~0x80) {
       case XCB_KEY_PRESS:
       case XCB_KEY_RELEASE: {
-        //UTRACE("PLATFORM KEY PRESSED OR RELEASED");
         xcb_key_release_event_t* keyboardEvent = (xcb_key_release_event_t*)event;
         u8  pressed         = event->response_type  == XCB_KEY_PRESS;
         xcb_keycode_t code  = keyboardEvent->detail;
@@ -205,7 +204,6 @@ TRACEFUNCTION;
 
       case  XCB_BUTTON_PRESS:
       case  XCB_BUTTON_RELEASE:{
-        //UTRACE("PLATFROM MOUSE PRESSED OR RELEASED");
         xcb_button_press_event_t* mouseEvent =   (xcb_button_press_event_t*)event;
         u8  pressed = event->response_type  ==  XCB_BUTTON_PRESS;
         buttons mouseButton = BUTTON_MAX_BUTTONS;
@@ -224,15 +222,13 @@ TRACEFUNCTION;
         }
       }break;
       case  XCB_MOTION_NOTIFY:{
-        //UTRACE("PLATFORM MOTION NOTIFY");
         xcb_motion_notify_event_t* moveEvent = (xcb_motion_notify_event_t*)event;
         inputProcessMouseMove(moveEvent->event_x, moveEvent->event_y);
         break;
       }
       case  XCB_CONFIGURE_NOTIFY:{
-        UINFO("--------------RESIZING--------------");
+        UWARN("--------------RESIZING--------------");
         xcb_configure_notify_event_t* configureEvent  = (xcb_configure_notify_event_t*)event;
-        //resizing
         EventContext context;
         context.data.u16[0] = configureEvent->width;
         context.data.u16[1] = configureEvent->height;
@@ -240,7 +236,6 @@ TRACEFUNCTION;
       }break;
 
       case  XCB_CLIENT_MESSAGE:{
-        //UTRACE("PLATFORM CLIENT NOTIFY");
         cm  = (xcb_client_message_event_t*)event;
         if(cm->data.data32[0] ==  platformSystemStatePtr->wmDeleteWin){
           quitFlagged = true;

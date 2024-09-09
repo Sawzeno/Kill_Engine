@@ -114,6 +114,5 @@ i8    gameRender    (Game* game , f32 deltaTime){
 }
 
 void  gameOnResize  (Game* game , u32 width , u32 height){
-  UTRACE("GAME ON RESIZE CALLED");
 }
 

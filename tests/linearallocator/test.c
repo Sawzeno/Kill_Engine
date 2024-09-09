@@ -1,15 +1,5 @@
 #include  "memory/linearallocator.h"
-#include  "core/logger.h"
-#include  "../testmanager.h"
-
-void  linearAllocatorRegisterTests();
-int main(void){
-  testManagerInit();   
-  linearAllocatorRegisterTests();
-  UTEST("STARTING LINEAR ALLOCATOR TESTS !");
-  testManagerRunTests();
-  return 0;
-}
+#include  "testmanager.h"
 
 u8 CreateAndDestroy(){
   LinearAllocator alloc;
@@ -62,7 +52,6 @@ u8 overAllocate(){
   }
 
   EXPECTED_AS(maxallocs* sizeof(u64), alloc.allocated);
-  UWARN("FOLLOWING ERROR IS INTENTIONAL !");
   EXPECTED_AS(NULL,linearAllocatorAllocate(&alloc, sizeof(u64)));
   EXPECTED_AS(maxallocs* sizeof(u64), alloc.allocated);
   linearAllocatorDestroy(&alloc);
@@ -83,12 +72,18 @@ u8 freeAll(){
   return true;
 }
 
-void linearAllocatorRegisterTests(){
+
+int main(void){
+  testManagerInit();   
+
   testManagerRegisterTest(CreateAndDestroy, "CREATE AND DESTROY");
   testManagerRegisterTest(SingleAllocation,"SINGLE ALLOCATION TESTING");
   testManagerRegisterTest(MultiAllocation,"MULTI ALLOCATION TESTING");
   testManagerRegisterTest(overAllocate,"OVER ALLOCATION TESTING");
   testManagerRegisterTest(freeAll,"FREE ALL TESTING");
-
   
+  testManagerRunTests();
+  return 0;
 }
+
+

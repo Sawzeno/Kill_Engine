@@ -46,27 +46,21 @@ u8  vulkanFenceWait(VulkanContext* context, VulkanFence* fence, u64 timeoutNS){
     switch(result){                                                
       case VK_SUCCESS:                                              
         fence->isSignaled = true;                                   
-        UINFO("FENCE WAS SUCCESSFULLY EXECUTED");                   
         KINFO("FENCE WAS SUCCESSFULLY EXECUTED");                   
         return true;                                                
       case VK_TIMEOUT:                                              
-        UWARN("vkFenceWait -> FENCE TIMED OUT");                    
         KWARN("vkFenceWait -> FENCE TIMED OUT");                    
         break;                                                      
       case VK_ERROR_DEVICE_LOST:                                    
-        UERROR("vkFenceWait -> DEVICE LOST");                       
         KERROR("vkFenceWait -> DEVICE LOST");                       
         break;                                                      
       case VK_ERROR_OUT_OF_HOST_MEMORY:                             
-        UERROR("vkFenceWait -> VK_ERROR_OUT_OF_HOST_MEMORY");       
         KERROR("vkFenceWait -> VK_ERROR_OUT_OF_HOST_MEMORY");       
         break;                                                      
       case VK_ERROR_OUT_OF_DEVICE_MEMORY:                           
-        UERROR("vkFenceWait -> VK_ERROR_OUT_OF_DEVICE_MEMORY");     
         KERROR("vkFenceWait -> VK_ERROR_OUT_OF_DEVICE_MEMORY");     
         break;                                                      
       default:                                                      
-        UERROR("vkFenceWait -> UNKNOWN ERROR HAS OCCURRED");        
         KERROR("vkFenceWait -> UNKNOWN ERROR HAS OCCURRED");        
         break;                                                      
     }

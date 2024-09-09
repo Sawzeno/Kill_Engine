@@ -1,4 +1,5 @@
 #include  "defines.h"
+#include  "math.h"
 #include  "core/logger.h"
 #define BYPASS 2
 
@@ -30,7 +31,7 @@ if(actual == expected){                                                         
 }
 
 #define EXPECTED_FLOAT_AS(expected, actual)                                                       \
-if(abs(expected - actual) > 0.001f){                                                              \
+if(fabs(expected - actual) > 0.001f){                                                              \
   UERROR("expected %f as %f but not, File : %s, Line : %d", expected, actual, __FILE__, __LINE__);\
   return false;                                                                                   \
 }

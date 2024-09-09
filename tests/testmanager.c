@@ -51,7 +51,7 @@ void testManagerRunTests(){
   INITCLOCK;
 
   for(u32 i = 0; i < count ; ++i){
-    UTEST("RUNNING TEST %d of %d", i, count);
+    UTEST("RUNNING TEST %d of %d", i + 1, count);
     u8 result = tests[i].func();
     if(result == true){
       ++passed;
@@ -91,13 +91,12 @@ testLog(const char* message , ...){
   return bufferlen ;
 }
 
-
 void elapsed(struct timespec* start, const char* func){
   struct timespec end1;
   clock_gettime(CLOCK_MONOTONIC, &end1);
 
   f64 elapsed = (end1.tv_sec - start->tv_sec) + (end1.tv_nsec - start->tv_nsec)/1e9;
-  UTRACE("%-30s : %.9f",func,elapsed);
+  UTEST("%-30s : %.9f",func,elapsed);
   struct timespec end2;
   clock_gettime(CLOCK_MONOTONIC, &end2);
   *start  = end2;

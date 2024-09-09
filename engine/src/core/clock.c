@@ -1,7 +1,7 @@
 #include  "clock.h"
 
 #include  "defines.h"
-#include  "platform/platform.h"
+#include  "core/platform.h"
 
 u8  clockStart(Clock *clock){
   clock->start  = platformGetAbsoluteTime();

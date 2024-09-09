@@ -1,6 +1,6 @@
 #include "kmath.h"
 #include  "math.h"
-#include  "../platform/platform.h"
+#include  "../core/platform.h"
 
 #include "defines.h"
 #include <math.h>

@@ -213,7 +213,7 @@ ObjectShaderCreate(VulkanContext* ctx, VulkanObjectShader* outShader)
     result  = vkAllocateDescriptorSets(ctx->device.logicalDevice, &globalUBOAllocateInfo, outShader->globalDescriptorSets);
     VK_CHECK_VERBOSE(result, "FAILED TO CREATE OBJECT SHADER DESCRIPTOR SETS");
   }
-  KINFO("SUCCESFULLY CRAEATED SHADER OBJECT");
+  KINFO("SUCCESFULLY CRAEATED OBEJCT SHADER");
   return result;
 }
 
@@ -227,7 +227,7 @@ ObjectShaderUse(VulkanContext* ctx, VulkanObjectShader* shader)
   result = vulkanGraphicsPipelineBind(&ctx->graphicsCommandBuffers[imageIndex], VK_PIPELINE_BIND_POINT_GRAPHICS, &shader->pipeline);
   VK_CHECK_RESULT(result, "vulkanGraphicsPipelineBind failed in vulkanObjectShaderUse");
 
-  KINFO("SUCCESFULLY USED SHADER OBJECT");
+  KINFO("SUCCESFULLY USED OBJECT SHADER ");
   return result;
 }
 
@@ -397,7 +397,7 @@ ObjectShaderAcquireResources  (VulkanContext* ctx, VulkanObjectShader* shader, u
 
   VkResult result = vkAllocateDescriptorSets(ctx->device.logicalDevice, &allocInfo, objectState->descriptorSets);
   VK_CHECK_BOOL(result, "ERROR ALLOCATIING DESCRIPTOR SETS IN SHADER");
-  KINFO("SUCCESFULLY ACQUIRED SHADER RESOURCES");
+  KINFO("SUCCESFULLY ACQUIRED OBJECT SHADER RESOURCES");
   return true;
 }
 
@@ -414,7 +414,7 @@ ObjectShaderReleaseResources  (VulkanContext* ctx, VulkanObjectShader* shader, u
     UERROR("ERROR FREEING SHADER DESCRIPTOR SETS");
     return;
   }
-  UINFO("FREED SHADER DESCRIPTOR SETS");
+  UINFO("FREED OBJECT SHADER DESCRIPTOR SETS");
 }
 
 VkResult
@@ -437,6 +437,6 @@ ObjectShaderDestroy(VulkanContext* ctx, VulkanObjectShader* shader)
     vkDestroyShaderModule(ctx->device.logicalDevice, shader->stages[i].handle, ctx->allocator);
     shader->stages[i].handle  = NULL;
   }
-  KINFO("SUCCESFULLY DESTROYED SHADER OBJECT");
+  KINFO("SUCCESFULLY DESTROYED OBJECT SHADER");
   return result;
 }

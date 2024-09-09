@@ -152,7 +152,7 @@ rendererSetView(Mat4 view){
 bool
 rendererResize(u16 width , u16 height)
 {
-  UTRACE("RENDRER RESIZE CALLED");
+  TRACEFUNCTION;
   if(statePtr != NULL){
     statePtr->backend.applicationWidth  = width;
     statePtr->backend.applicationHeight = height;

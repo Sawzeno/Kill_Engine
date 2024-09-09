@@ -199,7 +199,6 @@ checkAvailableLayers(const char** requiredLayers)
   return VK_SUCCESS;
 }
 
-
 VkResult
 vulkanDebuggerCreate (VulkanContext* context)
 {
@@ -224,4 +223,3 @@ vulkanDebuggerCreate (VulkanContext* context)
   KINFO("VULKAN DEBUGGER CREATED");
   return result;
 }
-

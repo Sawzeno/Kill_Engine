@@ -1,11 +1,11 @@
 #include  "application.h"
-#include  "core/kmemory.h"
-#include  "core/logger.h"
-#include  "core/errors.h"
-#include  "memory/linearallocator.h"
+#include  "kmemory.h"
+#include  "logger.h"
+#include  "errors.h"
 #include  "gametypes.h"
+#include  "platform.h"
 
-#include  "platform/platform.h"
+#include  "memory/linearallocator.h"
 #include  "renderer/rendererfrontend.h"
 
 #include  "core/events.h"
@@ -229,7 +229,6 @@ bool  applicationRun(){
       if(remainingTime > 0 ){
         remainingMs= remainingTime * 1000;
         if(remainingMs > 0 && LIMITFRAMES){
-          UTRACE("remainingMs : %f" , remainingMs);
           platformSleep(remainingMs - 1);
         }
         frameCount++;
