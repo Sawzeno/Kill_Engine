@@ -175,7 +175,7 @@ rendererBackendInitialize(RendererBackend* backend)
   }
 
   KTRACE("----------------------SHADER OBJECTS----------------------");
-  result  = ObjectShaderCreate(&ctx, &ctx.objectShader);
+  result  = ObjectShaderCreate(&ctx, &ctx.objectShader, backend->defaultDiffuse);
   VK_CHECK_BOOL(result, "ERROR LOADING BUILTIN BASIC LIGHTING SHADER");
 
 
@@ -678,7 +678,7 @@ uploadDataRange(VulkanContext* ctx, VkCommandPool pool, VkFence fence ,
   return result;
 }
 
-void rendererBackendCreateTexture(const char* name, bool autoRelease, i32 width, u32 height, i32 channelCount, const u8* pixels, u32 hasTransparency, Texture* tex){
+void rendererCreateTexture(const char* name, bool autoRelease, i32 width, u32 height, i32 channelCount, const u8* pixels, u32 hasTransparency, Texture* tex){
   TRACEFUNCTION;
 
   tex->width  = width;
@@ -687,12 +687,13 @@ void rendererBackendCreateTexture(const char* name, bool autoRelease, i32 width,
   tex->generation = INVALID_ID;
 
   //----------------------ALLOCATE THE ITERNAL DATA---------------------
+  KINFO("ALLOCATING TEXTURE INTERNAL DATA");
   UINFO("ALLOCATING TEXTURE INTERNAL DATA");
   tex->internalData       = (VulkanTextureData*)kallocate(sizeof(VulkanTextureData), MEMORY_TAG_TEXTURE);
   VulkanTextureData* data = (VulkanTextureData*)tex->internalData;
   VkDeviceSize  imageSize = width* height * channelCount;
 
-  VkFormat imageFormat =  VK_FORMAT_B8G8R8A8_UNORM;
+  VkFormat imageFormat =  VK_FORMAT_R8G8B8A8_UNORM;
 
   //----------------------CREATING A STAGING BUFFER AND LOAD IT--------
   VkBufferUsageFlags usage  = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
@@ -702,6 +703,7 @@ void rendererBackendCreateTexture(const char* name, bool autoRelease, i32 width,
   vulkanBufferLoadData(&ctx, &staging, 0, imageSize, 0, pixels);
 
   KINFO("CREATING TEXTURE IMAGE");
+  UINFO("CREATING TEXTURE IMAGE");
   {
     vulkanImageCreate(&ctx, VK_IMAGE_TYPE_2D, width, height, imageFormat, VK_IMAGE_TILING_OPTIMAL,
                       VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
@@ -725,6 +727,7 @@ void rendererBackendCreateTexture(const char* name, bool autoRelease, i32 width,
     vulkanBufferDestroy(&ctx, &staging);
   }
   KINFO("CREATING TEXTURE SAMPLER");
+  UINFO("CREATING TEXTURE SAMPLER");
   {
     VkSamplerCreateInfo samplerInfo = {VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO};
 
@@ -757,18 +760,20 @@ void rendererBackendCreateTexture(const char* name, bool autoRelease, i32 width,
     tex->generation++;
   }
   KINFO("SUCCESFULLY CREATED TEXTURE");
+  UINFO("SUCCESFULLY CREATED TEXTURE");
 }
 
-void rendererBackendDestroyTexture(Texture *tex){
+void rendererDestroyTexture(Texture *tex){
   TRACEFUNCTION;
 
   vkDeviceWaitIdle(ctx.device.logicalDevice);
   VulkanTextureData* data  = (VulkanTextureData*) tex->internalData;
+  if(data){
   vulkanImageDestroy(&ctx, &data->image);
   kzeroMemory(&data->image, sizeof(VulkanImage));
   vkDestroySampler(ctx.device.logicalDevice, data->sampler, ctx.allocator);
   data->sampler = 0;
-
   kfree(tex->internalData, sizeof(VulkanTextureData), MEMORY_TAG_TEXTURE);
+  }
   kzeroMemory(tex, sizeof(Texture));
 }

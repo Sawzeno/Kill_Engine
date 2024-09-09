@@ -94,6 +94,7 @@ struct VulkanObjectShader{
   VkDescriptorSet           globalDescriptorSets[3];//bundling of these uniforms              //One Descriptor Set per Frame, max 3 for triple buffering
   GlobalUniformObject       globalUBO;                  //Global Uniform Object -> feed this to a buffer which is tied to a descriptor ->> uploaded to GPU
 
+  Texture*                  defaultDiffuse;
   VulkanPipeline            pipeline; 
 };
 

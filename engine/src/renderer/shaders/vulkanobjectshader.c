@@ -25,11 +25,12 @@
 */
 
 VkResult
-ObjectShaderCreate(VulkanContext* ctx, VulkanObjectShader* outShader)
+ObjectShaderCreate(VulkanContext* ctx, VulkanObjectShader* outShader, Texture* defaultDiffuse)
 {
   TRACEFUNCTION;
   MEMZERO(outShader);
   VkResult  result  = !VK_SUCCESS;
+  outShader->defaultDiffuse = defaultDiffuse;
 
   KINFO("CREATING SHADER MODULES");
   {
@@ -334,9 +335,12 @@ ObjectShaderUpdateLocalState(VulkanContext* ctx, VulkanObjectShader* shader,  Ge
       Texture* tex  = data.textures[i];
       u32* descriptorGeneration = &localObjectState->descriptorStates[descriptorIndex].generations[imageIndex];
 
+      if(tex->generation == INVALID_ID){
+        tex = shader->defaultDiffuse;
+        *descriptorGeneration = INVALID_ID;
+      }
       if(tex && (*descriptorGeneration != tex->generation || *descriptorGeneration == INVALID_ID)){
         VulkanTextureData* internalData = (VulkanTextureData*)tex->internalData;
-
 
         imageInfos[i].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         imageInfos[i].imageView   = internalData->image.view;

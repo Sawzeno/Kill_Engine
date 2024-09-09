@@ -19,6 +19,10 @@ target_include_directories(engine
 PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
+target_include_directories(engine
+PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/
+)
 
 # Find Vulkan and link
 find_package(Vulkan REQUIRED)

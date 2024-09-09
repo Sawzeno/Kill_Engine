@@ -1,7 +1,11 @@
 #pragma once
 
 #include "defines.h"
+#include  "errno.h"
+#include  "string.h"
 #include "math/mathtypes.h"
+
+#define MAX_STR_LEN 1024
 
 i64   kstrlen   (const char* str);
 

@@ -2,7 +2,7 @@
 
 #include  "renderer/vulkantypes.h"
 
-VkResult  ObjectShaderCreate            (VulkanContext* context, VulkanObjectShader* outShader);
+VkResult  ObjectShaderCreate            (VulkanContext* context, VulkanObjectShader* outShader, Texture* defaultDiffuse);
 VkResult  ObjectShaderDestroy           (VulkanContext* context, VulkanObjectShader* shader);
 
 VkResult  ObjectShaderUse               (VulkanContext* context, VulkanObjectShader* shader);

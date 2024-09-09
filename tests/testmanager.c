@@ -13,7 +13,7 @@
 #include  <time.h>
 
 #define PREFIX_LEN 24
-#define BUFFER_LEN 256
+#define BUFFER_LEN 2018
 #define SUFFIX_LEN 6
 #define UBUFF_CHECK(result, limit)                    \
 if(result >= limit){                                  \

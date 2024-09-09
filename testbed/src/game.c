@@ -3,6 +3,7 @@
 #include  "core/kmemory.h"
 #include  "core/logger.h"
 #include  "core/input.h"  
+#include  "core/events.h"
 
 #include "defines.h"
 #include "math/kmath.h"
@@ -28,6 +29,12 @@ i8    gameInitialize (Game* game){
 
 i8    gameUpdate    (Game* game , f32 deltaTime){
   GameState* state  = (GameState*)game->state;
+
+  if(inputIsKeyDown('T')){
+    UINFO("SWAPPIG TEXTURE");
+    EventContext ctx  = {0};
+    eventFire(EVENT_CODE_DEBUG0, game, ctx);
+  }
 
   if(inputIsKeyDown(KEY_UP)){
     cameraPitch(state, 1.0f * deltaTime);

@@ -8,7 +8,6 @@
 #include <stdarg.h>
 
 
-#define MAX_STR_LEN 1024
 i64   kstrlen   (const char* str){
 
   if(str == NULL ) return -1;
