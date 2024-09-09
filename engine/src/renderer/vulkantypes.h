@@ -6,6 +6,8 @@
 #include  <vulkan/vulkan_core.h>
 
 #define   OBJECT_SHADER_STAGE_COUNT 2
+#define   OBJECT_SHADER_DESCRIPTOR_COUNT 2
+#define   MAX_LOCAL_OBJECT_COUNT 1024
 
 typedef struct  VulkanDevice        VulkanDevice;
 typedef struct  VulkanContext       VulkanContext;
@@ -17,9 +19,12 @@ typedef struct  VulkanCommandBuffer VulkanCommandBuffer;
 typedef struct  VulkanFrameBuffer   VulkanFrameBuffer;
 typedef struct  VulkanFence         VulkanFence;
 typedef struct  VulkanObjectShader  VulkanObjectShader;
+typedef struct  LocalObjectState    LocalObjectState;
+typedef struct  vulkanDescriptorState vulkanDescriptorState;
 typedef struct  VulkanShaderStage   VulkanShaderStage;
 typedef struct  VulkanPipeline      VulkanPipeline;
 typedef struct  VulkanBuffer        VulkanBuffer;
+typedef struct  VulkanTextureData   VulkanTextureData;
 
 //---------------------------------------------------------------------------ENUMS
 typedef enum  VulkanRenderPassState {
@@ -62,15 +67,31 @@ struct VulkanPipeline{
   VkPipelineLayout          pipelineLayout;
 };
 
+struct vulkanDescriptorState{
+  u32 generations[3];
+};
+
+struct LocalObjectState {
+  VkDescriptorSet descriptorSets[3];
+  vulkanDescriptorState descriptorStates[OBJECT_SHADER_DESCRIPTOR_COUNT];
+};
+
 struct VulkanObjectShader{
   VulkanShaderStage         stages[OBJECT_SHADER_STAGE_COUNT];    //vertex , fragment shader stages
 
   VkDescriptorPool          globalDescriptorPool;
   VkDescriptorSetLayout     globalDescriptorSetLayout;
-  VkDescriptorSet           globalDescriptorSets[3];              //One Descriptor Set per Frame, max 3 for triple buffering
-
   VulkanBuffer              globalUniformBuffer;                  //Glboal Uniform Buffer
-  GlobalUniformObject       globalUBO;                  //Global Uniform Object
+  
+  VkDescriptorPool          localDescriptorPool;
+  VkDescriptorSetLayout     localDescriptorSetLayout;
+  VulkanBuffer              localUniformBuffer;
+  u32                       localUniformBufferIndex;
+
+  LocalObjectState          localObjectStates[MAX_LOCAL_OBJECT_COUNT];
+
+  VkDescriptorSet           globalDescriptorSets[3];//bundling of these uniforms              //One Descriptor Set per Frame, max 3 for triple buffering
+  GlobalUniformObject       globalUBO;                  //Global Uniform Object -> feed this to a buffer which is tied to a descriptor ->> uploaded to GPU
 
   VulkanPipeline            pipeline; 
 };
@@ -107,6 +128,12 @@ struct VulkanImage{
   VkImageView                   view;               //image  view
   u32                           width;              //width  of image
   u32                           height;             //height of image
+};
+
+//------------------------------------------------------------------------------------------------------------------------TEXTURE DATA
+struct VulkanTextureData{
+  VulkanImage                   image;
+  VkSampler                     sampler;
 };
 
 struct VulkanSwapchain{
@@ -175,6 +202,7 @@ struct VulkanContext{
   VulkanBuffer                  objectIndexBuffer;
   u64                           geometryVertexOffset;
   u64                           geometryIndexOffset;
+  f32                           deltaTime;
   i32(*findMemoryIndex)(u32 typeFilter, u32 propertyFlags);
 };
 

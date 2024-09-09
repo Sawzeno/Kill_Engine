@@ -68,6 +68,6 @@ union Vec4{
 };
 
 struct Vertex3D{
-  Vec3 Position;
-
+  Vec3 position;
+  Vec2 texcoord;
 };

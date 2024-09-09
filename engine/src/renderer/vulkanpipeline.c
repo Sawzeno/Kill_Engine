@@ -3,6 +3,7 @@
 #include  "math/mathtypes.h"
 
 #include  "core/logger.h"
+#include <vulkan/vulkan_core.h>
 
 VkResult  vulkanGraphicsPipelineCreate(VulkanContext* context,
                                        VulkanRenderPass* renderpass,
@@ -18,7 +19,6 @@ VkResult  vulkanGraphicsPipelineCreate(VulkanContext* context,
                                        VulkanPipeline* outPipeline){
   TRACEFUNCTION;
   VkResult result = !VK_SUCCESS;
-KDEBUG("context : %p renderpass : %p attributeCount : %"PRIu32" attributes : %p descriptorSetLayoutCount : %"PRIu32" descriptorSetLayouts : %p stageCount : %"PRIu32" stages : %p viewport : %p scissor : %p isWireframe %p outPipeline %p",context, renderpass, attributeCount, attributes, descriptorSetLayoutCount, descriptorSetLayouts, stageCount, stages, viewport, scissor, isWireframe, outPipeline);
   //VIEWPORT STATE
   VkPipelineViewportStateCreateInfo viewportStateCreateInfo = {VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO}; 
   viewportStateCreateInfo.viewportCount = 1;
@@ -32,8 +32,8 @@ KDEBUG("context : %p renderpass : %p attributeCount : %"PRIu32" attributes : %p 
   rasterizationStateCreateInfo.rasterizerDiscardEnable  = VK_FALSE;
   rasterizationStateCreateInfo.polygonMode              = isWireframe ? VK_POLYGON_MODE_LINE : VK_POLYGON_MODE_FILL;
   rasterizationStateCreateInfo.lineWidth                = 1.0f;
-  rasterizationStateCreateInfo.cullMode                 = VK_CULL_MODE_BACK_BIT;
-  rasterizationStateCreateInfo.frontFace                = VK_FRONT_FACE_CLOCKWISE;
+  // rasterizationStateCreateInfo.cullMode                 = VK_CULL_MODE_BACK_BIT;
+  rasterizationStateCreateInfo.frontFace                = VK_FRONT_FACE_COUNTER_CLOCKWISE;
   rasterizationStateCreateInfo.depthBiasEnable          = VK_FALSE;
   rasterizationStateCreateInfo.depthBiasConstantFactor  = 0.0f;
   rasterizationStateCreateInfo.depthBiasClamp           = 0.0f;
@@ -77,14 +77,14 @@ KDEBUG("context : %p renderpass : %p attributeCount : %"PRIu32" attributes : %p 
 
   //DYNAMIC STATE
   const u32 dynamicStateCount = 3;
-  VkDynamicState dynamicStates[dynamicStateCount] = {
+  VkDynamicState dynamicStates[3] = {
     VK_DYNAMIC_STATE_VIEWPORT,
     VK_DYNAMIC_STATE_SCISSOR,
     VK_DYNAMIC_STATE_LINE_WIDTH,
   };
 
   VkPipelineDynamicStateCreateInfo dynamicStateCreateInfo = {VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO};
-  dynamicStateCreateInfo.dynamicStateCount  = 3;
+  dynamicStateCreateInfo.dynamicStateCount  = dynamicStateCount;
   dynamicStateCreateInfo.pDynamicStates     = dynamicStates;
 
   //VERTEX INPUT

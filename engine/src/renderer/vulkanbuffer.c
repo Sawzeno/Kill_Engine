@@ -13,7 +13,6 @@ VkResult  vulkanBufferCreate      (VulkanContext*         context,
                                    VulkanBuffer*          outBuffer)
 {
   TRACEFUNCTION;
-  KDEBUG("context : %p size : %"PRIu64"usage : %p  memoryProprtyFlags : %"PRIu32" bindOnCreate : %d outBuffer : %p",context, size,usage,memoryPropertyFlags, bindOnCreate, outBuffer);
 
   VkResult result = !VK_SUCCESS;
   kzeroMemory(outBuffer, sizeof(VulkanBuffer));
@@ -38,6 +37,7 @@ VkResult  vulkanBufferCreate      (VulkanContext*         context,
     KERROR("unable to create vulkan buffer because the required memory type index was not found");
     return !VK_SUCCESS;
   }
+
   //ALLOCATE MEMORY INFO
   VkMemoryAllocateInfo memoryAllocateInfo = {VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO};
   memoryAllocateInfo.allocationSize = memoryRequirements.size;
@@ -61,7 +61,6 @@ VkResult  vulkanBufferResize      (VulkanContext*         context,
                                    VkQueue                queue,
                                    VkCommandPool          commandPool){
   TRACEFUNCTION;
-  KDEBUG("context : %p newSize : %"PRIu64" buffer: %p queue : %p commandPool : %p",context,newSize,buffer,queue,commandPool);
   VkResult  result    =!VK_SUCCESS;
   // create new buffer
   VkBufferCreateInfo bufferCreateInfo = {VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
@@ -94,6 +93,7 @@ VkResult  vulkanBufferResize      (VulkanContext*         context,
   //copy over the data
   result = vulkanBufferCopyTo(context,  commandPool, NULL, queue, buffer->handle, 0, newBuffer, 0, buffer->totalSize);
   VK_CHECK_RESULT(result, "failed to copy vulkan buffer while resizing");
+
   //make sure anything using these is finished
   result = vkDeviceWaitIdle(context->device.logicalDevice);
   VK_CHECK_VERBOSE(result, "vkDeviceWaitIdle failed");
@@ -121,7 +121,6 @@ VkResult  vulkanBufferBind        (VulkanContext*         context,
                                    VulkanBuffer*          buffer,
                                    u64                    offset){
   TRACEFUNCTION;
-  KDEBUG("context : %p buffer : %p offset "PRIu64"",context, buffer, offset);
   VkResult result =    vkBindBufferMemory(context->device.logicalDevice, buffer->handle, buffer->memory, offset);
   VK_CHECK_VERBOSE(result, "vkBindBufferMemory failed");
   KINFO("VULKAN BUFFER BINDED");
@@ -154,7 +153,6 @@ void*     vulkanBufferLockMemory  (VulkanContext*         context,
                                    u64                    size,
                                    u32                    flags){
 TRACEFUNCTION;
-  KDEBUG("context : %p buffer : %p offset : %"PRIu64" size : %"PRIu64" flags : %"PRIu32"", context, buffer, offset, size, flags);
   void* data;
   if(vkMapMemory(context->device.logicalDevice, buffer->memory, offset,  size,  flags, &data) != VK_SUCCESS){
     KERROR("vkMapMemory failed in vulkanBufferLockMemory");
@@ -166,7 +164,6 @@ TRACEFUNCTION;
 VkResult  vulkanBufferUnlockMemory(VulkanContext*         context,
                                    VulkanBuffer*          buffer){
 TRACEFUNCTION;
-  KDEBUG("context : %p context buffer : %p", context, buffer);
   vkUnmapMemory(context->device.logicalDevice, buffer->memory);
   return VK_SUCCESS;
 }
@@ -178,7 +175,6 @@ VkResult  vulkanBufferLoadData    (VulkanContext*         context,
                                    u32                    flags,
                                    const void*            data){
   TRACEFUNCTION;
-  KDEBUG("context : %p buffer : %p offset : %"PRIu64" size : %"PRIu64" flags : %"PRIu32" data : %p", context, buffer, offset, size, flags, data);
   void* dataptr;
   VkResult result = vkMapMemory(context->device.logicalDevice, buffer->memory, offset, size, flags, &dataptr);
   VK_CHECK_VERBOSE(result, "vkMapMemory failed in vulkanBufferLoadData");
@@ -198,7 +194,6 @@ VkResult  vulkanBufferCopyTo      (VulkanContext*         context,
                                    u64                    destOffset,
                                    u64                    size){
   TRACEFUNCTION;
-  KDEBUG("context : %p pool : %p fence : %p queue : %p source : %p sourceOffset : %"PRIu32" dest : %p destOffset : "PRIu32" size : "PRIu32"",context,&pool,&fence,&queue,&source,sourceOffset,&dest,destOffset,size);
   VkResult result = !VK_SUCCESS;
 
   //create a one time use command buffer

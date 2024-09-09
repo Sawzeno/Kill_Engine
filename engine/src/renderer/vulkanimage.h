@@ -20,3 +20,16 @@ VkResult  vulkanImageViewCreate (VulkanContext*     context,
 
 void      vulkanImageDestroy    (VulkanContext*     context,
                                  VulkanImage*       image);
+
+void      vulkanImageTransitionLayout(VulkanContext* context,
+                                      VulkanCommandBuffer* commandBuffer,
+                                      VulkanImage* image,
+                                      VkFormat format,
+                                      VkImageLayout oldLayout,
+                                      VkImageLayout newLayout);
+
+void      vulkanImageCopyFromBuffer(VulkanContext* context,
+                                    VulkanImage* image,
+                                    VkBuffer buffer,
+                                    VulkanCommandBuffer* commandBuffer);
+

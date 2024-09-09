@@ -13,8 +13,8 @@
 #include  "core/input.h"
 #include  "core/clock.h"
 
-#define   LIMITFRAMES false
-#define   TARGETFPS  60
+#define   LIMITFRAMES true
+#define   TARGETFPS  15
 typedef struct  ApplicationState  ApplicationState;
 
 u8  applicationOnEvent  (u16 code , void* sender , void* listener , EventContext context);
@@ -162,7 +162,7 @@ bool  applicationRun(){
   TRACEFUNCTION;
   KINFO("APPLICATION STARTED SUCCESSFULY");
   appState->isRunning    = true;
-  Uwrite(1024, getMemoryUsage());  
+  // Uwrite(1024, getMemoryUsage());  
 
   clockStart  (&appState->clock);
   clockUpdate (&appState->clock);

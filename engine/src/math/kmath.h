@@ -607,18 +607,18 @@ static inline Mat4 mat4EulerXYZ(f32 xRadians, f32 yRadians, f32 zRadians) {
 
 static inline Vec3 mat4Forward(Mat4 matrix) {
   Vec3 forward;
-  forward.x = -matrix.data[2];
-  forward.y = -matrix.data[6];
-  forward.z = -matrix.data[10];
+  forward.x = matrix.data[2];
+  forward.y = matrix.data[6];
+  forward.z = matrix.data[10];
   vec3Normalize(&forward);
   return forward;
 }
 
 static inline Vec3 mat4Backward(Mat4 matrix) {
   Vec3 backward;
-  backward.x = matrix.data[2];
-  backward.y = matrix.data[6];
-  backward.z = matrix.data[10];
+  backward.x = -matrix.data[2];
+  backward.y = -matrix.data[6];
+  backward.z = -matrix.data[10];
   vec3Normalize(&backward);
   return backward;
 }
@@ -643,18 +643,18 @@ static inline Vec3 mat4Down(Mat4 matrix) {
 
 static inline Vec3 mat4Left(Mat4 matrix) {
   Vec3 left;
-  left.x = -matrix.data[0];
-  left.y = -matrix.data[4];
-  left.z = -matrix.data[8];
+  left.x = matrix.data[0];
+  left.y = matrix.data[4];
+  left.z = matrix.data[8];
   vec3Normalize(&left);
   return left;
 }
 
 static inline Vec3 mat4Right(Mat4 matrix) {
   Vec3 right;
-  right.x = matrix.data[0];
-  right.y = matrix.data[4];
-  right.z = matrix.data[8];
+  right.x = -matrix.data[0];
+  right.y = -matrix.data[4];
+  right.z = -matrix.data[8];
   vec3Normalize(&right);
   return right;
 }

@@ -18,3 +18,5 @@ typedef int8_t    i8;
 
 typedef float     f32;
 typedef double    f64;
+
+#define INVALID_ID (4294967295U)

@@ -2,6 +2,8 @@
 
 #include  "defines.h"
 #include  "math/mathtypes.h"
+#include  "renderer/renderertypes.h"
+#include  "resource/resourcetypes.h"
 
 
 typedef struct  RendererBackend RendererBackend;
@@ -18,16 +20,20 @@ struct RenderPacket{
   f32 deltaTime;
 };
 
-bool  rendererBackendInitialize (RendererBackend* backend);
+bool rendererBackendInitialize (RendererBackend* backend);
 
-bool  rendererBackendBeginFrame (f32 deltaTime);
+bool rendererBackendBeginFrame (f32 deltaTime);
 
-bool  rendererBackendEndFrame   (f32 deltaTime);
+bool rendererBackendEndFrame   (f32 deltaTime);
 
-bool  rendererUpdateGlobalState (Mat4 projection, Mat4 view, Vec3 viewPosition, Vec4 ambientColor, i32 mode);
+bool rendererUpdateGlobalState (Mat4 projection, Mat4 view, Vec3 viewPosition, Vec4 ambientColor, i32 mode);
 
-bool  rendererBackendResized    (u16 width, u16 height);
+bool rendererBackendResized    (u16 width, u16 height);
 
-bool  rendererBackendShutdown   ();
+bool rendererBackendShutdown   ();
 
-bool  updateObject(Mat4 model);
+bool updateObject              (GeomteryRenderData data);
+
+void rendererBackendCreateTexture(const char* name, bool autoRelease, i32 width, u32 height, i32 channelCount, const u8* pixels, u32 hasTransparency, Texture* tex);
+
+void rendererBackendDestroyTexture( Texture* tex);

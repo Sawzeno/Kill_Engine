@@ -139,8 +139,8 @@ TRACEFUNCTION;
   VkRenderPassBeginInfo beginInfo = {VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO};
   beginInfo.renderPass  = renderPass->handle;
   beginInfo.framebuffer = frameBuffer;
-  beginInfo.renderArea.offset.x = 0;
-  beginInfo.renderArea.offset.y = 0;
+  beginInfo.renderArea.offset.x = renderPass->x;
+  beginInfo.renderArea.offset.y = renderPass->y;
   beginInfo.renderArea.extent.width = renderPass->w;
   beginInfo.renderArea.extent.height= renderPass->h;
   

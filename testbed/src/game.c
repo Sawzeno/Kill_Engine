@@ -16,7 +16,7 @@ i8    gameInitialize (Game* game){
   TRACEFUNCTION;
   GameState* state  = (GameState*)game->state;
 
-  state->cameraPosition = (Vec3){0,0,30.0};
+  state->cameraPosition = (Vec3){0,0,30.0f};
   state->cameraEuler    = vec3Zero();
 
   state->view = mat4Translation(state->cameraPosition);
@@ -30,27 +30,23 @@ i8    gameUpdate    (Game* game , f32 deltaTime){
   GameState* state  = (GameState*)game->state;
 
   if(inputIsKeyDown(KEY_UP)){
-    UWARN("UP");
     cameraPitch(state, 1.0f * deltaTime);
   }
 
   if(inputIsKeyDown(KEY_LEFT)){
-    UWARN("A");
-    cameraYaw(state, 1.0f * deltaTime);
+    cameraYaw(state, -1.0f * deltaTime);
   }
 
   if(inputIsKeyDown(KEY_DOWN)){
-    UWARN("DOWN");
     cameraPitch(state, -1.0f * deltaTime);
   }
 
   if(inputIsKeyDown(KEY_RIGHT)){
-    UWARN("D");
-    cameraYaw(state, -1.0f * deltaTime);
+    cameraYaw(state, 1.0f * deltaTime);
   }
 
 
-  f32 tempMoveSpeed = 10.0f;
+  f32 tempMoveSpeed = 30.0f;
   Vec3  velocity    = vec3Zero();
   if(inputIsKeyDown('W')){
     Vec3 forward    = mat4Forward(state->view);
@@ -60,11 +56,11 @@ i8    gameUpdate    (Game* game , f32 deltaTime){
     Vec3 backward   = mat4Backward(state->view);
     velocity        = vec3Add(velocity, backward);
   }
-  if(inputIsKeyDown('Q')){
+  if(inputIsKeyDown('A')){
     Vec3 left       = mat4Left(state->view);
     velocity        = vec3Add(velocity, left);
   }
-  if(inputIsKeyDown('E')){
+  if(inputIsKeyDown('D')){
     Vec3 right      = mat4Right(state->view);
     velocity        = vec3Add(velocity, right);
   }
