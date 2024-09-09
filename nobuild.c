@@ -16,6 +16,7 @@
 
 #define GLOBAL_BUFFER_CAP 1024 * 10
 
+
 #define LOG_TYPES  3
 #define PREFIX_LEN 24
 #define BUFFER_LEN 256
