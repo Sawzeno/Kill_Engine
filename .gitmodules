@@ -1,6 +1,0 @@
-[submodule "KillEngine/vendor/spdlog"]
-	path = KillEngine/vendor/spdlog
-	url = https://github.com/gabime/spdlog
-[submodule "KillEngine/vendor/GLFW"]
-	path = KillEngine/vendor/GLFW
-	url = https://github.com/Sawzeno/glfw
