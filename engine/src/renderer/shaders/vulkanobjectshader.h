@@ -2,13 +2,12 @@
 
 #include  "renderer/vulkantypes.h"
 
-VkResult  vulkanObjectShaderCreate            (VulkanContext* context, VulkanObjectShader* outShader);
-VkResult  vulkanObjectShaderDestroy           (VulkanContext* context, VulkanObjectShader* shader);
+VkResult  ObjectShaderCreate            (VulkanContext* context, VulkanObjectShader* outShader);
+VkResult  ObjectShaderDestroy           (VulkanContext* context, VulkanObjectShader* shader);
 
-VkResult  vulkanObjectShaderUse               (VulkanContext* context, VulkanObjectShader* shader);
-VkResult  vulkanObjectShaderUpdateGlobalState (VulkanContext* context, VulkanObjectShader* shader, f32 deltaTime);
-VkResult  vulkanObjectShaderUpdateLocalState      (
-  VulkanContext* context, VulkanObjectShader*,GeomteryRenderData data);
+VkResult  ObjectShaderUse               (VulkanContext* context, VulkanObjectShader* shader);
+VkResult  ObjectShaderUpdateGlobalState (VulkanContext* context, VulkanObjectShader* shader, f32 deltaTime);
+VkResult  ObjectShaderUpdateLocalState  (VulkanContext* context, VulkanObjectShader*,GeomteryRenderData data);
 
-bool      vulkanObjectShaderAcquireResources  (VulkanContext* context, VulkanObjectShader* shader, u32* outObjectId);
-void      vulkanObjectShaderReleaseResources  (VulkanContext* context, VulkanObjectShader* shader, u32  objectId);
+bool      ObjectShaderAcquireResources  (VulkanContext* context, VulkanObjectShader* shader, u32* outObjectId);
+void      ObjectShaderReleaseResources  (VulkanContext* context, VulkanObjectShader* shader, u32  objectId);

@@ -6,7 +6,8 @@
 #include  <vulkan/vulkan_core.h>
 
 #define   OBJECT_SHADER_STAGE_COUNT 2
-#define   OBJECT_SHADER_DESCRIPTOR_COUNT 2
+#define   OBJECT_SHADER_GLOBAL_DESCRIPTOR_COUNT 1
+#define   OBJECT_SHADER_LOCAL_DESCRIPTOR_COUNT  2 
 #define   MAX_LOCAL_OBJECT_COUNT 1024
 
 typedef struct  VulkanDevice        VulkanDevice;
@@ -73,7 +74,7 @@ struct vulkanDescriptorState{
 
 struct LocalObjectState {
   VkDescriptorSet descriptorSets[3];
-  vulkanDescriptorState descriptorStates[OBJECT_SHADER_DESCRIPTOR_COUNT];
+  vulkanDescriptorState descriptorStates[OBJECT_SHADER_LOCAL_DESCRIPTOR_COUNT];
 };
 
 struct VulkanObjectShader{

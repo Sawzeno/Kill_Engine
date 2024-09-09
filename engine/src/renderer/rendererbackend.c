@@ -177,7 +177,7 @@ rendererBackendInitialize(RendererBackend* backend)
   }
 
   KTRACE("----------------------SHADER OBJECTS----------------------");
-  result  = vulkanObjectShaderCreate(&context, &context.objectShader);
+  result  = ObjectShaderCreate(&context, &context.objectShader);
   VK_CHECK_BOOL(result, "ERROR LOADING BUILTIN BASIC LIGHTING SHADER");
 
 
@@ -222,7 +222,7 @@ rendererBackendInitialize(RendererBackend* backend)
 
 
   u32 objectId  = 0;
-  if(!vulkanObjectShaderAcquireResources(&context, &context.objectShader, &objectId)){
+  if(!ObjectShaderAcquireResources(&context, &context.objectShader, &objectId)){
     UERROR("FAILED TO ACQUIRE SHADER RESOURCES");
     return false;
   }
@@ -244,7 +244,7 @@ rendererBackendShutdown()
   vulkanBufferDestroy(&context, &context.objectIndexBuffer);
 
   KDEBUG("DESTORYING SHADER OBJECTS");
-  vulkanObjectShaderDestroy(&context, &context.objectShader);
+  ObjectShaderDestroy(&context, &context.objectShader);
 
   KDEBUG("DESTROYING SYNC OBJECTS");
   for(u32 i = 0; i < context.swapchain.imageCount; ++i){
@@ -471,13 +471,13 @@ rendererUpdateGlobalState (Mat4 projection, Mat4 view, Vec3 viewPosition, Vec4 a
   VkResult result = !VK_SUCCESS;
   VulkanCommandBuffer* commandBuffer = &context.graphicsCommandBuffers[context.imageIndex];
 
-  result  = vulkanObjectShaderUse(&context, &context.objectShader);
+  result  = ObjectShaderUse(&context, &context.objectShader);
   VK_CHECK_BOOL(result, "vulkanObjectShaderUse failed in renderUpdateGlobalState");
 
   context.objectShader.globalUBO.projection = projection;
   context.objectShader.globalUBO.view       = view;
   //todo : other globalUBO properties
-  result  = vulkanObjectShaderUpdateGlobalState(&context, &context.objectShader, context.deltaTime);
+  result  = ObjectShaderUpdateGlobalState(&context, &context.objectShader, context.deltaTime);
   VK_CHECK_BOOL(result, "vulkanObjectShaderUpdateGlobalState failed in rendererUpdateGlobalState");
 
 
@@ -489,11 +489,11 @@ rendererUpdateGlobalState (Mat4 projection, Mat4 view, Vec3 viewPosition, Vec4 a
 bool
 updateObject( GeomteryRenderData data){
   TRACEFUNCTION;
-  VkResult result = vulkanObjectShaderUpdateLocalState(&context, &context.objectShader, data);
+  VkResult result = ObjectShaderUpdateLocalState(&context, &context.objectShader, data);
   VK_CHECK_BOOL(result, "vulkanObjectShaderUpdateObject failed");
 
   //test slap to draw geometry
-  vulkanObjectShaderUse(&context, &context.objectShader);
+  ObjectShaderUse(&context, &context.objectShader);
 
   VulkanCommandBuffer* commandBuffer = &context.graphicsCommandBuffers[context.imageIndex];
   VkDeviceSize offsets[1] = {0};
