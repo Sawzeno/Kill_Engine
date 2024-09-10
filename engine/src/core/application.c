@@ -13,6 +13,8 @@
 #include  "core/input.h"
 #include  "core/clock.h"
 
+#include  "systems/texturesystem.h"
+
 #define   LIMITFRAMES true
 #define   TARGETFPS  15
 typedef struct  ApplicationState  ApplicationState;
@@ -32,23 +34,26 @@ struct ApplicationState{
 
   LinearAllocator systemsAllocator;
 
-  u64   memorySystemMemoryRequirement;
+  u64   memorySystemReq;
   void* memorySystemState;
 
-  u64   loggingSystemMemoryRequirement;
+  u64   loggingSystemReq;
   void* loggingSystemState;
 
-  u64   inputSystemMemoryRequirement;
+  u64   inputSystemReq;
   void* inputSystemState;
 
-  u64   eventSystemMemoryRequirement;
+  u64   eventSystemReq;
   void* eventSystemState;
 
-  u64   platformSystemMenoryRequirement;
+  u64   platformSystemReq;
   void* platformSystemState;
 
-  u64   rendererSystemMemoryRequirement;
+  u64   rendererSystemReq;
   void* rendererSystemState;
+
+  u64   textureSystemReq;
+  void* textureSystemState;
 };
 
 static bool initalized  = false;
@@ -76,20 +81,20 @@ bool  applicationCreate(Game* game){
   //requires calloc as other memory functions use the logging subsytem
   //so initialize the memory and logging system with calloc
   UINFO("INITIALZING APPLICATION MEMORY");
-  initializeMemory(&appState->memorySystemMemoryRequirement, NULL);
+  initializeMemory(&appState->memorySystemReq, NULL);
 
-  appState->memorySystemState = calloc(1, appState->memorySystemMemoryRequirement);
+  appState->memorySystemState = calloc(1, appState->memorySystemReq);
   ISNULL(appState->memorySystemState, false);
-  if(!initializeMemory(&appState->memorySystemMemoryRequirement, appState->memorySystemState)){
+  if(!initializeMemory(&appState->memorySystemReq, appState->memorySystemState)){
     UFATAL("failed to initialize memory subsytem, shutting down");
   }
 
   UINFO("INITIALZING ENGINE LOGGER");
-  initializeLogging(&appState->loggingSystemMemoryRequirement, NULL);
-  appState->loggingSystemState= calloc(1, appState->loggingSystemMemoryRequirement);
+  initializeLogging(&appState->loggingSystemReq, NULL);
+  appState->loggingSystemState= calloc(1, appState->loggingSystemReq);
 
   ISNULL(appState->loggingSystemState, false);
-  if(!initializeLogging(&appState->loggingSystemMemoryRequirement, appState->loggingSystemState)){
+  if(!initializeLogging(&appState->loggingSystemReq, appState->loggingSystemState)){
     UFATAL("failed to initialze logging system, shutting down");
     return false;
   }
@@ -98,21 +103,21 @@ bool  applicationCreate(Game* game){
   //-------------------------------------------------------------------------------
 
   KINFO("ALLOCATING MEMMORY FOR SUBSYSTEMS");
-  u64 systemsAllocatorTotalSize = 1024 * 1024;
+  u64 systemsAllocatorTotalSize = 1024 * 1024 * 24;
   linearAllocatorCreate(systemsAllocatorTotalSize, NULL, &appState->systemsAllocator);
 
   KINFO("INITIALIZING ENGINE INPUT");
-  initializeInput(&appState->inputSystemMemoryRequirement, NULL);
-  appState->inputSystemState  = linearAllocatorAllocate(&appState->systemsAllocator, appState->inputSystemMemoryRequirement);
-  if(!initializeInput(&appState->inputSystemMemoryRequirement, appState->inputSystemState)){
+  initializeInput(&appState->inputSystemReq, NULL);
+  appState->inputSystemState  = linearAllocatorAllocate(&appState->systemsAllocator, appState->inputSystemReq);
+  if(!initializeInput(&appState->inputSystemReq, appState->inputSystemState)){
     KFATAL("failed to initialize input sysytem, shutting down");
     return false;
   }
 
   KINFO("INITIALIZING ENGINE EVENTS");
-  initializeEvents(&appState->eventSystemMemoryRequirement, NULL);
-  appState->eventSystemState  = linearAllocatorAllocate(&appState->systemsAllocator, appState->eventSystemMemoryRequirement);
-  if(!initializeEvents(&appState->eventSystemMemoryRequirement, appState->eventSystemState)){
+  initializeEvents(&appState->eventSystemReq, NULL);
+  appState->eventSystemState  = linearAllocatorAllocate(&appState->systemsAllocator, appState->eventSystemReq);
+  if(!initializeEvents(&appState->eventSystemReq, appState->eventSystemState)){
     KFATAL("failed to initialize input subsystem, shutting down");
     return false;
   }
@@ -123,9 +128,9 @@ bool  applicationCreate(Game* game){
   eventRegister(EVENT_CODE_RESIZED          , NULL  , applicationOnResize);
 
   KINFO("INITIALZING ENGINE PLATFORM");
-  initializePlatform(&appState->platformSystemMenoryRequirement, NULL);
-  appState->platformSystemState = linearAllocatorAllocate(&appState->systemsAllocator, appState->platformSystemMenoryRequirement);
-  if(!initializePlatform(&appState->platformSystemMenoryRequirement, appState->platformSystemState)){
+  initializePlatform(&appState->platformSystemReq, NULL);
+  appState->platformSystemState = linearAllocatorAllocate(&appState->systemsAllocator, appState->platformSystemReq);
+  if(!initializePlatform(&appState->platformSystemReq, appState->platformSystemState)){
     KFATAL("failed to initialize platform subsystem, shutting down!");
   }
   if (!startPlatform(game->appConfig.name,
@@ -136,16 +141,28 @@ bool  applicationCreate(Game* game){
     KERROR("FAILED TO SET WINDOWING SYSTEM ON THIS PLATFORM");
     return false;
   }
+  
 
   KINFO("INITIALIZING ENGINE RENDERER");
-  initializeRenderer(&appState->rendererSystemMemoryRequirement, NULL);
-  appState->rendererSystemState = linearAllocatorAllocate(&appState->systemsAllocator, appState->rendererSystemMemoryRequirement);
-  if(!initializeRenderer(&appState->rendererSystemMemoryRequirement, appState->rendererSystemState)){
+  initializeRenderer(&appState->rendererSystemReq, NULL);
+  appState->rendererSystemState = linearAllocatorAllocate(&appState->systemsAllocator, appState->rendererSystemReq);
+  if(!initializeRenderer(&appState->rendererSystemReq, appState->rendererSystemState)){
     KFATAL("failed to initialize renderer subsystem, shutting down!");
     return false;
   }
 
-  //initialize the game 
+  KINFO("INITIALIZING ENGINE TEXTURE SYSTEM");
+
+  appState->textureSystemReq  = 0;
+  TextureSystemConfig textureSysConfig = {.maxTextureCount  = 64};
+  textureSystemInitialize(&appState->textureSystemReq, NULL, textureSysConfig);
+  if(appState->textureSystemReq == 0) return false;
+  appState->textureSystemState  = linearAllocatorAllocate(&appState->systemsAllocator, appState->textureSystemReq);
+  if(!textureSystemInitialize(&appState->textureSystemReq, appState->textureSystemState, textureSysConfig)){
+    KFATAL("FAILED TO INITIALIZE ENGINE TEXTURE SYSTEM");
+    return false;
+  }
+
   KINFO("INITIALZING GAME VARIABLES");
   if(appState->game->initialize(appState->game) == false){
     KFATAL("FAILED TO INITIALIZE GAME !");
@@ -258,6 +275,8 @@ bool  applicationRun(){
 
 void applicationShutdown(){
   UINFO("SHUTING DOWN SUBSYSTEMS");
+
+  textureSystemShutdown();
   shutdownRenderer();
   shutdownInput   ();
   shutdownEvents  ();
@@ -328,7 +347,6 @@ u8  applicationOnResize  (u16 code , void* sender , void* listener , EventContex
         appState->game->onResize(appState->game, width, height);
       }
     }
-
   }    
   // Event purposely not handled to allow other listeners to get this.
   return false;

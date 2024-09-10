@@ -129,7 +129,7 @@ VkResult  vulkanCommandBufferStopSingleUse    (VulkanContext* context,
 
   //free the command buffer
   vulkanCommandBufferFree(context, pool, commandBuffer);
-  UDEBUG("SUCCESFULLY ENDED SINGLE USE BUFFER");
+  KDEBUG("SUCCESFULLY ENDED SINGLE USE BUFFER");
   return result;
 }
 

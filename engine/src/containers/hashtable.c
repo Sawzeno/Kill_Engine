@@ -16,7 +16,7 @@ u64 hashName(const char* name, u32 elementCount){
 }
 
 void
-hashtableCreate  (u64 elementSize, u32 elementCount, void* memory, bool isPointerType, Hashtable* outHashtable){
+hashtableCreate  (u64 elementSize, u32 elementCount, void* memory, b8 isPointerType, Hashtable* outHashtable){
   if(!memory || !outHashtable){
     KERROR("hashTableCreate requires a valid pointer to memory and outHashtable");
   }
@@ -41,79 +41,77 @@ hashtableDestroy (Hashtable* hashtable){
   }
 }
 
-bool
+b8
 hashtableSet     (Hashtable* hashtable, const char* name, void*  value){
   if(!hashtable || !name || !value){
     KERROR("hashtableSet requires hashtable, name and value to exist");
-    return false;
+    return FALSE;
   }
   if(hashtable->isPointerType){
     KERROR("hashtableSet not to be used with ptr types, use hashtableSetPtr method");
-    return false;
+    return FALSE;
   }
   if(hashtable->elementCount < 1 || hashtable->elementSize < 1){
     KERROR("elementCount or elementSize cannot be less than zero");
-    return false;
+    return FALSE;
   }
   u64 hash  = hashName(name, hashtable->elementCount);
   kcopyMemory(hashtable->memory + (hashtable->elementSize * hash), value, hashtable->elementSize, __FUNCTION__);
-  // UDEBUG("value : %"PRIu64"",*(u64*)(hashtable->memory + (hashtable->elementSize * hash)));
-  return true;
+  return TRUE;
 }
 
-bool
+b8
 hashtableGet     (Hashtable* hashtable, const char* name, void*  outValue){
   if(!hashtable || !name || !outValue){
     KERROR("hashtableSet requires hashtable, name and outValue to exist");
-    return false;
+    return FALSE;
   }
   if(hashtable->isPointerType){
     KERROR("hashtableGet not to be used with ptr types, use hashtableGetPtr method");
-    return false;
+    return FALSE;
   }
   if(hashtable->elementCount < 1 || hashtable->elementSize < 1){
     KERROR("elementCount or elementSize cannot be less than zero");
-    return false;
+    return FALSE;
   }
 
   u64 hash  = hashName(name, hashtable->elementCount);
   kcopyMemory(outValue, hashtable->memory + (hashtable->elementSize * hash), hashtable->elementSize, __FUNCTION__);
-  // UDEBUG("outvalue : %"PRIu64"",*(u64*)(hashtable->memory + (hashtable->elementSize * hash)));
-  return true;
+  return TRUE;
 }
 
-bool
+b8
 hashtableSetPtr  (Hashtable* hashtable, const char* name, void** value){
   if(!hashtable || !name){
     KERROR("hashtableSet requires hashtable, name and to exist");
-    return false;
+    return FALSE;
   }
   if(!hashtable->isPointerType){
     KERROR("hashtableSetPtr not to be used with non ptr types, use hashtableSet method");
-    return false;
+    return FALSE;
   }
   if(hashtable->elementCount < 1 || hashtable->elementSize < 1){
     KERROR("elementCount or elementSize cannot be less than zero");
-    return false;
+    return FALSE;
   }
   u64 hash  = hashName(name, hashtable->elementCount);
   ((void**)hashtable->memory)[hash] = value ? *value : 0;
-  return true;
+  return TRUE;
 }
 
-bool
+b8
 hashtableGetPtr  (Hashtable* hashtable, const char* name, void** outValue){
   if(!hashtable || !name || !outValue){
     KERROR("hashtableSet requires hashtable, name and outValue to exist");
-    return false;
+    return FALSE;
   }
   if(!hashtable->isPointerType){
     KERROR("hashtableGetPtr not to be used with non-ptr types, use hashtableGet method");
-    return false;
+    return FALSE;
   }
   if(hashtable->elementCount < 1 || hashtable->elementSize < 1){
     KERROR("elementCount or elementSize cannot be less than zero");
-    return false;
+    return FALSE;
   }
   u64 hash  = hashName(name, hashtable->elementCount);
   *outValue = ((void**)hashtable->memory)[hash];
@@ -121,22 +119,22 @@ hashtableGetPtr  (Hashtable* hashtable, const char* name, void** outValue){
 }
 
 // fills the entries in the hashtable with the given value
-bool
+b8
 hashtableFill    (Hashtable* hashtable, void* value){
   if(!hashtable || ! value){
     KERROR("hashtableFill requires a valid pointer to a hashtable a fill value");
-    return false;
+    return FALSE;
   }
   if(hashtable->isPointerType){
     KERROR("hashtable fill not be used with hashtable of ptr types");
-    return false;
+    return FALSE;
   }
   if(hashtable->elementCount < 1 || hashtable->elementSize < 1){
     KERROR("elementCount or elementSize cannot be less than zero");
-    return false;
+    return FALSE;
   }
   for( u32 i = 0; i < hashtable->elementCount; ++i){
     kcopyMemory(hashtable->memory + (hashtable->elementSize * i), value, hashtable->elementSize, __FUNCTION__);
   }
-  return true;
+ return TRUE;
 }

@@ -3,7 +3,7 @@
 #include  "defines.h"
 
 #define MEMORY_TAG_MAX_TAGS 18
-#define MEMZERO(PTR) kzeroMemory(PTR, sizeof(typeof(*PTR)));
+#define MEMZERO(PTR) kzeroMemory(PTR, sizeof(typeof(*(PTR))))
 
 typedef enum Memory_tag{
   MEMORY_TAG_UNKNOWN,

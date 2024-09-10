@@ -223,3 +223,15 @@ defer:
   return file;
 }
 
+void bk1(){
+  UINFO("BK1");
+}
+void bk2(){
+  UINFO("BK2");
+}
+void bk3(){
+  UINFO("BK3");
+}
+void bk4(){
+  UINFO("BK4");
+}

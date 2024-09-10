@@ -1,5 +1,4 @@
 #include  "rendererbackend.h"
-#include "renderer/vulkanimage.h"
 #include  "renderertypes.h"
 #include  "rendererutils.h"
 
@@ -9,6 +8,7 @@
 #include  "vulkanrenderpass.h"
 #include  "vulkancommandbuffer.h"
 #include  "vulkanframebuffer.h"
+#include  "vulkanimage.h"
 #include  "vulkanbuffer.h"
 #include  "vulkanfence.h"
 
@@ -19,8 +19,7 @@
 
 #include  "math/mathtypes.h"
 
-#include  "shaders/vulkanobjectshader.h"
-#include  <vulkan/vulkan_core.h>
+#include  "shaders/materialshader.h"
 
 static    u32 cachedFrameBufferWidth    = 0;
 static    u32 cachedFrameBufferHeight   = 0;
@@ -87,7 +86,7 @@ rendererBackendInitialize(RendererBackend* backend)
   appInfo.engineVersion       = VK_MAKE_VERSION(1, 0, 0);
 
   VkResult result  = !VK_SUCCESS;
-  KTRACE("----------------------REQUIRED EXTENSIONS----------------------");
+  KTRACE("----------------------REQUIRED EXTENSIONS------------------");
   const char** requiredExtensions   = (const char**)DARRAY_CREATE(const char*);
   DARRAY_PUSH(requiredExtensions, &VK_KHR_SURFACE_EXTENSION_NAME);
   DARRAY_PUSH(requiredExtensions, &VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
@@ -119,19 +118,19 @@ rendererBackendInitialize(RendererBackend* backend)
   result  = vulkanDebuggerCreate(&ctx);
   VK_CHECK_BOOL(result, "FAILED TO CREATE DEBUGGER");
 
-  KTRACE("----------------------VULKAN SURFACE----------------------");
+  KTRACE("----------------------VULKAN SURFACE-----------------------");
   result  = vulkanSurfaceCreate(&ctx);
   VK_CHECK_BOOL(result, "FAILED TO CREATE SURFACE");
 
-  KTRACE("----------------------VULKAN DEVICE----------------------");
+  KTRACE("----------------------VULKAN DEVICE------------------------");
   result =  vulkanDeviceCreate(&ctx);
   VK_CHECK_BOOL(result, "FAILED TO CREATE DEVICE !");
 
-  KTRACE("----------------------VULKAN SWAPCHAIN----------------------");
+  KTRACE("----------------------VULKAN SWAPCHAIN---------------------");
   result = vulkanSwapchainCreate(&ctx, ctx.frameBufferWidth, ctx.frameBufferHeight, &ctx.swapchain);
   VK_CHECK_BOOL(result, "FAILED TO CREATE SWAPCHAIN");
 
-  KTRACE("----------------------VULKAN RENDERPASS----------------------");
+  KTRACE("----------------------VULKAN RENDERPASS--------------------");
   result =  vulkanRenderPassCreate(&ctx,
                                    &ctx.mainRenderPass,
                                    0, 0, ctx.frameBufferWidth, ctx.frameBufferHeight,
@@ -139,7 +138,7 @@ rendererBackendInitialize(RendererBackend* backend)
                                    1.0f, 0);
   VK_CHECK_BOOL(result, "FAILED TO CREATE RENDERPASS");
 
-  KTRACE("----------------------SWAPCHAIN FRAMEBUFFERS----------------------");
+  KTRACE("----------------------SWAPCHAIN FRAMEBUFFERS---------------");
   ctx.swapchain.frameBuffers  = DARRAY_RESERVE(VulkanFrameBuffer, ctx.swapchain.imageCount);
   result = regenerateFrameBuffers(&ctx.swapchain, &ctx.mainRenderPass);
   VK_CHECK_BOOL(result, "FAILED TO CREATE INITIAL FRAMEBUFFERS");
@@ -148,7 +147,8 @@ rendererBackendInitialize(RendererBackend* backend)
   result = createCommandBuffers();
   VK_CHECK_BOOL(result, "FAILED TO CREATE COMMAND BUFFERS");
 
-  KTRACE("----------------------SYNC OBJECTS----------------------");
+
+  KTRACE("----------------------SYNC OBJECTS-------------------------");
   ctx.imageAvailableSemaphores  = DARRAY_RESERVE(VkSemaphore, ctx.swapchain.maxFramesInFlight);
   ctx.queueCompleteSemaphores   = DARRAY_RESERVE(VkSemaphore, ctx.swapchain.maxFramesInFlight);
   ctx.inFlightFences            = DARRAY_RESERVE(VulkanFence, ctx.swapchain.maxFramesInFlight);
@@ -174,17 +174,17 @@ rendererBackendInitialize(RendererBackend* backend)
     ctx.imagesInFlight[i] = 0;
   }
 
-  KTRACE("----------------------SHADER OBJECTS----------------------");
-  result  = ObjectShaderCreate(&ctx, &ctx.objectShader, backend->defaultDiffuse);
+  KTRACE("----------------------BUILTIN SHADERS----------------------");
+  result  = materialShaderCreate(&ctx, &ctx.materialShader);
   VK_CHECK_BOOL(result, "ERROR LOADING BUILTIN BASIC LIGHTING SHADER");
 
 
-  KTRACE("----------------------VULKAN BUFFERS----------------------");
+
+  KTRACE("----------------------CREATE OBEJCT BUFFERS---------------");
   result = createBuffers(&ctx);
   VK_CHECK_BOOL(result, "FAILED TO CREATE BUFFERS");
 
-  KTRACE("----------------------TEST SLAP----------------------");
-  //test slap
+  KTRACE("----------------------TEST SLAP---------------------------");
   const u32 vertCount = 4;
   Vertex3D  verts[4]  = {0};
 
@@ -220,7 +220,7 @@ rendererBackendInitialize(RendererBackend* backend)
 
 
   u32 objectId  = 0;
-  if(!ObjectShaderAcquireResources(&ctx, &ctx.objectShader, &objectId)){
+  if(!materialShaderAcquireResources(&ctx, &ctx.materialShader, &objectId)){
     UERROR("FAILED TO ACQUIRE SHADER RESOURCES");
     return false;
   }
@@ -236,13 +236,12 @@ rendererBackendShutdown()
   // destory in opposite order
   vkDeviceWaitIdle(ctx.device.logicalDevice);
 
-
   KDEBUG("DESTORYING BUFFERS");
   vulkanBufferDestroy(&ctx, &ctx.objectVertexBuffer);
   vulkanBufferDestroy(&ctx, &ctx.objectIndexBuffer);
 
-  KDEBUG("DESTORYING SHADER OBJECTS");
-  ObjectShaderDestroy(&ctx, &ctx.objectShader);
+  KDEBUG("DESTORYING MATERIAL SHADER");
+  materialShaderDestroy(&ctx, &ctx.materialShader);
 
   KDEBUG("DESTROYING SYNC OBJECTS");
   for(u32 i = 0; i < ctx.swapchain.imageCount; ++i){
@@ -339,14 +338,14 @@ rendererBackendBeginFrame(f32 deltaTime)
     //if swapchain recreation failed (ex : if the window was minimized);
     VK_CHECK_BOOL(result, "SWAPCHAIN RECRETION FAILED");
 
-    KTRACE("-------------------RECREATING SWAPCHAIN-------------------");
+    KTRACE("-------------------RECREATING SWAPCHAIN------------------");
     VK_CHECK_BOOL(recreateSwapchain(),"SWAPCHAIN RECREATION FAILED");
 
     return false;
   }
 
   if(!vulkanFenceWait(&ctx,&ctx.inFlightFences[ctx.currentFrame],1))KWARN("IN FLIGHT FENCE WAIT FAILURE WHILE BEGIN FRAME !");
-  
+
   //THE SAME SEMAPHORE WILL BE WAITED ON BY THE QUEUE SUBMISSION TO ENSURE THIS IMAGE IS AVAILABLE.
   result =vulkanSwapchainAcquireNextImageIndex(&ctx,&ctx.swapchain,UINT64_MAX,ctx.imageAvailableSemaphores[ctx.currentFrame],0,&ctx.imageIndex);
   VK_CHECK_BOOL(result, "FAILED TO ACQUIRE NEXT IMAGE INDEX FROM SWAPCHAIN");
@@ -448,14 +447,14 @@ rendererUpdateGlobalState (Mat4 projection, Mat4 view, Vec3 viewPosition, Vec4 a
   VkResult result = !VK_SUCCESS;
   VulkanCommandBuffer* commandBuffer = &ctx.graphicsCommandBuffers[ctx.imageIndex];
 
-  result  = ObjectShaderUse(&ctx, &ctx.objectShader);
-  VK_CHECK_BOOL(result, "vulkanObjectShaderUse failed in renderUpdateGlobalState");
+  result  = materialShaderUse(&ctx, &ctx.materialShader);
+  VK_CHECK_BOOL(result, "vulkanmaterialShaderUse failed in renderUpdateGlobalState");
 
-  ctx.objectShader.globalUBO.projection = projection;
-  ctx.objectShader.globalUBO.view       = view;
+  ctx.materialShader.globalUBO.projection = projection;
+  ctx.materialShader.globalUBO.view       = view;
   //todo : other globalUBO properties
-  result  = ObjectShaderUpdateGlobalState(&ctx, &ctx.objectShader, ctx.deltaTime);
-  VK_CHECK_BOOL(result, "vulkanObjectShaderUpdateGlobalState failed in rendererUpdateGlobalState");
+  result  = materialShaderUpdateGlobalState(&ctx, &ctx.materialShader, ctx.deltaTime);
+  VK_CHECK_BOOL(result, "vulkanmaterialShaderUpdateGlobalState failed in rendererUpdateGlobalState");
   return true;
 }
 
@@ -465,11 +464,11 @@ bool
 updateObject( GeomteryRenderData data){
   TRACEFUNCTION;
 
-  VkResult result = ObjectShaderUpdateLocalState(&ctx, &ctx.objectShader, data);
-  VK_CHECK_BOOL(result, "vulkanObjectShaderUpdateObject failed");
+  VkResult result = materialShaderUpdateLocalState(&ctx, &ctx.materialShader, data);
+  VK_CHECK_BOOL(result, "vulkanmaterialShaderUpdateObject failed");
 
   //test slap to draw geometry
-  ObjectShaderUse(&ctx, &ctx.objectShader);
+  materialShaderUse(&ctx, &ctx.materialShader);
 
   VulkanCommandBuffer* commandBuffer = &ctx.graphicsCommandBuffers[ctx.imageIndex];
   VkDeviceSize offsets[1] = {0};
@@ -591,8 +590,7 @@ createCommandBuffers()
   if(!ctx.graphicsCommandBuffers){
     ctx.graphicsCommandBuffers  = DARRAY_RESERVE(VulkanCommandBuffer, ctx.swapchain.imageCount);
     for(u32 i = 0; i < ctx.swapchain.imageCount; ++i){
-      kzeroMemory(&ctx.graphicsCommandBuffers[i],
-                  sizeof(VulkanCommandBuffer));
+      MEMZERO(&ctx.graphicsCommandBuffers[i]);
     }
   }
 
@@ -678,56 +676,60 @@ uploadDataRange(VulkanContext* ctx, VkCommandPool pool, VkFence fence ,
   return result;
 }
 
-void rendererCreateTexture(const char* name, bool autoRelease, i32 width, u32 height, i32 channelCount, const u8* pixels, u32 hasTransparency, Texture* tex){
+b8
+rendererCreateTexture(const char* name, i32 width, u32 height, i32 channelCount, const u8* pixels, u32 hasTransparency, Texture* tex)
+{
   TRACEFUNCTION;
+  KTRACE("CREATING TEXTURE '%s'", name);
 
-  tex->width  = width;
-  tex->height = height;
-  tex->channelCount = channelCount;
-  tex->generation = INVALID_ID;
+  VkResult result = !VK_SUCCESS;
+  tex->width          = width;
+  tex->height         = height;
+  tex->channelCount   = channelCount;
+  tex->generation     = INVALID_ID;
+  tex->internalData   = (VulkanTextureData*)kallocate(sizeof(VulkanTextureData), MEMORY_TAG_TEXTURE);
 
-  //----------------------ALLOCATE THE ITERNAL DATA---------------------
-  KINFO("ALLOCATING TEXTURE INTERNAL DATA");
-  UINFO("ALLOCATING TEXTURE INTERNAL DATA");
-  tex->internalData       = (VulkanTextureData*)kallocate(sizeof(VulkanTextureData), MEMORY_TAG_TEXTURE);
-  VulkanTextureData* data = (VulkanTextureData*)tex->internalData;
-  VkDeviceSize  imageSize = width* height * channelCount;
+  VulkanTextureData*    data    = (VulkanTextureData*)tex->internalData;
+  VkDeviceSize          imgsize = width* height * channelCount;
+  VkFormat              imgfmt  =  VK_FORMAT_R8G8B8A8_UNORM;
+  VulkanBuffer          staging = {0};
+  VkBufferUsageFlags    usage   = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+  VkMemoryPropertyFlags memflags= VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 
-  VkFormat imageFormat =  VK_FORMAT_R8G8B8A8_UNORM;
-
-  //----------------------CREATING A STAGING BUFFER AND LOAD IT--------
-  VkBufferUsageFlags usage  = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
-  VkMemoryPropertyFlags memflags  = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-  VulkanBuffer staging;
-  vulkanBufferCreate(&ctx, imageSize, usage, memflags, true, &staging);
-  vulkanBufferLoadData(&ctx, &staging, 0, imageSize, 0, pixels);
-
-  KINFO("CREATING TEXTURE IMAGE");
-  UINFO("CREATING TEXTURE IMAGE");
+  KINFO("CREATING TEXTURE IMAGE FOR '%s'", name);
   {
-    vulkanImageCreate(&ctx, VK_IMAGE_TYPE_2D, width, height, imageFormat, VK_IMAGE_TILING_OPTIMAL,
-                      VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-                      VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-                      true,
-                      VK_IMAGE_ASPECT_COLOR_BIT,
-                      &data->image);
+    result  = vulkanBufferCreate(&ctx, imgsize, usage, memflags, true, &staging);
+    VK_CHECK_BOOL(result, "FAILED TO CREATE VulkanBuffer FOR TEXTURE '%s'",name);
 
-    VulkanCommandBuffer tempbuffer;
+    result  = vulkanBufferLoadData(&ctx, &staging, 0, imgsize, 0, pixels);
+    VK_CHECK_BOOL(result, "FAILED TO LOAD VulkanBuffer   FOR TEXTURE '%s'",name);
+
+    result  = vulkanImageCreate(&ctx, VK_IMAGE_TYPE_2D, width, height, imgfmt, VK_IMAGE_TILING_OPTIMAL,
+                                VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+                                true,
+                                VK_IMAGE_ASPECT_COLOR_BIT,
+                                &data->image);
+    VK_CHECK_BOOL(result, "FAILED TO CREATE VulkanImage FOR TEXTURE '%s'",name);
+
+    VulkanCommandBuffer tempbuf;
     VkCommandPool pool  = ctx.device.graphicsCommandPool;
     VkQueue       queue = ctx.device.graphicsQueue;
-    vulkanCommandBufferStartSingleUse(&ctx, pool, &tempbuffer);
 
-    //------------------------------------------------------------------------------FORMAT--------------------------------
-    vulkanImageTransitionLayout(&ctx, &tempbuffer, &data->image, imageFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-    vulkanImageCopyFromBuffer(&ctx, &data->image, staging.handle, &tempbuffer);
+    result = vulkanCommandBufferStartSingleUse(&ctx, pool, &tempbuf);
+    VK_CHECK_BOOL(result, "FAILED TO START SINGLE USE COMMAND BUFFER FOR CREATING TEXTURE");
 
-    vulkanImageTransitionLayout(&ctx, &tempbuffer, &data->image, imageFormat, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    vulkanImageTransitionLayout (&ctx, &tempbuf, &data->image, imgfmt, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+    vulkanImageCopyFromBuffer   (&ctx, &data->image, staging.handle, &tempbuf);
+    vulkanImageTransitionLayout (&ctx, &tempbuf, &data->image, imgfmt, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-    vulkanCommandBufferStopSingleUse(&ctx, pool, &tempbuffer, queue);
+    result = vulkanCommandBufferStopSingleUse(&ctx, pool, &tempbuf, queue);
+    VK_CHECK_BOOL(result, "FAILED TO STOP SINGLE USE COMMAND BUFFER FOR CREATING TEXTURE");
+
     vulkanBufferDestroy(&ctx, &staging);
   }
-  KINFO("CREATING TEXTURE SAMPLER");
-  UINFO("CREATING TEXTURE SAMPLER");
+
+  KINFO("CREATING TEXTURE SAMPLER FOR '%s'", name);
   {
     VkSamplerCreateInfo samplerInfo = {VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO};
 
@@ -752,28 +754,31 @@ void rendererCreateTexture(const char* name, bool autoRelease, i32 width, u32 he
     samplerInfo.maxLod            = 0.0f;
 
     VkResult result = vkCreateSampler(ctx.device.logicalDevice, &samplerInfo, ctx.allocator, &data->sampler);
-    if(result != VK_SUCCESS){
-      UFATAL("FAILED TO CREATE IMAGE SAMPLER");
-      return;
-    }
+    VK_CHECK_BOOL(result, "FAILED TO CREATE IMAGE SAMPLER FOR '%s'",name);
+
     tex->hasTransparency  = hasTransparency;
     tex->generation++;
   }
-  KINFO("SUCCESFULLY CREATED TEXTURE");
-  UINFO("SUCCESFULLY CREATED TEXTURE");
+  KINFO("SUCCESFULLY CREATED TEXTURE '%s'",name);
+  return true;
 }
 
-void rendererDestroyTexture(Texture *tex){
+void 
+rendererDestroyTexture(Texture *tex)
+{
   TRACEFUNCTION;
+  KDEBUG("DESTROYING TEXTURE ");
 
   vkDeviceWaitIdle(ctx.device.logicalDevice);
+
   VulkanTextureData* data  = (VulkanTextureData*) tex->internalData;
   if(data){
-  vulkanImageDestroy(&ctx, &data->image);
-  kzeroMemory(&data->image, sizeof(VulkanImage));
-  vkDestroySampler(ctx.device.logicalDevice, data->sampler, ctx.allocator);
-  data->sampler = 0;
-  kfree(tex->internalData, sizeof(VulkanTextureData), MEMORY_TAG_TEXTURE);
+    vulkanImageDestroy(&ctx, &data->image);
+    MEMZERO(&data->image);
+
+    vkDestroySampler(ctx.device.logicalDevice, data->sampler, ctx.allocator);
+    data->sampler = 0;
+    kfree(tex->internalData, sizeof(VulkanTextureData), MEMORY_TAG_TEXTURE);
   }
-  kzeroMemory(tex, sizeof(Texture));
+  MEMZERO(tex);
 }

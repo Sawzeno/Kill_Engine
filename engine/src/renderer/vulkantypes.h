@@ -5,27 +5,31 @@
 
 #include  <vulkan/vulkan_core.h>
 
-#define   OBJECT_SHADER_STAGE_COUNT 2
-#define   OBJECT_SHADER_GLOBAL_DESCRIPTOR_COUNT 1
-#define   OBJECT_SHADER_LOCAL_DESCRIPTOR_COUNT  2 
+#define   MATERIAL_SHADER_STAGE_COUNT 2
+#define   MATERIAL_SHADER_GLOBAL_DESCRIPTOR_COUNT 1
+#define   MATERIAL_SHADER_LOCAL_DESCRIPTOR_COUNT  2 
 #define   MAX_LOCAL_OBJECT_COUNT 1024
 
 typedef struct  VulkanDevice        VulkanDevice;
 typedef struct  VulkanContext       VulkanContext;
+typedef struct  VulkanFence         VulkanFence;
+
 typedef struct  VulkanSwapchainSupportInfo VulkanSwapchainSupportInfo;
 typedef struct  VulkanSwapchain     VulkanSwapchain;
+
+typedef struct  VulkanBuffer        VulkanBuffer;
 typedef struct  VulkanImage         VulkanImage;
 typedef struct  VulkanRenderPass    VulkanRenderPass;
 typedef struct  VulkanCommandBuffer VulkanCommandBuffer;
 typedef struct  VulkanFrameBuffer   VulkanFrameBuffer;
-typedef struct  VulkanFence         VulkanFence;
-typedef struct  VulkanObjectShader  VulkanObjectShader;
+
+typedef struct  VulkanPipeline      VulkanPipeline;
+typedef struct  VulkanShaderStage   VulkanShaderStage;
+typedef struct  VulkanMaterialShader  VulkanMaterialShader;
+
+typedef struct  VulkanTextureData   VulkanTextureData;
 typedef struct  LocalObjectState    LocalObjectState;
 typedef struct  vulkanDescriptorState vulkanDescriptorState;
-typedef struct  VulkanShaderStage   VulkanShaderStage;
-typedef struct  VulkanPipeline      VulkanPipeline;
-typedef struct  VulkanBuffer        VulkanBuffer;
-typedef struct  VulkanTextureData   VulkanTextureData;
 
 //---------------------------------------------------------------------------ENUMS
 typedef enum  VulkanRenderPassState {
@@ -56,7 +60,6 @@ struct VulkanBuffer{
   u32                   memoryPropertyFlags;
 };
 
-//---------------------------------------------------------------------------STRUCTS
 struct VulkanShaderStage{
   VkShaderModuleCreateInfo  createInfo;
   VkShaderModule            handle;
@@ -70,19 +73,20 @@ struct VulkanPipeline{
 
 struct vulkanDescriptorState{
   u32 generations[3];
+  u32 ids[3];
 };
 
 struct LocalObjectState {
   VkDescriptorSet descriptorSets[3];
-  vulkanDescriptorState descriptorStates[OBJECT_SHADER_LOCAL_DESCRIPTOR_COUNT];
+  vulkanDescriptorState descriptorStates[MATERIAL_SHADER_LOCAL_DESCRIPTOR_COUNT];
 };
 
-struct VulkanObjectShader{
-  VulkanShaderStage         stages[OBJECT_SHADER_STAGE_COUNT];    //vertex , fragment shader stages
+struct VulkanMaterialShader{
+  VulkanShaderStage         stages[MATERIAL_SHADER_STAGE_COUNT];
 
   VkDescriptorPool          globalDescriptorPool;
   VkDescriptorSetLayout     globalDescriptorSetLayout;
-  VulkanBuffer              globalUniformBuffer;                  //Glboal Uniform Buffer
+  VulkanBuffer              globalUniformBuffer;
   
   VkDescriptorPool          localDescriptorPool;
   VkDescriptorSetLayout     localDescriptorSetLayout;
@@ -91,10 +95,9 @@ struct VulkanObjectShader{
 
   LocalObjectState          localObjectStates[MAX_LOCAL_OBJECT_COUNT];
 
-  VkDescriptorSet           globalDescriptorSets[3];//bundling of these uniforms              //One Descriptor Set per Frame, max 3 for triple buffering
-  GlobalUniformObject       globalUBO;                  //Global Uniform Object -> feed this to a buffer which is tied to a descriptor ->> uploaded to GPU
+  VkDescriptorSet           globalDescriptorSets[3];//One Descriptor Set per Frame
+  GlobalUniformObject       globalUBO;              //Feed this to a buffer which is tied to a descriptor
 
-  Texture*                  defaultDiffuse;
   VulkanPipeline            pipeline; 
 };
 
@@ -132,7 +135,6 @@ struct VulkanImage{
   u32                           height;             //height of image
 };
 
-//------------------------------------------------------------------------------------------------------------------------TEXTURE DATA
 struct VulkanTextureData{
   VulkanImage                   image;
   VkSampler                     sampler;
@@ -179,6 +181,7 @@ struct VulkanDevice{
 };
 
 struct VulkanContext{
+  f32                           deltaTime;
   u32                           frameBufferWidth;    // Framebuffer width
   u32                           frameBufferHeight;   // Framebuffer height
   u64                           frameBufferSizeGeneration;
@@ -199,12 +202,11 @@ struct VulkanContext{
   u32                           inFlightFenceCount;  
   VulkanFence*                  inFlightFences;
   VulkanFence**                 imagesInFlight;        //holds pointer to fences which exist and aew owned elsewhere
-  VulkanObjectShader            objectShader;
+  VulkanMaterialShader          materialShader;
   VulkanBuffer                  objectVertexBuffer;
   VulkanBuffer                  objectIndexBuffer;
   u64                           geometryVertexOffset;
   u64                           geometryIndexOffset;
-  f32                           deltaTime;
   i32(*findMemoryIndex)(u32 typeFilter, u32 propertyFlags);
 };
 

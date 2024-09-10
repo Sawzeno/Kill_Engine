@@ -754,7 +754,6 @@ bool proc_wait(int p){
   return true;
 }
 
-
 bool cmd_run_sync(NobStrings* commands){
 
   INITCLOCK;

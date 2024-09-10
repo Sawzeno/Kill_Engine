@@ -134,3 +134,8 @@ void    shutdownLogging   ();
 u16     consoleLog        (               LOG_LEVEL level , const char* message , ...);
 u16     fileLog           (LOG_TYPE type, LOG_LEVEL level , const char* message , ...);
 u16     Uwrite            (u16 limit, const char *format , ...); 
+
+void bk1();
+void bk2();
+void bk3();
+void bk4();

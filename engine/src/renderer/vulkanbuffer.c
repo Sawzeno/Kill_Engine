@@ -5,12 +5,13 @@
 #include  "core/logger.h"
 #include  "core/kmemory.h"
 
-VkResult  vulkanBufferCreate      (VulkanContext*         context,
-                                   u64                    size,
-                                   VkBufferUsageFlagBits  usage,
-                                   u32                    memoryPropertyFlags,
-                                   bool                   bindOnCreate,
-                                   VulkanBuffer*          outBuffer)
+VkResult  
+vulkanBufferCreate      (VulkanContext*         context,
+                         u64                    size,
+                         VkBufferUsageFlagBits  usage,
+                         u32                    memoryPropertyFlags,
+                         bool                   bindOnCreate,
+                         VulkanBuffer*          outBuffer)
 {
   TRACEFUNCTION;
 
@@ -51,18 +52,20 @@ VkResult  vulkanBufferCreate      (VulkanContext*         context,
     result = vulkanBufferBind(context, outBuffer, 0);
     VK_CHECK_RESULT(result, "failed to bind vulkan buffer on create");
   }
-  KINFO("VULKAN BUFFER CREATED");
+  KDEBUG("VULKAN BUFFER CREATED");
   return result;
 }
 
-VkResult  vulkanBufferResize      (VulkanContext*         context,
-                                   u64                    newSize,
-                                   VulkanBuffer*          buffer,
-                                   VkQueue                queue,
-                                   VkCommandPool          commandPool){
+VkResult  
+vulkanBufferResize      (VulkanContext*         context,
+                         u64                    newSize,
+                         VulkanBuffer*          buffer,
+                         VkQueue                queue,
+                         VkCommandPool          commandPool)
+{
   TRACEFUNCTION;
   VkResult  result    =!VK_SUCCESS;
-  // create new buffer
+
   VkBufferCreateInfo bufferCreateInfo = {VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
   bufferCreateInfo.size = newSize;
   bufferCreateInfo.usage= buffer->usage;
@@ -113,24 +116,25 @@ VkResult  vulkanBufferResize      (VulkanContext*         context,
   buffer->memory    = newMemory;
   buffer->handle    = newBuffer;
 
-  KINFO("VULKAN BUFFER RESIZED");
+  KDEBUG("VULKAN BUFFER RESIZED");
   return result;
 }
 
-VkResult  vulkanBufferBind        (VulkanContext*         context,
-                                   VulkanBuffer*          buffer,
-                                   u64                    offset){
+VkResult  
+vulkanBufferBind        (VulkanContext*         context,
+                         VulkanBuffer*          buffer,
+                         u64                    offset){
   TRACEFUNCTION;
   VkResult result =    vkBindBufferMemory(context->device.logicalDevice, buffer->handle, buffer->memory, offset);
   VK_CHECK_VERBOSE(result, "vkBindBufferMemory failed");
-  KINFO("VULKAN BUFFER BINDED");
+  KDEBUG("VULKAN BUFFER BINDED");
   return result;
 }
 
-VkResult  vulkanBufferDestroy     (VulkanContext*         context,
-                                   VulkanBuffer*          buffer){
+void
+vulkanBufferDestroy     (VulkanContext*         context,
+                         VulkanBuffer*          buffer){
   TRACEFUNCTION;
-  KDEBUG("context : %p buffer : %p",context, buffer);
   if(buffer->memory){
     vkFreeMemory(context->device.logicalDevice, buffer->memory, context->allocator);
     buffer->memory  = 0;
@@ -143,16 +147,18 @@ VkResult  vulkanBufferDestroy     (VulkanContext*         context,
   buffer->usage     = 0;
   buffer->isLocked  = 0;
 
-  KINFO("VULKAN BUFFER DESTROYED");
-  return VK_SUCCESS;
+  KDEBUG("VULKAN BUFFER DESTROYED");
 }
 
-void*     vulkanBufferLockMemory  (VulkanContext*         context,
-                                   VulkanBuffer*          buffer,
-                                   u64                    offset,
-                                   u64                    size,
-                                   u32                    flags){
+void*     
+vulkanBufferLockMemory  (VulkanContext*         context,
+                         VulkanBuffer*          buffer,
+                         u64                    offset,
+                         u64                    size,
+                         u32                    flags)
+{
 TRACEFUNCTION;
+
   void* data;
   if(vkMapMemory(context->device.logicalDevice, buffer->memory, offset,  size,  flags, &data) != VK_SUCCESS){
     KERROR("vkMapMemory failed in vulkanBufferLockMemory");
@@ -161,20 +167,26 @@ TRACEFUNCTION;
   return data;
 }
 
-VkResult  vulkanBufferUnlockMemory(VulkanContext*         context,
-                                   VulkanBuffer*          buffer){
+VkResult  
+vulkanBufferUnlockMemory(VulkanContext*         context,
+                         VulkanBuffer*          buffer)
+{
 TRACEFUNCTION;
+
   vkUnmapMemory(context->device.logicalDevice, buffer->memory);
   return VK_SUCCESS;
 }
 
-VkResult  vulkanBufferLoadData    (VulkanContext*         context,
-                                   VulkanBuffer*          buffer,
-                                   u64                    offset,
-                                   u64                    size,
-                                   u32                    flags,
-                                   const void*            data){
+VkResult  
+vulkanBufferLoadData    (VulkanContext*         context,
+                         VulkanBuffer*          buffer,
+                         u64                    offset,
+                         u64                    size,
+                         u32                    flags,
+                         const void*            data)
+{
   TRACEFUNCTION;
+
   void* dataptr;
   VkResult result = vkMapMemory(context->device.logicalDevice, buffer->memory, offset, size, flags, &dataptr);
   VK_CHECK_VERBOSE(result, "vkMapMemory failed in vulkanBufferLoadData");
@@ -184,15 +196,17 @@ VkResult  vulkanBufferLoadData    (VulkanContext*         context,
   return VK_SUCCESS;
 }
 
-VkResult  vulkanBufferCopyTo      (VulkanContext*         context,
-                                   VkCommandPool          pool,
-                                   VkFence                fence,
-                                   VkQueue                queue,
-                                   VkBuffer               source,
-                                   u64                    sourceOffset,
-                                   VkBuffer               dest,
-                                   u64                    destOffset,
-                                   u64                    size){
+VkResult  
+vulkanBufferCopyTo      (VulkanContext*         context,
+                         VkCommandPool          pool,
+                         VkFence                fence,
+                         VkQueue                queue,
+                         VkBuffer               source,
+                         u64                    sourceOffset,
+                         VkBuffer               dest,
+                         u64                    destOffset,
+                         u64                    size)
+{
   TRACEFUNCTION;
   VkResult result = !VK_SUCCESS;
 

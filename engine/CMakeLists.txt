@@ -24,6 +24,7 @@ PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/
 )
 
+
 # Find Vulkan and link
 find_package(Vulkan REQUIRED)
 if (Vulkan_FOUND)

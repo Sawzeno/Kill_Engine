@@ -8,20 +8,20 @@ struct Hashtable{
   u64   elementSize;
   void* memory;
   u32   elementCount;
-  bool  isPointerType;
+  b8  isPointerType;
 };
 
-void hashtableCreate  (u64 elementSize, u32 elementCount, void* memory, bool isPointerType, Hashtable* outHashtable);
+void hashtableCreate  (u64 elementSize, u32 elementCount, void* memory, b8 isPointerType, Hashtable* outHashtable);
 
 void hashtableDestroy (Hashtable* hashtable);
 
-bool hashtableSet     (Hashtable* hashtable, const char* name, void*  value);
+b8 hashtableSet     (Hashtable* hashtable, const char* name, void*  value);
 
-bool hashtableGet     (Hashtable* hashtable, const char* name, void*  outValue);
+b8 hashtableGet     (Hashtable* hashtable, const char* name, void*  outValue);
 
-bool hashtableSetPtr  (Hashtable* hashtable, const char* name, void** value);
+b8 hashtableSetPtr  (Hashtable* hashtable, const char* name, void** value);
 
-bool hashtableGetPtr  (Hashtable* hashtable, const char* name, void** outValue);
+b8 hashtableGetPtr  (Hashtable* hashtable, const char* name, void** outValue);
 
 // fills the entries in the hashtable with the given value
-bool hashtableFill    (Hashtable* hashtable, void* value);
+b8 hashtableFill    (Hashtable* hashtable, void* value);

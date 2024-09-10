@@ -16,7 +16,7 @@ VkResult  vulkanBufferResize      (VulkanContext*         context,
                                    VkQueue                queue,
                                    VkCommandPool          commandPool);
 
-VkResult  vulkanBufferDestroy     (VulkanContext*         context,
+void      vulkanBufferDestroy     (VulkanContext*         context,
                                    VulkanBuffer*          buffer);
 
 // you cannot use buffer htat is not bound

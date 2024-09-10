@@ -141,7 +141,7 @@ void* kzeroMemory(void* block , u64 size){
 }
 
 void* kcopyMemory(void* dest , const void* source , u64 size, const char* func){
-  MDEBUG("%s  : %p copied to %p",source,dest,func);
+  MDEBUG("%s  : %p copied to %p",func,source,dest);
   return memcpy(dest , source , size);
 }
 

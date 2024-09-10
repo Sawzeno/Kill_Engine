@@ -20,16 +20,16 @@ char* kstrdup   (const char* str){
   return strdup(str);
 }
 
-bool  kstrequal (const char* str0, const char* str1){
+b8  kstrequal (const char* str0, const char* str1){
 
-  if(str0 == NULL || str1 == NULL) return false;
-  return (strcmp(str0, str1) == 0) ?  true :  false;
+  if(str0 == NULL || str1 == NULL) return FALSE;
+  return (strcmp(str0, str1) == 0) ?  TRUE :  FALSE;
 }
 
-bool  kstrequali(const char* str0, const char* str1){
+b8  kstrequali(const char* str0, const char* str1){
 
-  if(str0 == NULL || str1 == NULL) return false;
-  return (strcasecmp(str0, str1) == 0)? true : false;
+  if(str0 == NULL || str1 == NULL) return FALSE;
+  return (strcasecmp(str0, str1) == 0)? TRUE : FALSE;
 }
 
 i64 kstrfmt(char* dst, const char* fmt, ...){
@@ -130,95 +130,95 @@ void ksubstr(char* dst, const char* src, i32 start, i32 len) {
 
 
 
-bool  kstrtovec4(char* str,Vec4* v){
-  if( str == NULL) return false;
+b8  kstrtovec4(char* str,Vec4* v){
+  if( str == NULL) return FALSE;
 
   kzeroMemory(v, sizeof(Vec4)); 
   i32 result = sscanf(str, "%f %f %f %f",&v->x,&v->y,&v->z,&v->w);
   return result != -1;
 }
 
-bool  kstrtovec3(char* str,Vec3* v){
-  if( str == NULL) return false;
+b8  kstrtovec3(char* str,Vec3* v){
+  if( str == NULL) return FALSE;
 
   kzeroMemory(v, sizeof(Vec3)); 
   i32 result = sscanf(str, "%f %f %f",&v->x,&v->y,&v->z);
   return result != -1;
 }
 
-bool  kstrtovec2(char* str,Vec2* v){
-  if( str == NULL) return false;
+b8  kstrtovec2(char* str,Vec2* v){
+  if( str == NULL) return FALSE;
 
   kzeroMemory(v, sizeof(Vec2)); 
   i32 result = sscanf(str, "%f %f",&v->x,&v->y);
   return result != -1;
 }
 
-bool  kstrtof32 (char* str, f32* f){
-  if( str == NULL) return false;
+b8  kstrtof32 (char* str, f32* f){
+  if( str == NULL) return FALSE;
   *f = 0;
   i32 result = sscanf(str, "%f", f);
   return result != -1;
 }
 
-bool  kstrtof64 (char* str, f64* f){
-  if( str == NULL) return false;
+b8  kstrtof64 (char* str, f64* f){
+  if( str == NULL) return FALSE;
   *f = 0;
   i32 result = sscanf(str, "%lf", f);
   return result != -1;
 }
 
-bool  kstrtoi64 (char* str, i64* i){
-  if( str == NULL) return false;
+b8  kstrtoi64 (char* str, i64* i){
+  if( str == NULL) return FALSE;
   *i = 0;
   i32 result = sscanf(str, "%"SCNi64"", i);
   return result != -1;
 }
-bool  kstrtoi32 (char* str, i32* i){
-  if( str == NULL) return false;
+b8  kstrtoi32 (char* str, i32* i){
+  if( str == NULL) return FALSE;
   *i = 0;
   i32 result = sscanf(str, "%"SCNi32"", i);
   return result != -1;
 }
-bool  kstrtoi16 (char* str, i16* i){
-  if( str == NULL) return false;
+b8  kstrtoi16 (char* str, i16* i){
+  if( str == NULL) return FALSE;
   *i = 0;
   i32 result = sscanf(str, "%"SCNi16"", i);
   return result != -1;
 }
-bool  kstrtoi8  (char* str , i8* i){
-  if( str == NULL) return false;
+b8  kstrtoi8  (char* str , i8* i){
+  if( str == NULL) return FALSE;
   *i = 0;
   i32 result = sscanf(str, "%"SCNi8"", i);
   return result != -1;
 }
-bool  kstrtou64 (char* str,u64*u){
-  if( str == NULL) return false;
+b8  kstrtou64 (char* str,u64*u){
+  if( str == NULL) return FALSE;
   *u = 0;
   i32 result = sscanf(str, "%"SCNu64"",u);
   return result != -1;
 }
-bool  kstrtou32 (char* str,u32*u){
-  if( str == NULL) return false;
+b8  kstrtou32 (char* str,u32*u){
+  if( str == NULL) return FALSE;
   *u = 0;
   i32 result = sscanf(str, "%"SCNu32"",u);
   return result != -1;
 }
-bool  kstrtou16 (char* str,u16*u){
-  if( str == NULL) return false;
+b8  kstrtou16 (char* str,u16*u){
+  if( str == NULL) return FALSE;
   *u = 0;
   i32 result = sscanf(str, "%"SCNu16"",u);
   return result != -1;
 }
-bool  kstrtou8  (char* str ,u8*u){
-  if( str == NULL) return false;
+b8  kstrtou8  (char* str ,u8*u){
+  if( str == NULL) return FALSE;
   *u = 0;
   i32 result = sscanf(str, "%"SCNu8"",u);
   return result != -1;
 }
 
-bool  kstrtobool(char* str,bool* b){
-  if( str == NULL) return false;
+b8  kstrtob8(char* str,b8* b){
+  if( str == NULL) return FALSE;
   return kstrequal(str, "1") || kstrequali(str, "true") ;
 }
 

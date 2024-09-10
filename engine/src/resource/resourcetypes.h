@@ -14,3 +14,7 @@ struct Texture{
   u32 hasTransparency;
   u32 generation;
 };
+
+// Function to print the texture information
+void printTextureInfo(const struct Texture* texture, const char* str);
+

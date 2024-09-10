@@ -21,3 +21,4 @@ u8    platformPumpMessages    ();
 void  platformSleep           (u64 ms);
 f64   platformGetAbsoluteTime ();
 
+void platformKeyRepeatOff();

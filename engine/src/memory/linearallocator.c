@@ -35,16 +35,17 @@ void linearAllocatorDestroy(LinearAllocator* allocator){
 
 void* linearAllocatorAllocate(LinearAllocator* allocator, u64 size){
   TRACEMEMORY;
-  MDEBUG("allocator : %p size :"PRIu64"",allocator,size);
+  MDEBUG("size :%"PRIu64"",size);
   if(allocator && allocator->memory){
-    if(allocator->allocated + size > allocator->totalSize){
-      u64 remaining = allocator->totalSize - allocator->allocated;
-      MDEBUG("hinear allocator tried to allcoate %llu bytes, only %llu remaining", size, remaining);
-      return NULL;
-    }
-    void* block = allocator->memory + allocator->allocated;
-    allocator->allocated  += size;
-    return block;
+    return calloc(1, size * 64);
+    // if(allocator->allocated + size > allocator->totalSize){
+    //   u64 remaining = allocator->totalSize - allocator->allocated;
+    //   MDEBUG("hinear allocator tried to allcoate %llu bytes, only %llu remaining", size, remaining);
+    //   return NULL;
+    // }
+    // void* block = allocator->memory + allocator->allocated;
+    // allocator->allocated  += size;
+    // return block;
   }
   KERROR("LINEAR ALLOCATOR FAILED , PROBABLY NOT INITALIZED");
   return NULL;

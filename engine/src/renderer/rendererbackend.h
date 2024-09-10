@@ -10,7 +10,6 @@ typedef struct  RendererBackend RendererBackend;
 typedef struct  RenderPacket    RenderPacket;
 
 struct RendererBackend{
-  Texture*  defaultDiffuse;
   u32   applicationWidth;
   u32   applicationHeight;
   char* applicationName;
@@ -35,6 +34,6 @@ bool rendererBackendShutdown   ();
 
 bool updateObject              (GeomteryRenderData data);
 
-void rendererCreateTexture(const char* name, bool autoRelease, i32 width, u32 height, i32 channelCount, const u8* pixels, u32 hasTransparency, Texture* tex);
+b8   rendererCreateTexture(const char* name, i32 width, u32 height, i32 channelCount, const u8* pixels, u32 hasTransparency, Texture* tex);
 
 void rendererDestroyTexture( Texture* tex);
