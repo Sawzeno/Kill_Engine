@@ -10,6 +10,6 @@ struct Clock{
   f64 elapsed;
 };
 
-u8  clockStart  (Clock* clock);
-u8  clockUpdate (Clock* clock);
-u8  clockStop   (Clock* clock);
+b32  clockStart  (Clock* clock);
+b32  clockUpdate (Clock* clock);
+b32  clockStop   (Clock* clock);

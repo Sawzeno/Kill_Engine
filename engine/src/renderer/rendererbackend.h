@@ -20,20 +20,24 @@ struct RenderPacket{
   f32 deltaTime;
 };
 
-bool rendererBackendInitialize (RendererBackend* backend);
+b32   rendererBackendInitialize (RendererBackend* backend);
 
-bool rendererBackendBeginFrame (f32 deltaTime);
+b32   rendererBackendBeginFrame (f32 deltaTime);
 
-bool rendererBackendEndFrame   (f32 deltaTime);
+b32   rendererBackendEndFrame   (f32 deltaTime);
 
-bool rendererUpdateGlobalState (Mat4 projection, Mat4 view, Vec3 viewPosition, Vec4 ambientColor, i32 mode);
+b32   rendererUpdateGlobalState (Mat4 projection, Mat4 view, Vec3 viewPosition, Vec4 ambientColor, i32 mode);
 
-bool rendererBackendResized    (u16 width, u16 height);
+b32   rendererBackendResized    (u16 width, u16 height);
 
-bool rendererBackendShutdown   ();
+b32   rendererBackendShutdown   ();
 
-bool updateObject              (GeomteryRenderData data);
+b32   rendererUpdateObject      (GeomteryRenderData data);
 
-b8   rendererCreateTexture(const char* name, i32 width, u32 height, i32 channelCount, const u8* pixels, u32 hasTransparency, Texture* tex);
+b32   rendererCreateTexture     (Texture* texture, const u8* pixels);
 
-void rendererDestroyTexture( Texture* tex);
+void  rendererDestroyTexture    (Texture* texture);
+
+b32   rendererCreateMaterial    (Material* material);
+
+void  rendererDestroyMaterial   (Material* material);

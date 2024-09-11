@@ -5,14 +5,14 @@
 
 
 VkResult  vulkanFenceCreate(VulkanContext* context,
-                            u8  createSignaled,
+                            b32  createSignaled,
                             VulkanFence* outFence){
   TRACEFUNCTION;
   VkResult result = {0};
   // make sure to signal the fence 
   outFence->isSignaled = createSignaled;
   VkFenceCreateInfo createInfo = {VK_STRUCTURE_TYPE_FENCE_CREATE_INFO};
-  if(outFence->isSignaled){
+  if(outFence->isSignaled == TRUE){
     createInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
   }
   result  = vkCreateFence(context->device.logicalDevice,
@@ -27,27 +27,27 @@ VkResult  vulkanFenceCreate(VulkanContext* context,
 VkResult  vulkanFenceDestroy(VulkanContext* context, 
                              VulkanFence* fence){
   TRACEFUNCTION;
-  if(fence->handle){
+  if(fence->handle != NULL){
     vkDestroyFence(context->device.logicalDevice, fence->handle, context->allocator);
   }
-  fence->isSignaled = false;
+  fence->isSignaled = FALSE;
   return VK_SUCCESS;
 }
 
-u8  vulkanFenceWait(VulkanContext* context, VulkanFence* fence, u64 timeoutNS){
+b32  vulkanFenceWait(VulkanContext* context, VulkanFence* fence, u64 timeoutNS){
   VkResult  result  = {0};
   if(!fence->isSignaled)
   {
     result  = vkWaitForFences(context->device.logicalDevice,
                               1,
                               &fence->handle,
-                              true,
+                              TRUE,
                               timeoutNS);
     switch(result){                                                
       case VK_SUCCESS:                                              
-        fence->isSignaled = true;                                   
+        fence->isSignaled = TRUE;                                   
         KINFO("FENCE WAS SUCCESSFULLY EXECUTED");                   
-        return true;                                                
+        return TRUE;                                                
       case VK_TIMEOUT:                                              
         KWARN("vkFenceWait -> FENCE TIMED OUT");                    
         break;                                                      
@@ -66,9 +66,9 @@ u8  vulkanFenceWait(VulkanContext* context, VulkanFence* fence, u64 timeoutNS){
     }
   }else{
     KINFO("FENCE IS ALREADY BUSY");
-    return true;
+    return TRUE;
   }
-  return false;
+  return FALSE;
 }
 
 VkResult  vulkanFenceReset(VulkanContext* context, VulkanFence* fence){
@@ -77,7 +77,7 @@ VkResult  vulkanFenceReset(VulkanContext* context, VulkanFence* fence){
   if(fence->isSignaled){
     result  = vkResetFences(context->device.logicalDevice, 1, &fence->handle);
     VK_CHECK_VERBOSE(result , "vkResetFences failed");
-    fence->isSignaled = false;
+    fence->isSignaled = FALSE;
   }
   return result;
 }

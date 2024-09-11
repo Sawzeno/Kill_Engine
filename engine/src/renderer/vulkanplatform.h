@@ -4,7 +4,7 @@
 
 typedef struct VulkanContext VulkanContext;
 
-u8  vulkanSurfaceCreate(VulkanContext* context);
+b32  vulkanSurfaceCreate(VulkanContext* context);
 
 
 

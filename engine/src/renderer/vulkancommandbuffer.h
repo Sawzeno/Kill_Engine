@@ -3,7 +3,7 @@
 
 VkResult  vulkanCommandBufferAllocate         (VulkanContext* context,
                                                VkCommandPool pool,//pool we want to allocate our buffer from
-                                               u8 isPrimary,
+                                               b32 isPrimary,
                                                VulkanCommandBuffer* outCommandBuffer);
 
 VkResult  vulkanCommandBufferFree             (VulkanContext* context,
@@ -11,9 +11,9 @@ VkResult  vulkanCommandBufferFree             (VulkanContext* context,
                                                VulkanCommandBuffer* commandBuffer);
 
 VkResult  vulkanCommandBufferBegin            (VulkanCommandBuffer* commandBuffer,
-                                               u8 isSingleUse,
-                                               u8 isRenderPassContinue,
-                                               u8 isSimultaneousUse);
+                                               b32 isSingleUse,
+                                               b32 isRenderPassContinue,
+                                               b32 isSimultaneousUse);
 
 VkResult  vulkanCommandBufferEnd              (VulkanCommandBuffer* commandBuffer);
 

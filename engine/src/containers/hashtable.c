@@ -16,7 +16,7 @@ u64 hashName(const char* name, u32 elementCount){
 }
 
 void
-hashtableCreate  (u64 elementSize, u32 elementCount, void* memory, b8 isPointerType, Hashtable* outHashtable){
+hashtableCreate  (u64 elementSize, u32 elementCount, void* memory, b32 isPointerType, Hashtable* outHashtable){
   if(!memory || !outHashtable){
     KERROR("hashTableCreate requires a valid pointer to memory and outHashtable");
   }
@@ -41,7 +41,7 @@ hashtableDestroy (Hashtable* hashtable){
   }
 }
 
-b8
+b32
 hashtableSet     (Hashtable* hashtable, const char* name, void*  value){
   if(!hashtable || !name || !value){
     KERROR("hashtableSet requires hashtable, name and value to exist");
@@ -60,7 +60,7 @@ hashtableSet     (Hashtable* hashtable, const char* name, void*  value){
   return TRUE;
 }
 
-b8
+b32
 hashtableGet     (Hashtable* hashtable, const char* name, void*  outValue){
   if(!hashtable || !name || !outValue){
     KERROR("hashtableSet requires hashtable, name and outValue to exist");
@@ -80,7 +80,7 @@ hashtableGet     (Hashtable* hashtable, const char* name, void*  outValue){
   return TRUE;
 }
 
-b8
+b32
 hashtableSetPtr  (Hashtable* hashtable, const char* name, void** value){
   if(!hashtable || !name){
     KERROR("hashtableSet requires hashtable, name and to exist");
@@ -99,7 +99,7 @@ hashtableSetPtr  (Hashtable* hashtable, const char* name, void** value){
   return TRUE;
 }
 
-b8
+b32
 hashtableGetPtr  (Hashtable* hashtable, const char* name, void** outValue){
   if(!hashtable || !name || !outValue){
     KERROR("hashtableSet requires hashtable, name and outValue to exist");
@@ -119,7 +119,7 @@ hashtableGetPtr  (Hashtable* hashtable, const char* name, void** outValue){
 }
 
 // fills the entries in the hashtable with the given value
-b8
+b32
 hashtableFill    (Hashtable* hashtable, void* value){
   if(!hashtable || ! value){
     KERROR("hashtableFill requires a valid pointer to a hashtable a fill value");

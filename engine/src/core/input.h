@@ -141,28 +141,28 @@ typedef enum keys {
 } keys;
 
 //Input setup
-bool  initializeInput    (u64* memoryRequirement, void* state);
-void  shutdownInput     ();
+bool  inputSystemInitialize    (u64* memoryRequirement, void* state);
+void  inputSystemShutdown     ();
 void  inputUpdate       (f64 deltaTime);
 
 //Keyboard input
 void  testInput(char c);
-u8    inputIsKeyUp      (keys key);
-u8    inputIsKeyDown    (keys key);
-u8    inputWasKeyUp     (keys key);
-u8    inputWasKeyDown   (keys key);
+b32   inputIsKeyUp      (keys key);
+b32   inputIsKeyDown    (keys key);
+b32   inputWasKeyUp     (keys key);
+b32   inputWasKeyDown   (keys key);
 
-void  inputProcessKey   (keys key ,u8 pressed);
+void  inputProcessKey   (keys key ,b32 pressed);
 
 
 //Mouse Input
-u8    inputIsMouseUp    (buttons button);
-u8    inputIsMouseDown  (buttons button);
-u8    inputwasMouseUp   (buttons button);
-u8    inputWasMouseDown (buttons button);
+b32   inputIsMouseUp    (buttons button);
+b32   inputIsMouseDown  (buttons button);
+b32   inputwasMouseUp   (buttons button);
+b32   inputWasMouseDown (buttons button);
 void  inputGetMousePos  (i32* x , i32* y);
 void  inputGetPrevMousePos  (i32*x , i32* y);  
 
-void  inputProcessButton    (buttons button , u8 pressed);
+void  inputProcessButton    (buttons button , b32 pressed);
 void  inputProcessMouseMove (i16 x , i16 y);
 void  inputProcessMouseWheel(i8 z_delta);

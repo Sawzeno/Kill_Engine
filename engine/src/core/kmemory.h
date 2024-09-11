@@ -27,8 +27,8 @@ typedef enum Memory_tag{
 }Memory_tag;
 
 
-bool  initializeMemory(u64*  memoryRequirement, void* state);
-void  shutdownMemory();
+bool  memorySystemInitialize(u64*  memoryRequirement, void* state);
+void  memorySystemShutdown();
 
 void* kallocate(u64 size , Memory_tag tag);
 

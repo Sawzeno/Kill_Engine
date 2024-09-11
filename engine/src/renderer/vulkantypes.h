@@ -8,28 +8,27 @@
 #define   MATERIAL_SHADER_STAGE_COUNT 2
 #define   MATERIAL_SHADER_GLOBAL_DESCRIPTOR_COUNT 1
 #define   MATERIAL_SHADER_LOCAL_DESCRIPTOR_COUNT  2 
-#define   MAX_LOCAL_OBJECT_COUNT 1024
+#define   MATERIAL_SHADER_SAMPLER_COUNT 1
+#define   MAX_MATERIAL_COUNT 1024
 
-typedef struct  VulkanDevice        VulkanDevice;
 typedef struct  VulkanContext       VulkanContext;
-typedef struct  VulkanFence         VulkanFence;
-
+typedef struct  VulkanDevice        VulkanDevice;
 typedef struct  VulkanSwapchainSupportInfo VulkanSwapchainSupportInfo;
 typedef struct  VulkanSwapchain     VulkanSwapchain;
+typedef struct  VulkanCommandBuffer VulkanCommandBuffer;
+typedef struct  VulkanRenderPass    VulkanRenderPass;
+typedef struct  VulkanFrameBuffer   VulkanFrameBuffer;
+typedef struct  VulkanFence         VulkanFence;
 
 typedef struct  VulkanBuffer        VulkanBuffer;
 typedef struct  VulkanImage         VulkanImage;
-typedef struct  VulkanRenderPass    VulkanRenderPass;
-typedef struct  VulkanCommandBuffer VulkanCommandBuffer;
-typedef struct  VulkanFrameBuffer   VulkanFrameBuffer;
-
 typedef struct  VulkanPipeline      VulkanPipeline;
 typedef struct  VulkanShaderStage   VulkanShaderStage;
-typedef struct  VulkanMaterialShader  VulkanMaterialShader;
-
-typedef struct  VulkanTextureData   VulkanTextureData;
-typedef struct  LocalObjectState    LocalObjectState;
 typedef struct  vulkanDescriptorState vulkanDescriptorState;
+
+typedef struct  MaterialShader          MaterialShader;
+typedef struct  MaterialInstanceState   MaterialInstanceState;
+typedef struct  TextureData             TextureData;
 
 //---------------------------------------------------------------------------ENUMS
 typedef enum  VulkanRenderPassState {
@@ -39,7 +38,7 @@ typedef enum  VulkanRenderPassState {
   RECORDING_ENDED,
   SUBMITTED,
   NOT_ALLOCATED
-}VulkanRenderPassState;
+}VULKAN_RENDER_PASS_STATE;
 
 typedef enum VulkanCommandBufferState{
   COMMAND_BUFFER_STATE_READY,
@@ -48,7 +47,7 @@ typedef enum VulkanCommandBufferState{
   COMMAND_BUFFER_STATE_RECORDING_ENDED,
   COMMAND_BUFFER_STATE_SUBMITTED,
   COMMAND_BUFFER_STATE_NOT_ALLOCATED,
-}VulkanCommandBufferState;
+}VULKAN_COMMAND_BUFFER_STATE;
 
 struct VulkanBuffer{
   u64                   totalSize;
@@ -76,13 +75,20 @@ struct vulkanDescriptorState{
   u32 ids[3];
 };
 
-struct LocalObjectState {
+struct MaterialInstanceState {
   VkDescriptorSet descriptorSets[3];
   vulkanDescriptorState descriptorStates[MATERIAL_SHADER_LOCAL_DESCRIPTOR_COUNT];
 };
 
-struct VulkanMaterialShader{
+struct MaterialShader{
+  MaterialInstanceState     instanceStates[MAX_MATERIAL_COUNT];
   VulkanShaderStage         stages[MATERIAL_SHADER_STAGE_COUNT];
+
+  VulkanPipeline            pipeline; 
+  TEXTURE_USE               samplerUses[MATERIAL_SHADER_SAMPLER_COUNT];
+
+  VkDescriptorSet           globalDescriptorSets[3];
+  GlobalUniformObject       globalUBO;              //Feed this to a buffer which is tied to a descriptor
 
   VkDescriptorPool          globalDescriptorPool;
   VkDescriptorSetLayout     globalDescriptorSetLayout;
@@ -92,18 +98,11 @@ struct VulkanMaterialShader{
   VkDescriptorSetLayout     localDescriptorSetLayout;
   VulkanBuffer              localUniformBuffer;
   u32                       localUniformBufferIndex;
-
-  LocalObjectState          localObjectStates[MAX_LOCAL_OBJECT_COUNT];
-
-  VkDescriptorSet           globalDescriptorSets[3];//One Descriptor Set per Frame
-  GlobalUniformObject       globalUBO;              //Feed this to a buffer which is tied to a descriptor
-
-  VulkanPipeline            pipeline; 
 };
 
 struct VulkanFence{
   VkFence                   handle;
-  u8                        isSignaled;
+  b32                        isSignaled;
 };
 
 struct  VulkanFrameBuffer{
@@ -115,7 +114,7 @@ struct  VulkanFrameBuffer{
 
 struct VulkanCommandBuffer{
   VkCommandBuffer               handle;
-  VulkanCommandBufferState      state;
+  VULKAN_COMMAND_BUFFER_STATE      state;
 };
 
 struct VulkanRenderPass{
@@ -124,7 +123,7 @@ struct VulkanRenderPass{
   f32                           r, g, b, a;
   f32                           depth;
   u32                           stencil;
-  VulkanRenderPassState         state;
+  VULKAN_RENDER_PASS_STATE         state;
 };
 
 struct VulkanImage{
@@ -135,7 +134,7 @@ struct VulkanImage{
   u32                           height;             //height of image
 };
 
-struct VulkanTextureData{
+struct TextureData{
   VulkanImage                   image;
   VkSampler                     sampler;
 };
@@ -143,7 +142,7 @@ struct VulkanTextureData{
 struct VulkanSwapchain{
   VkSwapchainKHR                handle;             // Handle to the swapchain object
   VkSurfaceFormatKHR            imageFormat;        // Format of the swapchain images
-  u16                           maxFramesInFlight;  // Maximum number of frames that can be processed simultaneously
+  u32                           maxFramesInFlight;  // Maximum number of frames that can be processed simultaneously
   u32                           imageCount;         // Number of images in the swapchain
   VkImage*                      images;             // Array of swapchain images
   VkImageView*                  views;              // Array of image views corresponding to the swapchain images
@@ -181,32 +180,32 @@ struct VulkanDevice{
 };
 
 struct VulkanContext{
-  f32                           deltaTime;
-  u32                           frameBufferWidth;    // Framebuffer width
-  u32                           frameBufferHeight;   // Framebuffer height
-  u64                           frameBufferSizeGeneration;
-  u64                           frameBufferSizeLastGeneration;
   VkInstance                    instance;            // Handle to the Vulkan instance
+  VulkanDevice                  device;              // Vulkan device (physical and logical)
   VkAllocationCallbacks*        allocator;           // Custom memory allocator (optional)
   VkDebugUtilsMessengerEXT      debugMessenger;     // Handle to the debug messenger
-  VulkanDevice                  device;              // Vulkan device (physical and logical)
   VkSurfaceKHR                  surface;             // Handle to the window surface
   VulkanSwapchain               swapchain;           // Swapchain for image presentation
   VulkanRenderPass              mainRenderPass;      // mainRenderPass for creation
-  u32                           imageIndex;          // Index of the current swapchain image
-  u32                           currentFrame;        // Index of the current frame being processed
-  u8                            recreatingSwapchain; // if swapchain is beign recreated or not
   VulkanCommandBuffer*          graphicsCommandBuffers;//darray
   VkSemaphore*                  imageAvailableSemaphores;//darray
   VkSemaphore*                  queueCompleteSemaphores;//darray
-  u32                           inFlightFenceCount;  
   VulkanFence*                  inFlightFences;
   VulkanFence**                 imagesInFlight;        //holds pointer to fences which exist and aew owned elsewhere
-  VulkanMaterialShader          materialShader;
+  MaterialShader                materialShader;
   VulkanBuffer                  objectVertexBuffer;
   VulkanBuffer                  objectIndexBuffer;
+  u64                           frameBufferSizeGeneration;
+  u64                           frameBufferSizeLastGeneration;
   u64                           geometryVertexOffset;
   u64                           geometryIndexOffset;
-  i32(*findMemoryIndex)(u32 typeFilter, u32 propertyFlags);
+  u32                           inFlightFenceCount;  
+  f32                           deltaTime;
+  u32                           frameBufferWidth;    // Framebuffer width
+  u32                           frameBufferHeight;   // Framebuffer height
+  u32                           imageIndex;          // Index of the current swapchain image
+  u32                           currentFrame;        // Index of the current frame being processed
+  b32                           recreatingSwapchain; // if swapchain is beign recreated or not
+  i32                           (*findMemoryIndex)(u32 typeFilter, u32 propertyFlags);
 };
 

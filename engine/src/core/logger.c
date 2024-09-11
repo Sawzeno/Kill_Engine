@@ -56,7 +56,7 @@ static LoggerSystemState* loggingSystemStatePtr;
 bool createLogFiles(void);
 FILE* createLogFile(const char* filename);
 
-bool  initializeLogging (u64* memoryRequirement, void* state){
+bool  loggingSystemInitialize (u64* memoryRequirement, void* state){
   *memoryRequirement = sizeof(LoggerSystemState);
   if(state  == NULL){
     UDEBUG("LOGGING SUBSYSTEM : STATE PASSED AS NULL");
@@ -97,7 +97,7 @@ bool  initializeLogging (u64* memoryRequirement, void* state){
   return true;
 }
 
-void shutdownLogging(){
+void loggingSystemShutdown(){
   KINFO("LOGGING SYSTEM SHUTDOWN");
   if(LOG_FILES_ENABLED == 1){
     fclose(loggingSystemStatePtr->engineLogFile);

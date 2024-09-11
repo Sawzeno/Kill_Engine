@@ -113,7 +113,7 @@ VkResult createSwapchain  (VulkanContext*   context,
 
   KTRACE("-----------------IMAGE FORMATS------------------");
   //choose a swap surface format
-  u8 found = false;
+  b32 found = FALSE;
   for(u32 i = 0; i < context->device.swapchainSupport.formatCount; ++i){
     VkSurfaceFormatKHR format  = context->device.swapchainSupport.formats[i];
     //prefferedFormats
@@ -121,7 +121,7 @@ VkResult createSwapchain  (VulkanContext*   context,
        format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
     {
       swapchain->imageFormat = format;
-      found = true;
+      found = TRUE;
       break;
     }
   }
@@ -163,8 +163,8 @@ VkResult createSwapchain  (VulkanContext*   context,
   VkExtent2D min  = context->device.swapchainSupport.capabilities.maxImageExtent;
   VkExtent2D max  = context->device.swapchainSupport.capabilities.maxImageExtent;
 
-  swapchainExtent.width = UCLAMP(swapchainExtent.width , min.width , max.width);
-  swapchainExtent.height= UCLAMP(swapchainExtent.height, min.height, max.height);
+  swapchainExtent.width = KCLAMP(swapchainExtent.width , min.width , max.width);
+  swapchainExtent.height= KCLAMP(swapchainExtent.height, min.height, max.height);
 
   KINFO("swapchain extent : width, height : %i, %i",swapchainExtent.width, swapchainExtent.height);
   //clamp the value of image count to max allowed by device
@@ -264,7 +264,7 @@ VkResult createSwapchain  (VulkanContext*   context,
                     VK_IMAGE_TILING_OPTIMAL,
                     VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
                     VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-                    true,
+                    TRUE,
                     VK_IMAGE_ASPECT_DEPTH_BIT,
                     &swapchain->depthAttachment);
 

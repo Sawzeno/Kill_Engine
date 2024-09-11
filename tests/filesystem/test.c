@@ -1,4 +1,7 @@
 #include "core/filesystem.h"
+#include "core/kstring.h"
+#include "math/kmath.h"
+#include "systems/materialsystem.h"
 #include "testmanager.h"
 #include "core/kmemory.h"
 
@@ -12,7 +15,7 @@ u8 openFile(){
 
   UTEST("%s",fh.path);
   UTEST("%d",fh.size);
-  
+
   return true;
 }
 
@@ -46,85 +49,86 @@ u8  readLine(){
   return true;
 }
 
-//
-// b8    loadConfigurationFile (){
-//   TRACEFUNCTION;
-//
-//   MaterialConfig config;
-//   const char* path  = "/home/gon/Developer/Kill_Engine/assets/materials/test.kill";
-//
-//   FileHandle  f;
-//   if(!KFileOpen(path, FILE_MODE_READ, false, &f)){
-//     KERROR("FAILED TO OPEN FILE '%s'", path);
-//     return false;
-//   }
-//   char* linebuf = calloc(512, sizeof(char));
-//   i64 linelen = 0;
-//   u64 lineNum = 1;
-//   while(KFileReadLine(&f, &linebuf, 512)){
-//     char* trimmed = kstrtrim(linebuf);
-//     linelen = kstrlen(trimmed);
-//
-//     //skip blank lines and comments
-//     if(linelen < 1 || trimmed[0] == '#'){
-//       lineNum++;
-//       continue;
-//     }
-//     //spilt into var/value
-//     i32 equalIndex  = kstrindex(trimmed, '=');
-//     if(equalIndex == -1){
-//       KWARN("potential formatting issue found in file '%s' : '=' not found, skipping line %zu", path, lineNum);
-//       lineNum++;
-//       continue;
-//     }
-//     char rawVarName[64]=  {0};
-//     ksubstr(rawVarName, trimmed, 0, equalIndex);
-//     char* trimmedVarName  = kstrtrim(rawVarName);
-//
-//     char rawValue[446];
-//     kzeroMemory(rawValue, sizeof(char) * 446);
-//     ksubstr(rawValue, trimmed, equalIndex + 1, -1);
-//     char* trimmedValue  = kstrtrim(rawValue);
-//
-//     //process the value
-//     if(kstrequal(trimmedVarName, "version")){
-//       //TODO
-//     }else if(kstrequali(trimmedVarName, "name")){
-//       kstrncpy(config.name,trimmedValue, 512);
-//     }else if(kstrequali(trimmedVarName, "diffuseMapName")){
-//       kstrncpy(config.diffuseMapName, trimmedValue, 512);
-//     }else if(kstrequali(trimmedVarName, "diffuseColor")){
-//       if(!kstrtovec4(trimmedValue, &config.diffuseColor)){
-//         KWARN("Error parsing diffuseColor in file '%s', suing defualt of white instead", path);
-//         config.diffuseColor = vec4One();
-//       }
-//     }
-//     // TODO more fields
-//     // clear the line buffer
-//     kzeroMemory(linebuf, sizeof(char) * 512);
-//     lineNum++;
-//   }
-//
-//   Vec4* v = &config.diffuseColor;
-//   UINFO("name: %s", config.name);
-//   UINFO("diffuseMapName: %s", config.diffuseMapName);
-//   UINFO("autoRelease : %d", config.autoRelease);
-//   UINFO("x: %f, y: %f, y: %f, z: %f", v->x, v->y, v->z, v->w);
-//   free(linebuf);
-//   KFileClose(&f);
-//   return true;
-// }
+
+u8 loadConfigurationFile (){
+
+  MaterialConfig config;
+  const char* path  = "/home/gon/Developer/Kill_Engine/assets/materials/test.kill";
+
+  FileHandle  f;
+  if(KFileOpen(path, FILE_MODE_READ, false, &f) != KFILE_RET_SUCCESS)
+  {
+    UTEST("FAILED TO OPEN FILE '%s'", path);
+    return FALSE;
+  }
+  //TODO CHANGE THIS 
+  char* buffer    = calloc(1024, sizeof(char));
+  char* line      = buffer;
+  char* varname   = line + 512;
+  char* varvalue  = varname + 448 ;
+  i64 linelen = 0;
+  u64 lineNum = 1;
+  while(KFileReadLine(&f, &line, 512) == KFILE_RET_SUCCESS)
+  {
+    char* trimmed = kstrtrim(line);
+    linelen = kstrlen(trimmed);
+    if(linelen < 1 || trimmed[0] == '#')    //skip blank lines and comments
+    {
+      lineNum++;
+      continue;
+    }
+    i32 equalIndex  = kstrindex(trimmed, '=');    //spilt into var/value
+    if(equalIndex < 0)
+    {
+      KWARN("potential formatting issue found in file '%s' : '=' not found, skipping line %zu", path, lineNum);
+      lineNum++;
+      continue;
+    }
+    ksubstr(varname, trimmed, 0, equalIndex);  // get value name
+    char* trimmedVarName  = kstrtrim(varname);
+
+    ksubstr(varvalue, trimmed, equalIndex + 1, -1);// gat value
+    char* trimmedValue  = kstrtrim(varvalue);
+
+    if(kstrequali(trimmedVarName, "name"))
+    {
+      kstrncpy(config.name,trimmedValue, 512);
+    }else if(kstrequali(trimmedVarName, "diffuse_map_name"))
+    {
+      kstrncpy(config.diffuseMapName, trimmedValue, 512);
+    }else if(kstrequali(trimmedVarName, "diffuse_color"))
+    {
+      if(!kstrtovec4(trimmedValue, &config.diffuseColor))
+      {
+        KWARN("Error parsing diffuseColor in file '%s', suing defualt of white instead", path);
+        config.diffuseColor = vec4One();
+      }
+    }
+    kzeroMemory(buffer, sizeof(char) * 1024);
+    lineNum++;
+  }
+
+  Vec4* v = &config.diffuseColor;
+  UINFO("name: %s", config.name);
+  UINFO("diffuseMapName: %s", config.diffuseMapName);
+  UINFO("autoRelease : %d", config.autoRelease);
+  UINFO("x: %f, y: %f, y: %f, z: %f", v->x, v->y, v->z, v->w);
+  free(buffer);
+  KFileClose(&f);
+
+  return TRUE;
+}
 
 
 int main(void){
   testManagerInit();   
 
-  testManagerRegisterTest(openFile,"KfileOpen");
-  testManagerRegisterTest(readFile,"KFileReadFull");
-  testManagerRegisterTest(readLine,"KFileReadLine");
-  testManagerRegisterTest(closeFile,"KFileClose");
-  // testManagerRegisterTest(loadConfigurationFile,"loadConfigurationFile");
+  // testManagerRegisterTest(openFile,"KfileOpen");
+  // testManagerRegisterTest(readFile,"KFileReadFull");
+  // testManagerRegisterTest(readLine,"KFileReadLine");
+  // testManagerRegisterTest(closeFile,"KFileClose");
 
+  testManagerRegisterTest(loadConfigurationFile,"loadConfigurationFile");
   testManagerRunTests();
   return 0;
 }

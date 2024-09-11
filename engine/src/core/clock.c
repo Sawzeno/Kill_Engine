@@ -3,20 +3,20 @@
 #include  "defines.h"
 #include  "core/platform.h"
 
-u8  clockStart(Clock *clock){
+b32  clockStart(Clock *clock){
   clock->start  = platformGetAbsoluteTime();
   clock->elapsed= 0;
-  return true;
+  return TRUE;
 }
 
-u8  clockUpdate(Clock *clock){
+b32  clockUpdate(Clock *clock){
   if(clock->start != 0){
     clock->elapsed  = clock->start  - platformGetAbsoluteTime();
   }
-  return true;
+  return TRUE;
 }
 
-u8 clockStop(Clock* clock){
+b32 clockStop(Clock* clock){
   clock->start = 0;
-  return true;
+  return TRUE;
 }

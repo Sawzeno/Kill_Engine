@@ -19,28 +19,27 @@ struct EventCodeEntry{
 #define MAX_MESSAGE_CODES 128
 
 struct EventSystemState{
-  //lookup table for event codes
   EventCodeEntry registered[MAX_MESSAGE_CODES];
 };
 
 static EventSystemState* eventSystemStatePtr;
 
-bool  initializeEvents(u64* memoryRequirement, void* state ){
+b32  eventsSystemInitialize(u64* memoryRequirement, void* state){
 TRACEFUNCTION;
 EDEBUG("memoryRequirement :%"PRIu64" state : %p",*memoryRequirement, state);
 
   *memoryRequirement = sizeof(EventSystemState);
   if(state == NULL){
     EDEBUG("EVENT SUBSYSTEM : STATE PASSED AS NULL");
-    return true;
+    return TRUE;
   } 
   eventSystemStatePtr = state;
 
   KINFO("EVENT SUBSYSTEM INITIALIZED !");
-  return true;
+  return TRUE;
 }
 
-void  shutdownEvents(){
+void  eventsSystemShutdown(){
   TRACEFUNCTION;
   KINFO("EVENT SUBSYSTEM SHUTDOWN !");
   for(u16 i = 0 ; i < MAX_MESSAGE_CODES ; ++i){
@@ -52,11 +51,11 @@ void  shutdownEvents(){
   eventSystemStatePtr = NULL;
 }
 
-u8 eventRegister(u16 code, void* listener, pfnOnEvent onEvent) {
+b32 eventRegister(u16 code, void* listener, pfnOnEvent onEvent) {
   TRACEEVENT;
   EDEBUG("code : %"PRIu16" listener : %p onEvent : %p",code,listener,onEvent);
   if(eventSystemStatePtr  ==  NULL){
-    return false;
+    return FALSE;
   }
   if(eventSystemStatePtr->registered[code].events == 0) {
     eventSystemStatePtr->registered[code].events = DARRAY_CREATE(RegisteredEvent);
@@ -66,7 +65,7 @@ u8 eventRegister(u16 code, void* listener, pfnOnEvent onEvent) {
   for(u64 i = 0; i < registeredCount; ++i) {
     if(eventSystemStatePtr->registered[code].events[i].listener == listener) {
       UREPORT("TODO");
-      return false;
+      return FALSE;
     }
   }
 
@@ -76,54 +75,46 @@ u8 eventRegister(u16 code, void* listener, pfnOnEvent onEvent) {
   event.callback = onEvent;
   DARRAY_PUSH(eventSystemStatePtr->registered[code].events, event);
 
-  return true;
+  return TRUE;
 }
 
-u8 eventUnregister(u16 code, void* listener, pfnOnEvent onEvent) {
+b32
+eventUnregister(u16 code, void* listener, pfnOnEvent onEvent)
+{
   TRACEEVENT;
   EDEBUG("code : %"PRIu16" listener : %p onEvent : %p",code,listener,onEvent);
-  if(eventSystemStatePtr  ==  NULL){
-    return false;
-  }
-  // On nothing is registered for the code, boot out.
-  if(eventSystemStatePtr->registered[code].events == 0) {
-    // TODO: warn
-    return false;
-  }
+
+  if(eventSystemStatePtr  ==  NULL) return FALSE;
+  if(eventSystemStatePtr->registered[code].events == 0) return FALSE;
 
   u64 registeredCount = DARRAY_LENGTH(eventSystemStatePtr->registered[code].events);
-  for(u64 i = 0; i < registeredCount; ++i) {
+  for(u64 i = 0; i < registeredCount; ++i) 
+  {
     RegisteredEvent e = eventSystemStatePtr->registered[code].events[i];
-    if(e.listener == listener && e.callback == onEvent) {
-      // Found one, remove it
+    if(e.listener == listener && e.callback == onEvent) 
+    {
       RegisteredEvent popped_event;
       DARRAY_POPAT(eventSystemStatePtr->registered[code].events, i, &popped_event);
-      return true;
+      return TRUE;
     }
   }
-
-  // Not found.
-  return false;
+  return FALSE;
 }
 
-u8 eventFire(u16 code, void* sender, EventContext context) {
+b32 
+eventFire(u16 code, void* sender, EventContext context) 
+{
   TRACEEVENT;
   EDEBUG("code : %"PRIu16" sender : %p context : %p",code,sender,context);
-  if(eventSystemStatePtr  ==  NULL){
-    return false;
-  }
-  // If nothing is registered for the code, boot out.
-  if(eventSystemStatePtr->registered[code].events == 0) {
-    return false;
-  }
+
+  if(eventSystemStatePtr  ==  NULL) return FALSE;
+  if(eventSystemStatePtr->registered[code].events == 0) return FALSE;
+
   u64 registeredCount = DARRAY_LENGTH(eventSystemStatePtr->registered[code].events);
-  for(u64 i = 0; i < registeredCount; ++i) {
+  for(u64 i = 0; i < registeredCount; ++i) 
+  {
     RegisteredEvent e = eventSystemStatePtr->registered[code].events[i];
-    if(e.callback(code, sender, e.listener, context)) {
-      // Message has been handled, do not send to other listeners.
-      return true;
-    }
+    if(e.callback(code, sender, e.listener, context)) return TRUE;
   }
-  // Not found.
-  return false;
+  return FALSE;
 }

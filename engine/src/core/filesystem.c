@@ -2,10 +2,9 @@
 #include  "core/logger.h"
 #include  "core/kstring.h"
 
-#include <errno.h>
+#include  <errno.h>
 #include  <stdio.h>
-
-#include <string.h>
+#include  <string.h>
 #include  <sys/stat.h>
 #include  <unistd.h>
 
@@ -21,79 +20,31 @@ char* getExecutablePath() {
     return NULL;
 }
 
-char* getAbsolutePath(const char* relativePath) {
-    char* exePath = getExecutablePath();
-    if (!exePath) {
-        perror("Error getting executable path");
-        return NULL;
-    }
-    
-    // Find the directory of the executable
-    char* lastSlash = strrchr(exePath, '/');
-    if (!lastSlash) {
-        perror("Error parsing executable path");
-        return NULL;
-    }
-
-    // Determine the base directory by removing the `build/testbed` part
-    size_t baseDirLength = lastSlash - exePath + 1;
-    char* baseDir = (char*)malloc(baseDirLength + 1);
-    if (!baseDir) {
-        perror("Error allocating memory");
-        return NULL;
-    }
-    strncpy(baseDir, exePath, baseDirLength);
-    baseDir[baseDirLength] = '\0';
-
-    // Move up two directories from the build/testbed directory
-    char* parentDir = strrchr(baseDir, '/');
-    if (parentDir) {
-        parentDir[1] = '\0';  // Truncate the path to go up one level
-        parentDir = strrchr(baseDir, '/');
-        if (parentDir) {
-            parentDir[1] = '\0';  // Truncate the path to go up another level
-        }
-    }
-
-    // Append the relative path to the base directory
-    size_t fullPathLength = strlen(baseDir) + strlen("assets/textures/") + strlen(relativePath) + 1;
-    char* fullPath = (char*)malloc(fullPathLength);
-    if (!fullPath) {
-        perror("Error allocating memory");
-        free(baseDir);
-        return NULL;
-    }
-    snprintf(fullPath, fullPathLength, "%sassets/textures/%s", baseDir, relativePath);
-
-    free(baseDir);  // Free the baseDir memory after use
-    return fullPath;
-}
-
-bool
+b32
 KDirExists(const char* path){
   TRACEFUNCTION;
 
   struct stat stats;
   stat(path , &stats);
-  return S_ISDIR(stats.st_mode)? true : false;
+  return S_ISDIR(stats.st_mode)? TRUE : FALSE;
 }
 
-bool
+b32
 KMakeDir(const char* path){
   TRACEFUNCTION;
 
-  bool exists = KDirExists(path);
+  b32 exists = KDirExists(path);
   if(exists){
     KINFO("'%s' ALREAD EXISTS",path);
-    return true;
+    return TRUE;
   }else{
     KWARN("PATH NOT EXIST , MAKING '%s'",path);
     if(mkdir(path, S_IFDIR) < 0){
       KERROR("COULD NOT MAKE %s  : %s",path,strerror(errno));
-      return false;
+      return FALSE;
     }else{
       KINFO("CREATED '%s'",path);
-      return true;
+      return TRUE;
     }
   }
 }
@@ -116,29 +67,29 @@ KGetFileType(const char* path){
   }
 }
 
-bool
+b32
 KFileExists(const char* path){
   TRACEFUNCTION;
 
   if(access(path, F_OK)){
-    return true;
+    return TRUE;
   }else{
     KERROR("FILE DOES NOT EXIST : %s",path);
     UERROR("FILE DOES NOT EXIST : %s",path);
-    return false;
+    return FALSE;
   }
 }
 
 KFILE_RET
-KFileOpen(const char* path, KFILE_MODES  mode, bool binary, FileHandle* outHandle){
+KFileOpen(const char* path, KFILE_MODE  mode, b32 binary, FileHandle* outHandle){
   TRACEFUNCTION;
 
   outHandle->path     = path;
   outHandle->handle   = NULL;
-  outHandle->is_valid = false;
+  outHandle->is_valid = FALSE;
   outHandle->size     = 0;
   char* modestr       = NULL;
-  bool result         = false;
+  b32 result         = FALSE;
 
   if        ((mode & FILE_MODE_READ) != 0 && (mode & FILE_MODE_WRITE) != 0){
     // UDEBUG("FILE MODE READ & WRITE!");
@@ -158,15 +109,15 @@ KFileOpen(const char* path, KFILE_MODES  mode, bool binary, FileHandle* outHandl
   }
   FILE* file = fopen(path, modestr);
 
-  if(file == NULL)                  RETURN_DEFER(false);
-  if(fseek(file, 0, SEEK_END) < 0)  RETURN_DEFER(false);
+  if(file == NULL)                  RETURN_DEFER(FALSE);
+  if(fseek(file, 0, SEEK_END) < 0)  RETURN_DEFER(FALSE);
   u64 filesize  = ftell(file);
-  if(filesize < 0)                  RETURN_DEFER(false);
-  if(fseek(file, 0, SEEK_SET) < 0)  RETURN_DEFER(false);
-  result = true;
+  if(filesize < 0)                  RETURN_DEFER(FALSE);
+  if(fseek(file, 0, SEEK_SET) < 0)  RETURN_DEFER(FALSE);
+  result = TRUE;
   outHandle->handle   = file;
   outHandle->size     = filesize;
-  outHandle->is_valid = true;
+  outHandle->is_valid = TRUE;
 
 defer:
   if(!result){
@@ -188,7 +139,7 @@ KFileClose(FileHandle* handle){
     handle->path    = NULL;
     handle->size    = 0;
     handle->handle  = NULL;
-    handle->is_valid= false;
+    handle->is_valid= FALSE;
     return KFILE_RET_SUCCESS;
   }
   KERROR("FILE HANDLE PASSED AS NULL");
@@ -199,8 +150,8 @@ KFILE_RET
 FileReadSizeBytes(FileHandle* handle, size_t dataSize, void* data){
   TRACEFUNCTION;
 
-  if(data == NULL) return KFILE_RET_NULL_BUFFER;
-  if(handle == NULL || !handle->is_valid) return KFILE_RET_NULL_HANDLE;
+  if(data == NULL) return KFILE_RET_NULL_PARAM;
+  if(handle == NULL || !handle->is_valid) return KFILE_RET_NULL_PARAM;
   FILE* h = (FILE*)handle->handle;
 
   if (dataSize > UINT16_MAX) {
@@ -231,8 +182,8 @@ KFILE_RET
 KFileReadAllBytes(FileHandle* handle, u8** outBytes){
   TRACEFUNCTION;
 
-  if(outBytes == NULL) return KFILE_RET_NULL_BUFFER;
-  if(handle == NULL || !handle->is_valid) return KFILE_RET_NULL_HANDLE;
+  if(outBytes == NULL) return KFILE_RET_NULL_PARAM;
+  if(handle == NULL || !handle->is_valid) return KFILE_RET_NULL_PARAM;
   FILE* h = (FILE*)handle->handle;
   size_t bytesRead;
 
@@ -259,9 +210,9 @@ KFILE_RET
 KFileReadLine(FileHandle* handle, char** lineBuffer, u64 size){
   TRACEFUNCTION;
 
-  bool result = false;
-  if(lineBuffer == NULL) return KFILE_RET_NULL_BUFFER;
-  if(handle == NULL || !handle->is_valid) return KFILE_RET_NULL_HANDLE;
+  b32 result = FALSE;
+  if(lineBuffer == NULL) return KFILE_RET_NULL_PARAM;
+  if(handle == NULL || !handle->is_valid) return KFILE_RET_NULL_PARAM;
   FILE* h = (FILE*)handle->handle;
 
   if (fgets(*lineBuffer, size, h) != NULL) {
@@ -284,8 +235,8 @@ KFILE_RET
 KFileWriteSize(FileHandle* handle, size_t dataSize, const void* data, u64* outBytesWritten){
   TRACEFUNCTION;
 
-  if(data == NULL) return KFILE_RET_NULL_BUFFER;
-  if(handle == NULL || !handle->is_valid) return KFILE_RET_NULL_HANDLE;
+  if(data == NULL) return KFILE_RET_NULL_PARAM;
+  if(handle == NULL || !handle->is_valid) return KFILE_RET_NULL_PARAM;
   FILE* h = (FILE*)handle->handle;
 
   if (dataSize > UINT16_MAX) {

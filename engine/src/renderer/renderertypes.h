@@ -4,7 +4,7 @@
 #include  "resource/resourcetypes.h"
 
 typedef struct GlobalUniformObject GlobalUniformObject;
-typedef struct LocalUniformObject  LocalUniformObject;
+typedef struct MaterialUniformObject  MaterialUniformObject;
 typedef struct GeomteryRenderData  GeomteryRenderData;
 
 struct GlobalUniformObject{
@@ -14,7 +14,7 @@ struct GlobalUniformObject{
   Mat4 reserved1; //padded
 };
 
-struct LocalUniformObject{
+struct MaterialUniformObject{
   Vec4 diffuseColor;    // 16 bytes
   Vec4 reserved0;
   Vec4 reserved1;
@@ -22,7 +22,6 @@ struct LocalUniformObject{
 };
 
 struct GeomteryRenderData{
-  u32 objectId;
   Mat4 model;
-  Texture* textures[16];
+  Material* material;
 };

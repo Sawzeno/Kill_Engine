@@ -7,7 +7,7 @@
 
 VkResult  vulkanCommandBufferAllocate(VulkanContext* context,
                                       VkCommandPool pool ,//pool we want to allocate our buffer from
-                                      u8 isPrimary,
+                                      b32 isPrimary,
                                       VulkanCommandBuffer* outCommandBuffer){
 TRACEFUNCTION;
   VkResult result   = {0};
@@ -43,9 +43,9 @@ TRACEFUNCTION;
 }
 
 VkResult  vulkanCommandBufferBegin  (VulkanCommandBuffer* commandBuffer,
-                                     u8 isSingleUse,
-                                     u8 isRenderPassContinue,
-                                     u8 isSimultaneousUse){
+                                     b32 isSingleUse,
+                                     b32 isRenderPassContinue,
+                                     b32 isSimultaneousUse){
   TRACEFUNCTION;
   VkResult result = {0};
   VkCommandBufferBeginInfo beginInfo  = {VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};

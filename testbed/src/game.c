@@ -1,6 +1,5 @@
 #include  "game.h"
 
-#include  "core/kmemory.h"
 #include  "core/logger.h"
 #include  "core/input.h"  
 #include  "core/events.h"
@@ -112,7 +111,7 @@ void cameraPitch(GameState* state, f32 amount){
   TRACEFUNCTION;
   state->cameraEuler.x  +=  amount;
   f32 limit = degToRad(89.0f);
-  state->cameraEuler.x  = UCLAMP(state->cameraEuler.x, -limit, limit);
+  state->cameraEuler.x  = KCLAMP(state->cameraEuler.x, -limit, limit);
   state->cameraViewDirty =  true;
 }
 

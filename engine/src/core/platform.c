@@ -38,39 +38,39 @@ struct PlatformSystemState{
 
 static  PlatformSystemState*  state;
 
-u8    translateKeycode(u32 xKeycode);
+b32    translateKeycode(u32 xKeycode);
 
-bool  initializePlatform(u64* memoryRequirement, void* statePtr){
-TRACEFUNCTION;
-KDEBUG("memoryRequirement :%"PRIu64" state : %p",*memoryRequirement, statePtr);
+b32  platformIntialize(u64* memoryRequirement, void* statePtr){
+  TRACEFUNCTION;
+  KDEBUG("memoryRequirement :%"PRIu64" state : %p",*memoryRequirement, statePtr);
   *memoryRequirement  = sizeof(PlatformSystemState);
   if(statePtr  ==  NULL){
     KDEBUG("PLATFORM SUSBYSTEM : STATE PASSED AS NULL");
-    return true;
+    return TRUE;
   }
   state  = statePtr;
   KINFO("PLATFORM SUBSYTEM INITIALIZED");
-  return true;
+  return TRUE;
 }
 
-u8    startPlatform(const char* appliactionName,
-                  i32 x,
-                  i32 y,
-                  i32 width,
-                  i32 height){
-TRACEFUNCTION;
-KDEBUG("applicationName : %s x : %"PRIi32" y : %"PRIi32" width : %"PRIi32" height : %"PRIi32"",appliactionName,x,y,width,height);
+b32    startPlatform(const char* appliactionName,
+                     i32 x,
+                     i32 y,
+                     i32 width,
+                     i32 height){
+  TRACEFUNCTION;
+  KDEBUG("applicationName : %s x : %"PRIi32" y : %"PRIi32" width : %"PRIi32" height : %"PRIi32"",appliactionName,x,y,width,height);
   //connect to Xserver
   state->display  = XOpenDisplay(NULL);
 
   //Turn off keyrepeats
-  XAutoRepeatOff(state->display);
+  // XAutoRepeatOff(state->display);
 
   //Retrieve the connection from display
   state->connection = XGetXCBConnection(state->display);
   if(xcb_connection_has_error(state->connection)){
     KFATAL("Failed to connect to X server via XCB");
-    return false;
+    return FALSE;
   }
 
   //get data from the Xserver
@@ -104,16 +104,16 @@ KDEBUG("applicationName : %s x : %"PRIi32" y : %"PRIi32" width : %"PRIi32" heigh
   u32 valueList[] = {state->screen->black_pixel , eventValues} ;
 
   //create the window
-  xcb_create_window (state->connection,            /* Connection          */
-                     0,                                             /* depth               */
-                     state->window,                /* window Id           */
-                     state->screen->root,          /* parent window       */
-                     x, y,                                          /* x, y                */
-                     width, height,                                 /* width, height       */
-                     0,                                             /* border_width        */
-                     XCB_WINDOW_CLASS_INPUT_OUTPUT,                 /* class               */
-                     state->screen->root_visual,   /* visual              */
-                     eventMask, valueList);                         /* masks */
+  xcb_create_window (state->connection,            /* Connection    */
+                     0,                            /* depth         */
+                     state->window,                /* window Id     */
+                     state->screen->root,          /* parent window */
+                     x, y,                         /* x, y          */
+                     width, height,                /* width, height */
+                     0,                            /* border_width  */
+                     XCB_WINDOW_CLASS_INPUT_OUTPUT,/* class         */
+                     state->screen->root_visual,   /* visual        */
+                     eventMask, valueList);        /* masks         */
 
   //change title of window
   xcb_change_property(state->connection,
@@ -125,48 +125,31 @@ KDEBUG("applicationName : %s x : %"PRIi32" y : %"PRIi32" width : %"PRIi32" heigh
                       strlen(appliactionName),
                       appliactionName);
   //notify at deleteing the window
-  xcb_intern_atom_cookie_t  wmDeleteCookie    = xcb_intern_atom(state->connection,
-                                                                0,
-                                                                strlen("WM_DELETE_WINDOW"),
-                                                                "WM_DELETE_WINDOW");
-  xcb_intern_atom_cookie_t  wmProtocolsCookie = xcb_intern_atom(state->connection,
-                                                                0,
-                                                                strlen("WM_PROTOCOLS"),
-                                                                "WM_PROTOCOLS");
-  xcb_intern_atom_reply_t   *wmDeleteReply    = xcb_intern_atom_reply(state->connection,
-                                                                      wmDeleteCookie,
-                                                                      NULL);
-  xcb_intern_atom_reply_t   *wmProtocolsReply = xcb_intern_atom_reply(state->connection,
-                                                                      wmProtocolsCookie,
-                                                                      NULL);
+  xcb_intern_atom_cookie_t  wmDeleteCookie    = xcb_intern_atom(state->connection,0,strlen("WM_DELETE_WINDOW"),"WM_DELETE_WINDOW");
+  xcb_intern_atom_cookie_t  wmProtocolsCookie = xcb_intern_atom(state->connection,0,strlen("WM_PROTOCOLS"),"WM_PROTOCOLS");
+  xcb_intern_atom_reply_t   *wmDeleteReply    = xcb_intern_atom_reply(state->connection,wmDeleteCookie,NULL);
+  xcb_intern_atom_reply_t   *wmProtocolsReply = xcb_intern_atom_reply(state->connection,wmProtocolsCookie,NULL);
+
   state->wmDeleteWin  = wmDeleteReply->atom;
   state->wmProtocols  = wmProtocolsReply->atom;
 
-  xcb_change_property(state->connection,
-                      XCB_PROP_MODE_REPLACE,
-                      state->window,
-                      wmProtocolsReply->atom,
-                      4,
-                      32,
-                      1,
-                      &wmDeleteReply->atom);
-
+  xcb_change_property(state->connection,XCB_PROP_MODE_REPLACE,state->window,wmProtocolsReply->atom,4,32,1,&wmDeleteReply->atom);
   xcb_map_window(state->connection, state->window);
 
-  i32 streamResult  = xcb_flush(state->connection);
+  b32 streamResult  = xcb_flush(state->connection);
   if(streamResult <=  0 ){
     KFATAL("an error occured when flushing the stream %d" , streamResult);
-    return false;
+    return FALSE;
   }
 
   XAutoRepeatOff(state->display);
   KINFO("PLATFORM HAS BEEN STARTED !");
-  return true;
+  return TRUE;
 }
 
-void  shutdownPlatform    (void){
-TRACEFUNCTION;
-KDEBUG("void"); 
+void  platformShutdown    (void){
+  TRACEFUNCTION;
+  KDEBUG("void"); 
   KINFO("WINDOWING SUBSYTEM SHUTDOWN");
   KINFO("RESTORING STATES");
   //turn repeat keys back ON
@@ -178,73 +161,77 @@ KDEBUG("void");
   state  = NULL;
 }
 
-u8    platformPumpMessages(){
-TRACEFUNCTION;
+b32    platformPumpMessages(){
+  TRACEFUNCTION;
   xcb_generic_event_t* event;
   xcb_client_message_event_t* cm;
 
-  u8 quitFlagged  = false;
+  b32 quitFlagged  = FALSE;
 
-  //poll for events untill NULL returned
-  while(event != 0){
+  while(event != 0)
+  {
     event = xcb_poll_for_event(state->connection);
-    if(event  ==  0){
-      break;
-    }
+    if(event  ==  0)  break;
 
-    switch (event->response_type & ~0x80) {
+    switch (event->response_type & ~0x80)
+    {
       case XCB_KEY_PRESS:
-      case XCB_KEY_RELEASE: {
-        xcb_key_release_event_t* keyboardEvent = (xcb_key_release_event_t*)event;
-        u8  pressed         = event->response_type  == XCB_KEY_PRESS;
-        xcb_keycode_t code  = keyboardEvent->detail;
-        KeySym keysym       = XkbKeycodeToKeysym(state->display, (KeyCode)code, 0, code & ShiftMask ? 1 : 0);
-        keys key            = translateKeycode(keysym);
-        inputProcessKey(key, pressed);
-      } break;
+      case XCB_KEY_RELEASE: 
+        {
+          xcb_key_release_event_t* keyboardEvent = (xcb_key_release_event_t*)event;
+          u8  pressed         = event->response_type  == XCB_KEY_PRESS;
+          xcb_keycode_t code  = keyboardEvent->detail;
+          KeySym keysym       = XkbKeycodeToKeysym(state->display, (KeyCode)code, 0, code & ShiftMask ? 1 : 0);
+          keys key            = translateKeycode(keysym);
+          inputProcessKey(key, pressed);
+        } break;
 
       case  XCB_BUTTON_PRESS:
-      case  XCB_BUTTON_RELEASE:{
-        xcb_button_press_event_t* mouseEvent =   (xcb_button_press_event_t*)event;
-        u8  pressed = event->response_type  ==  XCB_BUTTON_PRESS;
-        buttons mouseButton = BUTTON_MAX_BUTTONS;
-        switch(mouseEvent->detail){
-          case XCB_BUTTON_INDEX_1 :
-            mouseButton = BUTTON_LEFT;
-          case XCB_BUTTON_INDEX_2 :
-            mouseButton = BUTTON_MIDDLE;
-          case XCB_BUTTON_INDEX_3 :
-            mouseButton = BUTTON_LEFT;
-        }
+      case  XCB_BUTTON_RELEASE:
+        {
+          xcb_button_press_event_t* mouseEvent =   (xcb_button_press_event_t*)event;
+          u8  pressed = event->response_type  ==  XCB_BUTTON_PRESS;
+          buttons mouseButton = BUTTON_MAX_BUTTONS;
+          switch(mouseEvent->detail)
+          {
+            case XCB_BUTTON_INDEX_1 :
+              mouseButton = BUTTON_LEFT;
+            case XCB_BUTTON_INDEX_2 :
+              mouseButton = BUTTON_MIDDLE;
+            case XCB_BUTTON_INDEX_3 :
+              mouseButton = BUTTON_LEFT;
+          }
 
-        if(mouseButton != BUTTON_MAX_BUTTONS){
-          UWARN("PLATFORM MAX BUTTONS PRESSED");
-          inputProcessButton(mouseButton, pressed);
+          if(mouseButton != BUTTON_MAX_BUTTONS)
+          {
+            UWARN("PLATFORM MAX BUTTONS PRESSED");
+            inputProcessButton(mouseButton, pressed);
+          }
+        }break;
+      case  XCB_MOTION_NOTIFY:
+        {
+          xcb_motion_notify_event_t* moveEvent = (xcb_motion_notify_event_t*)event;
+          inputProcessMouseMove(moveEvent->event_x, moveEvent->event_y);
+          break;
         }
-      }break;
-      case  XCB_MOTION_NOTIFY:{
-        xcb_motion_notify_event_t* moveEvent = (xcb_motion_notify_event_t*)event;
-        inputProcessMouseMove(moveEvent->event_x, moveEvent->event_y);
-        break;
-      }
-      case  XCB_CONFIGURE_NOTIFY:{
-        UWARN("--------------RESIZING--------------");
-        xcb_configure_notify_event_t* configureEvent  = (xcb_configure_notify_event_t*)event;
-        EventContext context;
-        context.data.u16[0] = configureEvent->width;
-        context.data.u16[1] = configureEvent->height;
-        eventFire(EVENT_CODE_RESIZED, 0, context);
-      }break;
+      case  XCB_CONFIGURE_NOTIFY:
+        {
+          UWARN("--------------RESIZING--------------");
+          xcb_configure_notify_event_t* configureEvent  = (xcb_configure_notify_event_t*)event;
+          EventContext context;
+          context.data.u16[0] = configureEvent->width;
+          context.data.u16[1] = configureEvent->height;
+          eventFire(EVENT_CODE_RESIZED, 0, context);
+        }break;
 
-      case  XCB_CLIENT_MESSAGE:{
-        cm  = (xcb_client_message_event_t*)event;
-        if(cm->data.data32[0] ==  state->wmDeleteWin){
-          quitFlagged = true;
-        }
-      }break;
-      default:
-        //something else
-        break;
+      case  XCB_CLIENT_MESSAGE:
+        {
+          cm  = (xcb_client_message_event_t*)event;
+          if(cm->data.data32[0] ==  state->wmDeleteWin){
+            quitFlagged = TRUE;
+          }
+        }break;
+      default: break;
     }
 
     free(event);
@@ -264,15 +251,15 @@ void  platformSleep(u64 ms){
   usleep((ms%1000) * 1000);
 }
 
-VkResult  vulkanSurfaceCreate(VulkanContext* context){
-TRACEFUNCTION;
-KDEBUG("context : %p");
+b32  vulkanSurfaceCreate(VulkanContext* context){
+  TRACEFUNCTION;
+  KDEBUG("context : %p");
   VkXcbSurfaceCreateInfoKHR createInfo  = {VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR};
   createInfo.connection = state->connection;
   createInfo.window = state->window;
 
   VkResult  result  = vkCreateXcbSurfaceKHR(context->instance, &createInfo, context->allocator, &state->surface);
-  VK_CHECK_VERBOSE(result, "COULD NOT SETUP VULKAN SURFACE "); 
+  VK_CHECK_B32(result, "COULD NOT SETUP VULKAN SURFACE "); 
   context->surface  = state->surface;
   KINFO("VULKAN SURFACE INITIALIZED");
   return result;
@@ -284,7 +271,7 @@ f64   platformGetAbsoluteTime(){
   return  now.tv_sec + now.tv_nsec * 0.000000001;
 }
 
-u8  translateKeycode(u32 xKeycode){
+b32  translateKeycode(u32 xKeycode){
   switch (xKeycode) {
     case XK_BackSpace:
       return KEY_BACKSPACE;
@@ -547,8 +534,7 @@ u8  translateKeycode(u32 xKeycode){
     case XK_Z:
       return KEY_Z;
 
-    default:
-      return 0;
+    default:return 0;
   }
 }
 

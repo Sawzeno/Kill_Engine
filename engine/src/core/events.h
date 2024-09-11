@@ -20,7 +20,7 @@ struct EventContext{
     u16 u16[8];
 
     i8  i8[16];
-    u8  u8[16];
+    b32  u8[16];
   }data;
 };
 
@@ -51,12 +51,12 @@ typedef enum SystemEventCode{
   MAX_EVENT_CODE              = 0xFF
 }systemEventCode;
 
-typedef u8(*pfnOnEvent)(u16 code , void* sender  , void* listener , EventContext data);
+typedef b32(*pfnOnEvent)(u16 code, void* sender, void* listener, EventContext data);
 
-bool    initializeEvents(u64* memoryRequirement, void* state);
-void  shutdownEvents  ();
+b32   eventsSystemInitialize(u64* memoryRequirement, void* state);
+void  eventsSystemShutdown  ();
 
-u8    eventRegister   (u16 code, void* listener , pfnOnEvent onEvent);
-u8    eventUnregister (u16 code , void* listener , pfnOnEvent onEvent);
-u8    eventFire       (u16 code , void* sender , EventContext context);
+b32   eventRegister   (u16 code, void* listener, pfnOnEvent onEvent);
+b32   eventUnregister (u16 code, void* listener, pfnOnEvent onEvent);
+b32   eventFire       (u16 code, void* sender  , EventContext context);
 

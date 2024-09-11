@@ -77,7 +77,7 @@ void handle_sigill(int sig, siginfo_t* info, void* context){
   if(sig  ==  SIGILL){
     if(info == NULL){
       UFATAL("SIGILL raised");
-      shutdownLogging();
+      loggingSystemShutdown();
       exit(SIGILL);
     }else{
       Uinfo* uinfo  = (Uinfo*)(info->si_value.sival_ptr);
@@ -118,7 +118,7 @@ void handle_sigsegv(int sig) {
       UERROR("Could not backtrace symbols");
     }
     UFATAL("SIGSEGV: TERMINATING...");
-    shutdownLogging();  
+    loggingSystemShutdown();  
     exit(EXIT_SUCCESS);
   }
 }

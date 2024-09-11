@@ -9,16 +9,11 @@ struct PlatformState{
 };
 
 
-u8    startPlatform       (const char* appliactionName,
-                           i32 x,
-                           i32 y,
-                           i32 width,
-                           i32 height);
+b32   startPlatform           (const char* appliactionName,i32 x,i32 y,i32 width,i32 height);
+b32   platformIntialize      (u64* memoryRequirement, void* state);
+b32   platformPumpMessages    ();
 
-bool  initializePlatform      (u64* memoryRequirement, void* state);
-void  shutdownPlatform        ();
-u8    platformPumpMessages    ();
+void  platformShutdown        ();
 void  platformSleep           (u64 ms);
-f64   platformGetAbsoluteTime ();
 
-void platformKeyRepeatOff();
+f64   platformGetAbsoluteTime ();

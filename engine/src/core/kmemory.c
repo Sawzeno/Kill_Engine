@@ -44,7 +44,7 @@ typedef struct MemorySystemStats{
 
 static MemorySystemStats* memorySystemStatePtr = NULL;
 
-bool initializeMemory(u64*  memoryRequirement, void* state){
+bool memorySystemInitialize(u64*  memoryRequirement, void* state){
   *memoryRequirement = sizeof(MemorySystemStats);
   if(state == NULL){
     UDEBUG("MEMORY SUBSYSTEM : STATE PASSED AS NULL");
@@ -57,7 +57,7 @@ bool initializeMemory(u64*  memoryRequirement, void* state){
   return true;
 }
 
-void shutdownMemory(){
+void memorySystemShutdown(){
   KINFO("MEMORY SYSTEM SHUTDOWN");
   memorySystemStatePtr  = NULL;
 }

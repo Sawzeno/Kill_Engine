@@ -129,8 +129,8 @@ typedef enum LOG_TYPE{
 
 // Initializes logging system , call twice once with state = 0 , to get memory size , and then to pass allocated memory to the state;
 
-bool    initializeLogging (u64* memoryRequirement, void* state);
-void    shutdownLogging   ();
+bool    loggingSystemInitialize (u64* memoryRequirement, void* state);
+void    loggingSystemShutdown   ();
 u16     consoleLog        (               LOG_LEVEL level , const char* message , ...);
 u16     fileLog           (LOG_TYPE type, LOG_LEVEL level , const char* message , ...);
 u16     Uwrite            (u16 limit, const char *format , ...); 

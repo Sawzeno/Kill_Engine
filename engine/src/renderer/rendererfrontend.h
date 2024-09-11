@@ -2,8 +2,8 @@
 
 #include  "rendererbackend.h"
 
-bool  initializeRenderer(u64*requiredMemory, void* statePtr);
-void  shutdownRenderer  ();
+bool  rendererInitalize(u64*requiredMemory, void* statePtr);
+void  rendererShutdown  ();
 bool  rendererResize    (u16 width , u16 height);
 bool  rendererDrawFrame (RenderPacket* packet);
 void  rendererSetView   (Mat4 view);

@@ -1,0 +1,5 @@
+#material
+
+name=BISCUIT
+diffuse_color=1.0 1.0 1.0 1.0
+diffuse_map_name=bismarck.png

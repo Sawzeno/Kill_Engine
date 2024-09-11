@@ -16,11 +16,11 @@
   return result;                                                    \
 }
 
-#define VK_CHECK_BOOL(result, message, ...)                         \
+#define VK_CHECK_B32(result, message, ...)                          \
   if (result != VK_SUCCESS){                                        \
   UERROR(message,##__VA_ARGS__);                                    \
   KERROR(message,##__VA_ARGS__);                                    \
-  return false;                                                     \
+  return FALSE;                                                     \
 }
 
 bool            vulkanResultIsSuccess         (VkResult result);
